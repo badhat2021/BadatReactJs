@@ -184,11 +184,17 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
     });
   };
 
+  const onMyProfileClickHandle = () =>{
+    history.push("/profile");
+  }
+
   const onMyOrderClickHandle = () => {
-    setAnchorEl(null);
-    installOurApp(
-      "To track or manage order, or talk to or chat  with seller download the app by clicking link."
-    );
+    // setAnchorEl(null);
+    // installOurApp(
+    //   "To track or manage order, or talk to or chat  with seller download the app by clicking link."
+    // );
+    history.push("/order");
+
   };
 
   const handleClose = () => {
@@ -308,6 +314,9 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
               open={open}
               onClose={handleClose}
             >
+              <MenuItem key="myProfile" onClick={() => onMyProfileClickHandle()}>
+                My Profile
+              </MenuItem>
               <MenuItem key="myOrder" onClick={() => onMyOrderClickHandle()}>
                 My Order
               </MenuItem>

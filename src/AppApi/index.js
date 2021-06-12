@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
   BASE_URL,
-  NEW_BASE_URL,
+  //NEW_BASE_URL,
   ENDPOINT_CATEGORIES,
   ENDPOINT_GET_SUBCATEGORIES,
   ENDPOINT_GET_VERTICAL_CATEGORIES,
@@ -18,10 +18,10 @@ import {
   ENDPOINT_GET_SELLER_DETAIL,
   ENDPOINT_GET_STATES,
   ENDPOINT_GET_DISTRICT,
-  ENDPOINT_GET_TRUECALLER_RESPONSE,
+  //ENDPOINT_GET_TRUECALLER_RESPONSE,
 } from "../Constant";
 import Swal from "sweetalert2";
-import { storeToken, getToken } from "../Util";
+import { storeToken, getToken, storeId, getId } from "../Util";
 
 export const getCategory = async () => {
   const res = await axios.get(BASE_URL + ENDPOINT_CATEGORIES);
@@ -73,7 +73,8 @@ export const sendOtp = async (mobile, otp) => {
   };
   const res = await axios.post(BASE_URL + ENDPOINT_LOGIN, body);
   if (res.status === 200) {
-    // storeToken(res.data.data.access_token);
+    storeToken(res.data.data.access_token);
+    storeId(res.data.data.user.id)
     return res;
   } else {
     return false;
@@ -147,7 +148,8 @@ export const placeOrder = async (body) => {
   }
 };
 
-export const getSellerDetail = async (id) => {
+export const getSellerDetail = async () => {
+  const id = await getId();
   const res = await axios.get(BASE_URL + ENDPOINT_GET_SELLER_DETAIL + id);
   return res.data.data;
 };

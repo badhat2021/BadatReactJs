@@ -17,10 +17,12 @@ import {
 import Cart from "../Pages/Cart";
 import AllProductPage from "../Pages/AllProductPage";
 import Login from "../Pages/Login";
-import UserDetail from "../Pages/UserDetail";
+import UserDetail from "../Pages/UserDetail2";
 import Register from "../Pages/Register";
 import PrivacyPolicy from "../Pages/PrivacyPolicy";
 import Help from "../Pages/Help";
+//import Profile from "../Pages/Profile"
+import Order from '../Pages/Order'
 
 const Routes = () => {
   return (
@@ -51,6 +53,8 @@ const Routes = () => {
       <Route exact path={`/${ROUTE_USER_DETAIL}/:id`} component={UserDetail} />
       <Route exact path="/privacy-policy" component={PrivacyPolicy} />
       <Route exact path="/help" component={Help} />
+      <Route exact path="/profile" component={UserDetail} />
+      <Route exact path="/order" component={Order} />
       <Route exact path="/" component={Homepage} />
     </Switch>
   );

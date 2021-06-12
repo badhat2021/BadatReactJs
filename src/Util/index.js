@@ -64,9 +64,18 @@ export const storeToken = (token) => {
   localStorage.setItem("badhat_token", JSON.stringify(token));
 };
 
+export const storeId = (id) => {
+  localStorage.setItem("badhat_uid", JSON.stringify(id));
+};
+
 export const getToken = () => {
   const token = JSON.parse(localStorage.getItem("badhat_token"));
   return token;
+};
+
+export const getId = () => {
+  const id = JSON.parse(localStorage.getItem("badhat_uid"));
+  return id;
 };
 
 export const getCartCount = async () => {
