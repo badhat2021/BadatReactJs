@@ -189,12 +189,11 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
   }
 
   const onMyOrderClickHandle = () => {
+    history.push("/order"); 
     // setAnchorEl(null);
     // installOurApp(
     //   "To track or manage order, or talk to or chat  with seller download the app by clicking link."
     // );
-    history.push("/order");
-
   };
 
   const handleClose = () => {

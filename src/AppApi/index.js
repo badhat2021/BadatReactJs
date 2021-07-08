@@ -125,6 +125,7 @@ export const deleteCartData = async (id) => {
   });
 };
 
+
 export const registerUser = async (body) => {
   const res = await axios.post(BASE_URL + ENDPOINT_REGISTER_USER, body);
   if (res.status === 200) {
@@ -150,7 +151,7 @@ export const placeOrder = async (body) => {
 
 export const getSellerDetail = async () => {
   const id = await getId();
-  const res = await axios.get(BASE_URL + ENDPOINT_GET_SELLER_DETAIL + id);
+  const  res = await axios.get(BASE_URL + ENDPOINT_GET_SELLER_DETAIL + id);
   return res.data.data;
 };
 
@@ -201,3 +202,94 @@ export const getTruecallerResponse = async (id) => {
   );
   return res.data;
 };
+
+export const getOrderRecieved = async (body) => {
+  const token = await getToken();
+  const res = await axios.get(BASE_URL + "receivedOrders", {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  return res.data.data;
+};
+
+export const getOrderPlaced = async (body) => {
+  const token = await getToken();
+  const res = await axios.get(BASE_URL + "placedOrders", {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  return res.data.data;
+};
+
+export const acceptOrder = async (id) => {
+  const token = await getToken();
+  const res = await axios.get(BASE_URL + "acceptOrder/"+id, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  return res.data;
+};
+
+export const declineOrder = async (id) => {
+  const token = await getToken();
+  const res = await axios.get(BASE_URL + "cancelOrder/"+id, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  return res.data;
+};
+
+export const getOrderById = async (id) => {
+  const token = await getToken();
+  const res = await axios.get(BASE_URL + "order/"+id, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  return res.data.data;
+};
+
+export const updateProfile = async (id) => {
+  const token = await getToken();
+
+  var data = new FormData(); 
+  data.append('id', id); 
+  data.append('business_category', 'test'); 
+  data.append('name', 'test'); 
+  data.append('business_name', '123'); 
+  data.append('email', 'test@test.com'); 
+  data.append('mobile', '1234567890'); 
+  data.append('state', 'Gujarat'); 
+  data.append('district', 'rajkot'); 
+  data.append('pincode', '360002'); 
+  data.append('latitude', '1.3'); 
+  data.append('longitude', '1.2'); 
+  data.append('address', 'rajkot'); 
+  data.append('city', 'rajkot'); 
+  data.append('gstin', '113166565'); 
+  data.append('business_type', 'Retail');  
+
+  var config = {   
+      method: 'post',   
+      url: 'https://badhat.app/api/updateProfile',   
+      headers: {      
+        "Authorization": "Bearer " + token,
+        "content-type": 'multipart/form-data'
+      },   
+      data : data 
+    };  
+
+    await axios(config)
+    .then(function (response) {   
+      console.log(response); 
+    })
+    .catch(function (error) {   
+      console.log(error); 
+    });
+}
+
+//updateProfile(416)

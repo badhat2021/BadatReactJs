@@ -29,16 +29,19 @@
 }
 
 .sliderCardCategoryName {
-  position: absolute;
+/*  position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);*/
 }
 
 .sliderCategoryPaper {
   width: 100%;
   height: 100%;
   text-align: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 @media screen and (max-width: 700px) {
   .sliderContainer::-webkit-scrollbar {

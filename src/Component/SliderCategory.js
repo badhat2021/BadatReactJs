@@ -38,12 +38,8 @@ class SliderCategory extends Component {
                 onClick={() => this.props.onClickCategoryHandle(res.id)}
               >
                 <Paper className="sliderCategoryPaper" elevation={5}>
-                  <div
-                    style={{ opacity: "0.4", height: "100%", width: "100%" }}
-                  >
-                    <img src={res.bg_image} alt="" width="100%" height="100%" />
-                  </div>
-                  <div className="sliderCardCategoryName">{res.name}</div>
+                    <img src={res.icon} alt="" style={{height:"100%",float:"left", maxHeight: 60}} />
+                  <div className="sliderCardCategoryName" style={{float:"right"}}>{res.name}</div>
                 </Paper>
               </div>
             ))

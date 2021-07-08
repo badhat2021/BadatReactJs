@@ -5,15 +5,16 @@
 }
 
 .subCategoryPaper {
+  /*display: inline-block;*/
   width: 100%;
   position: relative;
-  height: 100%;
+  /*height: 100%;*/
   text-align: center;
 }
 
 .subCategorySliderCard {
-  width: 30%;
-  height: 75px;
+  /*width: 30%;*/
+  /*height: 45px;*/
   margin: 5px;
   cursor: pointer;
 }
@@ -23,14 +24,14 @@
   display: flex;
   flex-wrap: wrap;
   overflow-x: auto;
-  /* height: 100px; */
+   height: 100px; 
 }
 .subCategoryGridContainer {
   width: 100%;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: 200px;
+  height: 120px;
   overflow-x: auto;
 }
 
@@ -39,12 +40,15 @@
 }
 
 .sliderCardSubCategoryName {
-  width: 100%;
+  /*width: 100%;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);*/
+  white-space: nowrap;
+  padding: 10px;
 }
+
 
 .subCategoryGridContainer_Less_item::-webkit-scrollbar {
   display: none;
@@ -54,7 +58,11 @@
   .subCategoryGridContainer_Less_item::-webkit-scrollbar {
     display: none;
   }
+  .subCategorySliderCard {
+    width: 38%;
+  }
 }
+
 
 .css-df17o1 {
   height: 600px;

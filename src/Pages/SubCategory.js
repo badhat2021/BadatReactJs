@@ -251,7 +251,7 @@ class SubCategory extends Component {
                         key={res.id}
                         onClick={() => this.onClickHandle(res.id)}
                       >
-                        <Paper className="subCategoryPaper" elevation={5}>
+                        <Paper className="subCategoryPaper" style={{backgroundColor:"#fee3ce"}} elevation={5}>
                           <div className="sliderCardSubCategoryName">
                             {res.name}
                           </div>

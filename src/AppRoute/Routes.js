@@ -17,7 +17,7 @@ import {
 import Cart from "../Pages/Cart";
 import AllProductPage from "../Pages/AllProductPage";
 import Login from "../Pages/Login";
-import UserDetail from "../Pages/UserDetail2";
+import UserDetail from "../Pages/UserDetail";
 import Register from "../Pages/Register";
 import PrivacyPolicy from "../Pages/PrivacyPolicy";
 import Help from "../Pages/Help";
