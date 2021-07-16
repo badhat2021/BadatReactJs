@@ -3,7 +3,7 @@ import React,{useEffect, useState, useRef} from 'react'
 import { useParams } from "react-router-dom";
 import { getSubCategory, getVerticalCategory, getCategory, getProductDetail, editProduct } from "../AppApi";
 import Avatar from '@material-ui/core/Avatar';
-import ImageEditList from '../Component/ImageEditList'
+//import ImageEditList from '../Component/ImageEditList'
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
