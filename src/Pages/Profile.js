@@ -34,7 +34,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+
+
+export default function AddProductForm() {
   const classes = useStyles();
 
   return (
@@ -45,7 +47,7 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Add Product
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -56,8 +58,8 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id="name"
+                label="Name"
                 autoFocus
               />
             </Grid>

@@ -15,7 +15,12 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import Popover from '@material-ui/core/Popover';
 import DehazeIcon from "@material-ui/icons/Dehaze";
 // import ClearIcon from "@material-ui/icons/Clear";
 import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
@@ -24,6 +29,7 @@ import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
 import Logo from "../AppAsset/Badhat App Icon.jpg";
 import { ROUTE_CART, ROUTE_ALL_PRODUCT, ROUTE_LOGIN } from "../Constant";
 import "../AppAsset/CSS/Header.css";
+import {getNotifications, markAsRead} from '../AppApi'
 import { installOurApp, handleLogout, checkLogin } from "../Util";
 
 const useStyles = makeStyles((theme) => ({
@@ -144,14 +150,25 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
   const [search, setSearch] = useState("");
   useEffect(() => {
     getCartCount();
+    async function fetchData(){
+      const data = await getNotifications();
+      setNotifyData(data.data);
+    }
+    fetchData();
   }, []);
 
-  //
+  const [notifyData, setNotifyData] = useState()
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const [notify, setNotify] = useState(null);
+  const openNotify = Boolean(notify);
+  const handleClickNotify = async (event) => {
+    setNotify(event.currentTarget);
+  };
+
   const getCartCount = () => {
     cartItemCount();
   };
@@ -159,6 +176,18 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
   const onClickCartHandle = () => {
     history.push(`/${ROUTE_CART}`);
   };
+
+  const unreadCount = () => {
+    var c = 0;
+    if(notifyData){
+      notifyData.map((msg) => {
+        if(msg.is_read === 0)
+          c++;
+      })
+    }
+    console.log(c)
+    return c;
+  }
 
   const onSaleClickHandle = () => {
     installOurApp(`Want to sell on Badat at wholesale prices or in bulk? 
@@ -188,6 +217,10 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
     history.push("/profile");
   }
 
+  const onMyProductsClickHandle = () => {
+    history.push("/products");
+  }
+
   const onMyOrderClickHandle = () => {
     history.push("/order"); 
     // setAnchorEl(null);
@@ -200,11 +233,18 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
     setAnchorEl(null);
   };
 
+  const handleCloseNotify = async () => {
+    setNotify(null);
+    await markAsRead()
+  };
+
   const onLogoutClickHandle = () => {
     setAnchorEl(null);
     handleLogout();
     history.push(`/`);
   };
+
+
   return (
     <div className="HeaderContainer">
       <Toolbar>
@@ -287,6 +327,35 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
         )}
         {!checkLogin() ? null : (
           <div className={classes.myOrderButton}>
+            <IconButton aria-label="show new notifications" onClick={handleClickNotify}>
+              <Badge badgeContent={unreadCount()} color="primary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+                <Popover 
+                  open={openNotify}
+                  anchorEl={notify}
+                  onClose={handleCloseNotify}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                >
+                  <List component="nav" aria-label="secondary mailbox folders">
+                    {
+                      notifyData ? notifyData.map((msg) => (
+                        <ListItem button onClick={() => {history.push("/order")}}>
+                          <ListItemText primary={msg.message} />
+                        </ListItem>
+                      )) : ""
+                    }
+                  </List>
+                </Popover>
+
             <IconButton
               aria-label="more"
               aria-controls="long-menu"
@@ -318,6 +387,9 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
               </MenuItem>
               <MenuItem key="myOrder" onClick={() => onMyOrderClickHandle()}>
                 My Order
+              </MenuItem>
+              <MenuItem key="myProducts" onClick={() => onMyProductsClickHandle()}>
+                My Products
               </MenuItem>
               <MenuItem key="logOut" onClick={() => onLogoutClickHandle()}>
                 Logout

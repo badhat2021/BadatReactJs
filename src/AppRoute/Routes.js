@@ -16,6 +16,8 @@ import {
 } from "../Constant";
 import Cart from "../Pages/Cart";
 import AllProductPage from "../Pages/AllProductPage";
+import AddProduct from '../Pages/AddProduct'
+import EditProduct from '../Pages/EditProduct'
 import Login from "../Pages/Login";
 import UserDetail from "../Pages/UserDetail";
 import Register from "../Pages/Register";
@@ -23,6 +25,8 @@ import PrivacyPolicy from "../Pages/PrivacyPolicy";
 import Help from "../Pages/Help";
 //import Profile from "../Pages/Profile"
 import Order from '../Pages/Order'
+import Products from '../Pages/Products'
+
 
 const Routes = () => {
   return (
@@ -55,6 +59,9 @@ const Routes = () => {
       <Route exact path="/help" component={Help} />
       <Route exact path="/profile" component={UserDetail} />
       <Route exact path="/order" component={Order} />
+      <Route exact path="/products" component={Products} />
+      <Route exact path="/products/new" component={AddProduct} />
+      <Route exact path="/products/edit/:id" component={EditProduct} />
       <Route exact path="/" component={Homepage} />
     </Switch>
   );

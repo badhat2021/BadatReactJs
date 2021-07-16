@@ -293,3 +293,130 @@ export const updateProfile = async (id) => {
 }
 
 //updateProfile(416)
+
+export const addProduct = async (dataset, files) => {
+    const token = await getToken();
+    console.log(dataset)
+    console.log(files.[0])
+    var data = new FormData();
+    data.append('name', dataset.name);
+    data.append('description', dataset.desc);
+    data.append('moq', dataset.moq);
+    data.append('price', dataset.price);
+    data.append('category_id', dataset.categoryId);
+    data.append('sub_category_id', dataset.subCategoryId);
+    data.append('vertical_id', dataset.verticalId);
+    for (var i = 0; i < files.length; i++) {
+      data.append(`images[${i}]`, files.[i]);
+    }
+    
+    var config = {
+      method: 'post',
+      url: 'https://badhat.app/api/addProduct',
+      headers: { 
+        "Authorization": "Bearer " + token,
+        "content-type": 'multipart/form-data'
+      },
+      data : data
+    };
+    
+    axios(config)
+    .then(function (response) {
+      console.log(response.data);
+      if(response.data.message==="Product added"){
+        window.location.href="/products";
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+}
+
+//addProduct("lol")
+
+
+export const editProduct = async (dataset, files) => {
+    const token = await getToken();
+    console.log(dataset)
+    console.log(files.[0])
+    var data = new FormData();
+    data.append('id', dataset.id);
+    data.append('name', dataset.name);
+    data.append('description', dataset.desc);
+    data.append('moq', dataset.moq);
+    data.append('price', dataset.price);
+    data.append('category_id', dataset.categoryId);
+    data.append('sub_category_id', dataset.subCategoryId);
+    data.append('vertical_id', dataset.verticalId);
+    for (var i = 0; i < files.length; i++) {
+      data.append(`images[${i}]`, files.[i]);
+    }
+    
+    var config = {
+      method: 'post',
+      url: 'https://badhat.app/api/editProduct',
+      headers: { 
+        "Authorization": "Bearer " + token,
+        "content-type": 'multipart/form-data'
+      },
+      data : data
+    };
+    
+    axios(config)
+    .then(function (response) {
+      console.log(response.data);
+      if(response.data.message==="Product Updated"){
+        window.location.href="/products";
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+}
+
+
+export const getNotifications = async () => {
+  const token = await getToken();
+  const res = await axios.get(
+    "https://badhat.app/api/notifications",{
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  return res.data;
+};
+
+export const markAsRead = async () => {
+  const token = await getToken();
+  const res = await axios.get(
+    "https://badhat.app/api/markAllRead",{
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+};
+
+
+export const getMyProducts = async () => {
+  const token = JSON.parse(localStorage.getItem("badhat_token"));
+  const res = await axios.get(
+    "https://badhat.app/api/products",{
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  return res;
+};
+
+export const delProduct = async (id) => {
+  const token = JSON.parse(localStorage.getItem("badhat_token"));
+  const res = await axios.delete(
+    `https://badhat.app/api/product/${id}`,{
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  return res;
+};
