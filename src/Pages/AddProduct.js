@@ -5,8 +5,10 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
+import Input from '@material-ui/core/Input';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -32,6 +34,21 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  input: {
+    padding: "18.5px 14px",
+    font: "inherit",
+    width: "100%",
+    border: 0,
+    height: "1.1876em",
+    margin: 0,
+    minWidth: 0,
+    background: "none",
+    boxSizing: "content-box"
+  },
+  filebtn:{
+    display: "flex",
+    alignItems: "center"
+  }
 }));
 
 
@@ -145,6 +162,8 @@ const AddProductForm = () => {
               id="description"
               required
               fullWidth
+              multiline
+              rows={3}
               label="Product Details"
               onChange={(e) => {
                 console.log(e.target.value);
@@ -243,19 +262,23 @@ const AddProductForm = () => {
             }
           </TextField>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField 
-              variant="outlined" 
-              fullWidth            
+          <Grid item xs={12} sm={6} className={classes.filebtn}>     
+          <Button
+            variant="contained"
+            color="secondary"
+            component="label"
+          >
+            Upload Images
+            <input
+              type="file"
               accept="image/*"
-              className={classes.input}
-              id="contained-button-file"
               multiple
               type="file"
-              onChange={onFileChange}
-              helperText="Add Images"
-            >
-            </TextField>
+              onChange={onFileChange}  
+              hidden
+            />
+          </Button>
+          
             </Grid>
           </Grid>
           <Button

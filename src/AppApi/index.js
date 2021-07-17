@@ -306,6 +306,7 @@ export const addProduct = async (dataset, files) => {
     data.append('category_id', dataset.categoryId);
     data.append('sub_category_id', dataset.subCategoryId);
     data.append('vertical_id', dataset.verticalId);
+    console.log(files)
     for (var i = 0; i < files.length; i++) {
       data.append(`images[${i}]`, files.[i]);
     }
@@ -349,6 +350,7 @@ export const editProduct = async (dataset, files) => {
     data.append('category_id', dataset.categoryId);
     data.append('sub_category_id', dataset.subCategoryId);
     data.append('vertical_id', dataset.verticalId);
+    console.log(files)
     for (var i = 0; i < files.length; i++) {
       data.append(`images[${i}]`, files.[i]);
     }

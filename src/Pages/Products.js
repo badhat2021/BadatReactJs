@@ -30,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
   },
   linkStyle: {
     textDecoration: 'none'
+  },
+  prdcard:{
+    display: "flex",
+    flexWrap: "wrap"
   }
 }));
 
@@ -58,11 +62,12 @@ export default function ProductsPage() {
 
   return (
     <div className={classes.root}>
+    <div className={classes.prdcard}>
       {myProductsList ? myProductsList.length>0 ? myProductsList.map((product) => (<MyProductCard product={product}/>)) : <NoDataFound content={"No Products Added"} /> : <CircularProgress />}
+    </div> 
       <Snackbar
         anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
         open={true}
-        message="I love snacks"
         key={"bottom right"}
       >
         <Link to="/products/new" className={classes.linkStyle}>

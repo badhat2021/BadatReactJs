@@ -36,6 +36,23 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  input: {
+    padding: "18.5px 14px",
+    font: "inherit",
+    width: "100%",
+    border: 0,
+    height: "1.1876em",
+    margin: 0,
+    minWidth: 0,
+    background: "none",
+    boxSizing: "content-box",
+    borderColor: "",
+    borderWidth: ""
+  },
+    filebtn:{
+    display: "flex",
+    alignItems: "center"
+  }
 }));
 
 
@@ -100,6 +117,9 @@ const EditProductForm = (props) => {
       return;
     }
 
+      setSubCategoryId(0);
+      setVerticalId(0);
+
       async function fetchData() {  
         const cat2 = await getSubCategory(categoryId);
         setSubCategoryData(cat2.data.data);
@@ -128,7 +148,7 @@ const EditProductForm = (props) => {
   };
 
   const onFileChange = event => {
-    setImages(event.target.files);
+    setImages(event.target.files)
     console.log(event.target.files)
   };
 
@@ -177,6 +197,8 @@ const EditProductForm = (props) => {
               defaultValue={props.proData.description}
               fullWidth
               label="Product Details"
+              multiline
+              rows={3}
               onChange={(e) => {
                 console.log(e.target.value);
                 setDiscription(e.target.value)
@@ -279,19 +301,23 @@ const EditProductForm = (props) => {
             }
           </TextField>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField 
-              variant="outlined" 
-              fullWidth            
+          <Grid item xs={12} sm={6} className={classes.filebtn}>
+                        <Button
+            variant="contained"
+            color="secondary"
+            component="label"
+          >
+            Upload Images
+            <input
+              type="file"
               accept="image/*"
-              className={classes.input}
-              id="contained-button-file"
               multiple
               type="file"
-              onChange={onFileChange}
-              helperText="Add Images"
-            >
-            </TextField>
+              onChange={onFileChange}  
+              hidden
+            />
+          </Button>
+                   
             </Grid>
           </Grid>
           <Button

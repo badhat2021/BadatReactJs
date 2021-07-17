@@ -70,7 +70,7 @@ export default function MyProductCard(props) {
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={props.product.images.[0].image}
+          image={props.product.images.[0].thumbnail}
           title={props.product.name}
         />
         <CardContent>
