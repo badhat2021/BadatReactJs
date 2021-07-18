@@ -437,3 +437,14 @@ export const delProduct = async (id) => {
     });
   return res;
 };
+
+export const delProductImg = async (prd_id,img_id) => {
+  const token = JSON.parse(localStorage.getItem("badhat_token"));
+  const res = await axios.delete(
+    `https://badhat.app/api/products/${prd_id}/images/${img_id}`,{
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  return res;
+};
