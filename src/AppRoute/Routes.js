@@ -26,7 +26,7 @@ import Help from "../Pages/Help";
 //import Profile from "../Pages/Profile"
 import Order from '../Pages/Order'
 import Products from '../Pages/Products'
-
+import Notification from '../Pages/Notification'
 
 const Routes = () => {
   return (
@@ -59,6 +59,7 @@ const Routes = () => {
       <Route exact path="/help" component={Help} />
       <Route exact path="/profile" component={UserDetail} />
       <Route exact path="/order" component={Order} />
+      <Route exact path="/notification" component={Notification} />
       <Route exact path="/products" component={Products} />
       <Route exact path="/products/new" component={AddProduct} />
       <Route exact path="/products/edit/:id" component={EditProduct} />

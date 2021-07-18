@@ -29,7 +29,7 @@ import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
 import Logo from "../AppAsset/Badhat App Icon.jpg";
 import { ROUTE_CART, ROUTE_ALL_PRODUCT, ROUTE_LOGIN } from "../Constant";
 import "../AppAsset/CSS/Header.css";
-import {getNotifications, markAsRead} from '../AppApi'
+import {getNotificationCount, markAsRead} from '../AppApi'
 import { installOurApp, handleLogout, checkLogin } from "../Util";
 
 const useStyles = makeStyles((theme) => ({
@@ -148,25 +148,23 @@ const StyledBadge = withStyles((theme) => ({
 
 const Header = ({ history, cartCount, login, cartItemCount }) => {
   const [search, setSearch] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
   useEffect(() => {
     getCartCount();
     async function fetchData(){
-      const data = await getNotifications();
-      setNotifyData(data.data);
+      const data = await getNotificationCount();
     }
     fetchData();
   }, []);
 
-  const [notifyData, setNotifyData] = useState()
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [notifyData, setNotifyData] = useState(0)
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const [notify, setNotify] = useState(null);
-  const openNotify = Boolean(notify);
-  const handleClickNotify = async (event) => {
-    setNotify(event.currentTarget);
+  const handleClickNotify = (event) => {
+    history.push(`/notification`);
   };
 
   const getCartCount = () => {
@@ -231,11 +229,6 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleCloseNotify = async () => {
-    setNotify(null);
-    await markAsRead()
   };
 
   const onLogoutClickHandle = () => {
@@ -332,29 +325,6 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-                <Popover 
-                  open={openNotify}
-                  anchorEl={notify}
-                  onClose={handleCloseNotify}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                  }}
-                >
-                  <List component="nav" aria-label="secondary mailbox folders">
-                    {
-                      notifyData ? notifyData.map((msg) => (
-                        <ListItem button onClick={() => {history.push("/order")}}>
-                          <ListItemText primary={msg.message} />
-                        </ListItem>
-                      )) : ""
-                    }
-                  </List>
-                </Popover>
 
             <IconButton
               aria-label="more"

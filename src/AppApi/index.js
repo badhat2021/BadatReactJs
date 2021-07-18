@@ -392,6 +392,19 @@ export const getNotifications = async () => {
   return res.data;
 };
 
+
+export const getNotificationCount = async () => {
+  const token = JSON.parse(localStorage.getItem("badhat_token"));
+  const res = await axios.get(
+    "https://badhat.app/api/appState",{
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  return res.data.data.notification;
+};
+
+
 export const markAsRead = async () => {
   const token = await getToken();
   const res = await axios.get(
