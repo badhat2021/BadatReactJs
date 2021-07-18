@@ -13,6 +13,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import MenuItem from '@material-ui/core/MenuItem';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@material-ui/core/Backdrop';
+import Alert from '@material-ui/lab/Alert';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,7 +52,11 @@ const useStyles = makeStyles((theme) => ({
   filebtn:{
     display: "flex",
     alignItems: "center"
-  }
+  },
+  backdrop: {
+    zIndex: 1,
+    color: '#fff',
+  },  
 }));
 
 
@@ -62,7 +70,11 @@ const AddProductForm = () => {
   const [categoryId, setCategoryId] = useState(0);
   const [subCategoryId, setSubCategoryId] = useState(0);
   const [verticalId, setVerticalId] = useState(0);
+  const [imgLoad, setImgLoad] = useState(false)
+  const [fileError, setFileError] = useState(false)
   const [images, setImages] = useState([]);
+  const [backdrop, setBackdrop] = useState(false)
+
 
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
@@ -118,10 +130,14 @@ const AddProductForm = () => {
 
   const onFileChange = event => {
     setImages(event.target.files);
+    setImgLoad(false);
     console.log(event.target.files)
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
+    if (images.length>0) {
+    setBackdrop(true)
     var dataset = {
       "name" : name,
       "desc" : description,
@@ -132,16 +148,22 @@ const AddProductForm = () => {
       "verticalId" : verticalId
     }
     addProduct(dataset,images);    
+  }else{
+    setFileError(true)
+  }
   }
 
   return (
     <Container component="main" maxWidth="lg">
       <CssBaseline />
+        <Backdrop className={classes.backdrop} open={backdrop}>
+          <CircularProgress />
+        </Backdrop>        
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
           Add Product
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -204,7 +226,8 @@ const AddProductForm = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               id="categoryId"
-              select              
+              select          
+              required    
               fullWidth
               label="Category"
               onChange={(e) => {console.log(e.target.value);setCategoryId(e.target.value)}}
@@ -226,6 +249,7 @@ const AddProductForm = () => {
               id="subCategoryId"
               select              
               fullWidth
+              required
               label="Subcategory"
               onChange={(e) => {console.log(e.target.value); setSubCategoryId(e.target.value)}}
               variant="outlined"
@@ -264,9 +288,13 @@ const AddProductForm = () => {
           </Grid>
           <Grid item xs={12} sm={6} className={classes.filebtn}>     
           <Button
+            required  
             variant="contained"
             color="secondary"
             component="label"
+            style={{marginRight: "20px"}}
+            onClick={() => {setImgLoad(true)}}
+            endIcon={imgLoad?<CircularProgress size={20}/>:""}
           >
             Upload Images
             <input
@@ -278,11 +306,12 @@ const AddProductForm = () => {
               hidden
             />
           </Button>
-          
+          {images.length===1?"1 file":images.length>1?`${images.length }files`:"0 files"} 
+                  {fileError?<Alert style={{marginLeft: "20px"}} severity="error">Image is required!</Alert>:""}         
             </Grid>
           </Grid>
           <Button
-            onClick={handleSubmit}
+            type="submit"
             variant="contained"
             color="primary"
             className={classes.submit}

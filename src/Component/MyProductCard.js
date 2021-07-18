@@ -13,12 +13,30 @@ import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import ShareIcon from '@material-ui/icons/Share';
 import Typography from '@material-ui/core/Typography';
+import Modal from '@material-ui/core/Modal';
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  LinkedinShareButton,
+  RedditShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,  
+  FacebookIcon,
+  TwitterIcon,
+  TelegramIcon,
+  RedditIcon,
+  WhatsappIcon,  
+  LinkedinIcon,
+  EmailIcon,
+} from "react-share";
 
-const useStyles = makeStyles({
+
+const useStyles = makeStyles((theme) => ({
   root: {
   	minWidth: 270,
     maxWidth: 345,
-    margin: 20
+    margin: "20px 10px"
   },
   media: {
     height: 140,
@@ -46,26 +64,118 @@ const useStyles = makeStyles({
   	justifyContent: "space-between"
   },
   shareBtnCover: {
-  	backgroundColor: "#ffffff",
+  	backgroundColor: "#e3d3d3",
   	alignSelf: "flex-end",
-  	marginLeft: "20px"
+  	marginLeft: "20px",
+    borderRadius: "20px"
   	//padding: "2px 8px",
   	//height: "min-content",
   },
   shareBtn: {
   	marginRight: "5px"
+  },
+  mdlPaper: {
+    position: 'absolute',
+    color: "#ffffff",
+    // width: 400,
+    backgroundColor: "#424242",
+    border: '1px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  mdlAlign: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  socialBtns: {
+    margin: "0px 10px"
   }
-});
+}));
 
 export default function MyProductCard(props) {
   const classes = useStyles();
-  
+  const [open, setOpen] = React.useState(false);
+
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const onDeleteClick = async () => {
   	const res = await delProduct(props.product.id);
   	window.location.reload();
   }
 
+  //const url = window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/product/"+props.product.id
+  const url = "https://badat-in.vercel.app/"+"/product/"+props.product.id;
+  console.log(url)
+
+  const body = (
+    <div className={classes.mdlPaper}>
+      <h2 id="simple-modal-title">{`Share - ${props.product.name}`}</h2>
+      <div>
+        <FacebookShareButton
+          className={classes.socialBtns}
+          url={url}
+          quote={`Checkout this product in badat`}>
+          <FacebookIcon size={32} round={true}/>
+        </FacebookShareButton>
+  
+        <TwitterShareButton
+          className={classes.socialBtns}
+          url={url}
+          hashtags={["badat"]}
+          title={`Checkout this product in badat`}>
+          <TwitterIcon size={32} round={true} />        
+        </TwitterShareButton>
+  
+        <EmailShareButton
+          className={classes.socialBtns}
+          subject={`Check out the product in badat`}
+          body={`${url}`}>
+          <EmailIcon size={32} round={true}/>
+        </EmailShareButton>
+
+        <LinkedinShareButton
+          className={classes.socialBtns}
+          url={url}
+          summary={props.product.name}
+          title={`Checkout this product in badat`}>
+          <LinkedinIcon size={32} round={true} />        
+        </LinkedinShareButton>       
+
+        <TelegramShareButton
+          className={classes.socialBtns}
+          url={url}
+          title={`Checkout this product in badat`}>
+          <TelegramIcon size={32} round={true} />        
+        </TelegramShareButton>
+
+        <RedditShareButton
+          className={classes.socialBtns}
+          url={url}
+          title={`Checkout this product in badat`}>
+          <RedditIcon size={32} round={true} />        
+        </RedditShareButton>
+
+        <WhatsappShareButton
+          className={classes.socialBtns}
+          url={url}
+          separator=" || "
+          title={`Checkout this product in badat`}>
+          <WhatsappIcon size={32} round={true} />        
+        </WhatsappShareButton>                         
+      </div>
+    </div>
+  );
+
   return (
+  <div>
     <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
@@ -89,10 +199,9 @@ export default function MyProductCard(props) {
             		MOQ: {props.product.moq}
           		</Typography>
           </div>
-          	<Fab variant="extended" className={classes.shareBtnCover}>          		
-          		<ShareIcon fontSize="small" className={classes.shareBtn}/>			  	
-				Share
-			</Fab>
+          	<Button variant="contained" onClick={handleOpen}  className={classes.shareBtnCover} startIcon={<ShareIcon fontSize="small" />}>
+              Share
+            </Button>
 			</div>
         </CardContent>
       </CardActionArea>
@@ -112,5 +221,15 @@ export default function MyProductCard(props) {
         	</Button>
       </CardActions>
     </Card>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      className={classes.mdlAlign}
+      aria-labelledby="simple-modal-title"
+      aria-describedby="simple-modal-description"
+    >
+      {body}
+    </Modal>
+  </div>
   );
 }

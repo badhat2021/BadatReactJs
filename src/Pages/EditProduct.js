@@ -14,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import MenuItem from '@material-ui/core/MenuItem';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@material-ui/core/Backdrop';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +53,11 @@ const useStyles = makeStyles((theme) => ({
     filebtn:{
     display: "flex",
     alignItems: "center"
-  }
+  },
+    backdrop: {
+    zIndex: 1,
+    color: '#fff',
+  },
 }));
 
 
@@ -84,6 +89,8 @@ const EditProductForm = (props) => {
   const [categoryId, setCategoryId] = useState(props.proData.category_id);
   const [subCategoryId, setSubCategoryId] = useState(props.proData.sub_category_id);
   const [verticalId, setVerticalId] = useState(props.proData.vertical_id);
+  const [imgLoad, setImgLoad] = useState(false)
+  const [backdrop, setBackdrop] = useState(false)
   const [images, setImages] = useState([]);
 
   const [categoryData, setCategoryData] = useState([]);
@@ -149,10 +156,13 @@ const EditProductForm = (props) => {
 
   const onFileChange = event => {
     setImages(event.target.files)
+    setImgLoad(false);
     console.log(event.target.files)
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
+    setBackdrop(true)
     var dataset = {
       "id" : id,
       "name" : name,
@@ -169,11 +179,14 @@ const EditProductForm = (props) => {
   return (
     <Container component="main" maxWidth="lg">
       <CssBaseline />
+        <Backdrop className={classes.backdrop} open={backdrop}>
+          <CircularProgress />
+        </Backdrop>       
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
           Edit Product #{id}
         </Typography>
-            <form className={classes.form} noValidate>
+            <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -226,6 +239,7 @@ const EditProductForm = (props) => {
               <TextField
                 variant="outlined"
                 fullWidth
+                required
                 id="price"  
                 label="Price per Quantity"
                 defaultValue={props.proData.price}      
@@ -242,6 +256,7 @@ const EditProductForm = (props) => {
               id="categoryId"
               select              
               fullWidth
+              required
               defaultValue={props.proData.category_id}
               label="Category"
               onChange={(e) => {console.log(e.target.value);setCategoryId(e.target.value)}}
@@ -262,6 +277,7 @@ const EditProductForm = (props) => {
             <TextField
               id="subCategoryId"
               select              
+              required
               fullWidth
               defaultValue={props.proData.sub_category_id}
               label="Subcategory"
@@ -283,6 +299,7 @@ const EditProductForm = (props) => {
             <TextField
               id="verticalId"
               select              
+              required
               fullWidth
               defaultValue={props.proData.vertical_id}
               label="Section"
@@ -302,10 +319,12 @@ const EditProductForm = (props) => {
           </TextField>
           </Grid>
           <Grid item xs={12} sm={6} className={classes.filebtn}>
-                        <Button
+          <Button
             variant="contained"
             color="secondary"
             component="label"
+            onClick={() => {setImgLoad(true)}}
+            endIcon={imgLoad?<CircularProgress size={20}/>:""}
           >
             Upload Images
             <input
@@ -317,11 +336,11 @@ const EditProductForm = (props) => {
               hidden
             />
           </Button>
-                   
+          {images.length===1?"1 new file":images.length>1?`${images.length }new files`:"0 new files"}          
             </Grid>
           </Grid>
           <Button
-            onClick={handleSubmit}
+            type="submit"
             variant="contained"
             color="primary"
             className={classes.submit}
@@ -330,9 +349,6 @@ const EditProductForm = (props) => {
           </Button>
         </form>      
       </div>
-      <Box mt={5}>
-        {/*<ImageEditList images={props.proData.images} />*/}
-      </Box>
     </Container>
   )
 }

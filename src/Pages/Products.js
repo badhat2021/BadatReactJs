@@ -18,8 +18,9 @@ import AddIcon from '@material-ui/icons/AddBox';
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    padding: "30px",
+    padding: "10px",
     display: "flex",
+    justifyContent:"center",
     height: "100%"
   },
   centerAlign: {

@@ -298,6 +298,8 @@ export const addProduct = async (dataset, files) => {
     const token = await getToken();
     console.log(dataset)
     console.log(files.[0])
+    if(dataset.name === null || dataset.verticalId === null || dataset.subCategoryId === null || dataset.categoryId === null || dataset.description === null || dataset.moq === null || dataset.price === null || files.length===0)
+              window.location.href="/products/new";
     var data = new FormData();
     data.append('name', dataset.name);
     data.append('description', dataset.desc);
