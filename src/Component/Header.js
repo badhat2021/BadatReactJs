@@ -183,7 +183,6 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
           c++;
       })
     }
-    console.log(c)
     return c;
   }
 

@@ -144,7 +144,8 @@ const UserDetails = () => {
 	const [updateUser, setUpdate] = useState({data:user.data})
 	const [categoryData, setCategory] = useState([]);
   const [backdrop, setBackdrop] = useState(user.load)
-  console.log(user.data)
+  
+  const [name, setname] = useState(user.data.name)
   const [about_us, setabout_us] = useState()
   const [address, setaddress] = useState()
   const [business_category, setbusiness_category] = useState()
@@ -158,7 +159,6 @@ const UserDetails = () => {
   const [email, setemail] = useState()
   const [gstin, setgstin] = useState()
   //const [image, setimage] = useState()
-  const [name, setname] = useState()
   const [payment_policy, setpayment_policy] = useState()
   const [pincode, setpincode] = useState()
   const [return_policy, setreturn_policy] = useState()
@@ -172,10 +172,20 @@ const UserDetails = () => {
 			  const categoryDatares = await getCategory();
      		setUser({ load: false, data: res });
      		setUpdate({data: res });
+        console.log(res)
      		setCategory(categoryDatares.data.data);
-        setname(user.data.name)
-
-   		}
+   		  setname(res.name)
+        setemail(res.email)
+        setgstin(res.gstin)
+        setbusiness_name(res.business_name)
+        setbusiness_category(res.business_category)
+        setbusiness_type(res.business_type)
+        setaddress(res.address)
+        setcity(res.city)
+        setdistrict(res.district)
+        setstate(res.state)
+        setpincode(res.pincode)
+      }
    		fetchData();
 	 }, []);
 
@@ -183,7 +193,25 @@ const UserDetails = () => {
     	updateUser.data.ura = event.target.value
   	};
 
-	console.log(name)
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    var dataset = {
+      "id" : user.data.id,
+      "name" : name,
+      "email" : email,
+      "gstin" : gstin,
+      "business_name" : business_name,
+      "business_category" : business_category,
+      "business_type" : business_type,
+      "address" : address,
+      "city" : city,
+      "district" : district,
+      "state" : state,
+      "pincode" : pincode,
+      "mobile" : user.data.mobile,
+    }
+    console.log(dataset)
+  };
 
 	return (
     <Container component="main" maxWidth="lg">
@@ -193,9 +221,7 @@ const UserDetails = () => {
         <Backdrop className={classes.backdrop} open={backdrop}>
           <CircularProgress />
         </Backdrop>
-        :
-        ""
-      }
+        :        
 
       <div className={classes.paper}>
       	
@@ -205,7 +231,7 @@ const UserDetails = () => {
           Profile
         </Typography>
 
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -213,7 +239,7 @@ const UserDetails = () => {
                 name="name"
                 variant="outlined"
                 required
-                value={user.data.name?user.data.name:"0000"}
+                defaultValue={user.data.name}
                 onChange={(e) => {setname(e.target.value)}}
                 fullWidth
                 id="name"
@@ -233,6 +259,32 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                autoComplete="email"
+                name="email"
+                variant="outlined"
+                required
+                defaultValue={user.data.email}
+                onChange={(e) => {setemail(e.target.value)}}
+                fullWidth
+                id="email"
+                label="E-mail"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="gst"
+                name="gstin"
+                variant="outlined"
+                required
+                defaultValue={gstin}
+                onChange={(e) => {setgstin(e.target.value)}}
+                fullWidth
+                id="gstin"
+                label="GSTIN"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
                 variant="outlined"
                 required
                 fullWidth
@@ -243,82 +295,105 @@ const UserDetails = () => {
                 autoComplete="shop"
               />
             </Grid>
+        	  <Grid item xs={12} sm={6}>
+              <TextField
+          	 	  id="businessd"
+          	 	  select
+          	 	  required
+          	 	  fullWidth
+          	 	  label="Business Domain"
+          	 	  value={user.data.business_category?user.data.business_category:"none"}
+          	 	  //onChange={handleChange}
+          	 	  helperText="Please select your business category"
+          	 	  variant="outlined"
+        	    > 
+          	 	
+                {categoryData.map((option) => (
+              		<MenuItem key={option.name} value={option.name}>
+                			{option.name}
+              		</MenuItem>
+          	 	  ))}
+        	    
+              </TextField>
+        	  </Grid>
             <Grid item xs={12} sm={6}>
-            <TextField
-          		id="ura"
-          		select
-          		required
-          		fullWidth
-          		label="You are a"
-          		value={user.data.business_type?user.data.business_type:"None"}
-          		//onChange={handleChange}
-          		helperText="Please select your business type"
-          		variant="outlined"
-        	>
-          		{URA.map((option) => (
-            		<MenuItem key={option.value} value={option.value}>
-              			{option.label}
-            		</MenuItem>
-          		))}
-        	</TextField>
-        	</Grid>
-        	<Grid item xs={12} sm={6}>
-            <TextField
-          		id="businessd"
-          		select
-          		required
-          		fullWidth
-          		label="Business Domain"
-          		value={user.data.business_category?user.data.business_category:"none"}
-          		//onChange={handleChange}
-          		helperText="Please select your business category"
-          		variant="outlined"
-        	>
-          		{categoryData.map((option) => (
-            		<MenuItem key={option.name} value={option.name}>
-              			{option.name}
-            		</MenuItem>
-          		))}
-        	</TextField>
-        	</Grid>
-		    <Grid item xs={12} sm={5}>
+              <TextField
+                id="ura"
+                select
+                required
+                fullWidth
+                label="You are a"
+                value={user.data.business_type?user.data.business_type:"None"}
+                onChange={handleChange}
+                helperText="Please select your business type"
+                variant="outlined"
+              >
+                {URA.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+		        <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
+                defaultValue={address}
+                onChange={(e) => {setaddress(e.target.value)}}                
                 name="shopstreet"
                 label="Shop/House No. & Street Name"
                 id="shopstreet"
                 autoComplete="Street"
               />
             </Grid>
-            <Grid item xs={12} sm={7}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
+                defaultValue={city}
+                onChange={(e) => {setcity(e.target.value)}}                
                 name="cityarea"
                 label="City/Town/Village Area"
                 id="cityarea"
                 autoComplete="City"
               />
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
+                defaultValue={pincode}
+                onChange={(e) => {setpincode(e.target.value)}}                
                 name="pincode"
                 label="Pincode"
                 id="pincode"
                 autoComplete="Pincode"
               />
             </Grid>
-		     <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
+                defaultValue={district}
+                onChange={(e) => {setdistrict(e.target.value)}}                
+                name="state"
+                label="State"
+                id="state"
+                autoComplete="State"
+              />
+            </Grid>
+		        <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                defaultValue={state}
+                onChange={(e) => {setstate(e.target.value)}}                
                 name="state"
                 label="State"
                 id="state"
@@ -336,8 +411,7 @@ const UserDetails = () => {
           </Button>
         </form>
       </div>
-      <Box mt={5}>
-      </Box>
+    }
     </Container>
 	)
 }
