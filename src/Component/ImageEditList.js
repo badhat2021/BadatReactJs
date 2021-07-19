@@ -14,8 +14,10 @@ import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import AppBar from "@material-ui/core/AppBar";
+import Grid from '@material-ui/core/Grid';
 import Toolbar from "@material-ui/core/Toolbar";
 import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
@@ -51,7 +53,14 @@ const useStyles = makeStyles(theme => ({
 
   },
   gridlistitem: {
-    margin: "5px 10px"
+    // margin: "5px",
+    padding: "5px",
+    height: "100%"
+  },
+  tilebar: {
+    backgroundColor: "#00000000",
+    display: "flex",
+    justifyContent: "center"
   }
 }));
 
@@ -98,34 +107,27 @@ export default function TitlebarGridList(props) {
     <div className={classes.root}>
       <div className={classes.gridList}>        
         {props.data.map(tile => (
+          <Grid xs={6} md={3}>
           <GridListTile key={tile.id} className={classes.gridlistitem}>
             <img src={tile.thumbnail} alt={tile.product_id} className={classes.image}/>
             <GridListTileBar              
-              subtitle={<span>#{tile.product_id}-{tile.id}</span>}
+              className={classes.tilebar}
               actionIcon={
                 <>
-                  <Button variant="contained" size="small" onClick={() => { deleteImg(tile.product_id,tile.id)}}>DELETE</Button>
-                  
-                  <IconButton
-                    aria-label={`info about ${tile.id}`}
-                    className={classes.icon}
-                    value={tile.id}
-                    onClick={() => handleClickOpen(tile)}
-                  >
-                    <InfoIcon />
-                  </IconButton>
+                  <Button variant="contained" size="small" startIcon={<DeleteIcon />} style={{margin: "0 20px 15px 0px"}} onClick={() => { deleteImg(tile.product_id,tile.id)}}>DELETE</Button>
                 </>
               }
             />
           </GridListTile>
+          </Grid>
         ))}
-          <GridListTile key={"12312"} className={classes.gridlistitem}>
+{/*          <GridListTile key={"12312"} className={classes.gridlistitem}>
             <Button variant="contained" className={classes.image} onClick={() => { uploadImg(tile.product_id,tile.id)}}>
               <AddToPhotosIcon  fontSize="large"/>
             </Button>
-          </GridListTile>
+          </GridListTile>*/}
       </div>
-      <Dialog
+{/*      <Dialog
         fullScreen
         open={selectedTile !== null}
         onClose={handleClose}
@@ -147,7 +149,7 @@ export default function TitlebarGridList(props) {
         {selectedTile && (
           <img src={selectedTile.image} alt={selectedTile.id} />
         )}
-      </Dialog>
+      </Dialog>*/}
     </div>
   );
 }
