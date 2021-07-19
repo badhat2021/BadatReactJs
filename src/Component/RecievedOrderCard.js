@@ -34,7 +34,8 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
     maxWidth: 350,
-    margin: 20,
+    margin: "10px 0px",
+    padding: 10
   },
   bullet: {
     display: 'inline-block',
@@ -165,7 +166,6 @@ export default function RecievedOrderCard(props) {
         </Box>
         <Button color="primary" style={{fontWeight:"bold",marginRight: 15, fontSize:18, textTransform: "capitalize"}} onClick={orderDetails}>Details</Button>
         </Box>
-        <br/>
         <Box component="div" m={1}>
         <ButtonGroup color="primary" aria-label="outlined primary button group">
         
@@ -208,7 +208,6 @@ export default function RecievedOrderCard(props) {
       </Button>
       </ButtonGroup>
         </Box>
-        <br/>
         <Box component="div" m={1} className={classes.chipGroup}>
           <Chip label={`Rs. ${totalPrice}`} className={classes.amount} onClick={orderDetails}/>
           <Chip label={`Items: ${items}`} className={classes.items} onClick={orderDetails}/>

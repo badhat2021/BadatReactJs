@@ -107,7 +107,7 @@ export default function TitlebarGridList(props) {
     <div className={classes.root}>
       <div className={classes.gridList}>        
         {props.data.map(tile => (
-          <Grid xs={6} md={3}>
+          <Grid item xs={6} md={3}>
           <GridListTile key={tile.id} className={classes.gridlistitem}>
             <img src={tile.thumbnail} alt={tile.product_id} className={classes.image}/>
             <GridListTileBar              

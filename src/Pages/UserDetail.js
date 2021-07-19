@@ -104,7 +104,7 @@ const bCaegory = [
   },
   {
     value: 'StockList',
-    label: 'StockList',
+    label: 'StockList', 
   },
   {
     value: 'Manufacturer',
@@ -145,32 +145,25 @@ const UserDetails = () => {
 	const [categoryData, setCategory] = useState([]);
   const [backdrop, setBackdrop] = useState(user.load)
   console.log(user.data)
-  const [about_us, setabout_us] = useState(user.data.about_us)  
-  const [address, setaddress] = useState(user.data.address)
-  const [business_category, setbusiness_category] = useState(user.data.business_category)
-  const [business_name, setbusiness_name] = useState(user.data.business_name)
-  const [business_type, setbusiness_type] = useState(user.data.business_type)
-  const [city, setcity] = useState(user.data.city)
-  const [created_at, setcreated_at] = useState(user.data.created_at)
-  const [delivery_policy, setdelivery_policy] = useState(user.data.delivery_policy)
-  const [discount_upto, setdiscount_upto] = useState(user.data.discount_upto)
-  const [district, setdistrict] = useState(user.data.district)
-  const [email, setemail] = useState(user.data.email)
-  const [fcm_token, setfcm_token] = useState(user.data.fcm_token)
-  const [gstin, setgstin] = useState(user.data.gstin)
-  const [id, setid] = useState(user.data.id)
-  const [image, setimage] = useState(user.data.image)
-  const [latitude, setlatitude] = useState(user.data.latitude)
-  const [longitude, setlongitude] = useState(user.data.longitude)
-  const [mobile, setmobile] = useState(user.data.mobile)
-  const [name, setname] = useState(user.data.name)
-  const [payment_policy, setpayment_policy] = useState(user.data.payment_policy)
-  const [pincode, setpincode] = useState(user.data.pincode)
-  const [products, setproducts] = useState(user.data.products)
-  const [return_policy, setreturn_policy] = useState(user.data.return_policy)
-  const [room_id, setroom_id] = useState(user.data.room_id)
-  const [started_since, setstarted_since] = useState(user.data.started_since)
-  const [state, setstate] = useState(user.data.state)
+  const [about_us, setabout_us] = useState()
+  const [address, setaddress] = useState()
+  const [business_category, setbusiness_category] = useState()
+  const [business_name, setbusiness_name] = useState()
+  const [business_type, setbusiness_type] = useState()
+  const [city, setcity] = useState()
+  const [created_at, setcreated_at] = useState()
+  const [delivery_policy, setdelivery_policy] = useState()
+  const [discount_upto, setdiscount_upto] = useState()
+  const [district, setdistrict] = useState()
+  const [email, setemail] = useState()
+  const [gstin, setgstin] = useState()
+  //const [image, setimage] = useState()
+  const [name, setname] = useState()
+  const [payment_policy, setpayment_policy] = useState()
+  const [pincode, setpincode] = useState()
+  const [return_policy, setreturn_policy] = useState()
+  const [started_since, setstarted_since] = useState()
+  const [state, setstate] = useState()
 
 	const classes = useStyles();
 	useEffect(() => {
@@ -180,6 +173,7 @@ const UserDetails = () => {
      		setUser({ load: false, data: res });
      		setUpdate({data: res });
      		setCategory(categoryDatares.data.data);
+        setname(user.data.name)
 
    		}
    		fetchData();
@@ -202,11 +196,15 @@ const UserDetails = () => {
         :
         ""
       }
+
       <div className={classes.paper}>
-      	{user.data.image ? <Avatar className={classes.avatar} src={user.data.image }/> : <Avatar className={classes.avatar}> {user.data.name ? user.data.name : "Z"  } </Avatar>}
+      	
+        {user.data.image ? <Avatar className={classes.avatar} src={user.data.image }/> : <Avatar className={classes.avatar}> {user.data.name ? user.data.name : "Z"  } </Avatar>}
+        
         <Typography component="h1" variant="h5">
           Profile
         </Typography>
+
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -215,7 +213,7 @@ const UserDetails = () => {
                 name="name"
                 variant="outlined"
                 required
-                defaultValue={name}
+                value={user.data.name?user.data.name:"0000"}
                 onChange={(e) => {setname(e.target.value)}}
                 fullWidth
                 id="name"

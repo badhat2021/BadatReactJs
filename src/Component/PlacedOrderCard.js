@@ -30,7 +30,8 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
     maxWidth: 350,
-    margin: 20,
+    margin: "10px 0px",
+    padding: 10
   },
   bullet: {
     display: 'inline-block',
