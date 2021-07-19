@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@material-ui/core/Backdrop';
 import Container from '@material-ui/core/Container';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -33,10 +35,11 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  backdrop: {
+    zIndex: 1,
+    color: '#fff',
+  },
 }));
-
-
-
 
 const URA = [
   {
@@ -136,13 +139,39 @@ const bCaegory = [
 
 
 
-
-
-
-const UserDetail2 = () => {
+const UserDetails = () => {
 	const [user, setUser] = useState({load:true,data:{}})
 	const [updateUser, setUpdate] = useState({data:user.data})
 	const [categoryData, setCategory] = useState([]);
+  const [backdrop, setBackdrop] = useState(user.load)
+  console.log(user.data)
+  const [about_us, setabout_us] = useState(user.data.about_us)  
+  const [address, setaddress] = useState(user.data.address)
+  const [business_category, setbusiness_category] = useState(user.data.business_category)
+  const [business_name, setbusiness_name] = useState(user.data.business_name)
+  const [business_type, setbusiness_type] = useState(user.data.business_type)
+  const [city, setcity] = useState(user.data.city)
+  const [created_at, setcreated_at] = useState(user.data.created_at)
+  const [delivery_policy, setdelivery_policy] = useState(user.data.delivery_policy)
+  const [discount_upto, setdiscount_upto] = useState(user.data.discount_upto)
+  const [district, setdistrict] = useState(user.data.district)
+  const [email, setemail] = useState(user.data.email)
+  const [fcm_token, setfcm_token] = useState(user.data.fcm_token)
+  const [gstin, setgstin] = useState(user.data.gstin)
+  const [id, setid] = useState(user.data.id)
+  const [image, setimage] = useState(user.data.image)
+  const [latitude, setlatitude] = useState(user.data.latitude)
+  const [longitude, setlongitude] = useState(user.data.longitude)
+  const [mobile, setmobile] = useState(user.data.mobile)
+  const [name, setname] = useState(user.data.name)
+  const [payment_policy, setpayment_policy] = useState(user.data.payment_policy)
+  const [pincode, setpincode] = useState(user.data.pincode)
+  const [products, setproducts] = useState(user.data.products)
+  const [return_policy, setreturn_policy] = useState(user.data.return_policy)
+  const [room_id, setroom_id] = useState(user.data.room_id)
+  const [started_since, setstarted_since] = useState(user.data.started_since)
+  const [state, setstate] = useState(user.data.state)
+
 	const classes = useStyles();
 	useEffect(() => {
    		async function fetchData() {    
@@ -160,11 +189,19 @@ const UserDetail2 = () => {
     	updateUser.data.ura = event.target.value
   	};
 
-	//console.log(updateUser)
+	console.log(name)
 
 	return (
-<Container component="main" maxWidth="lg">
+    <Container component="main" maxWidth="lg">
       <CssBaseline />
+      {user.load
+        ?
+        <Backdrop className={classes.backdrop} open={backdrop}>
+          <CircularProgress />
+        </Backdrop>
+        :
+        ""
+      }
       <div className={classes.paper}>
       	{user.data.image ? <Avatar className={classes.avatar} src={user.data.image }/> : <Avatar className={classes.avatar}> {user.data.name ? user.data.name : "Z"  } </Avatar>}
         <Typography component="h1" variant="h5">
@@ -178,12 +215,11 @@ const UserDetail2 = () => {
                 name="name"
                 variant="outlined"
                 required
-                value={user.data.name?user.data.name:"none"}
+                defaultValue={name}
+                onChange={(e) => {setname(e.target.value)}}
                 fullWidth
                 id="name"
                 label="Name"
-                placeholder="nosand"
-                autoFocus
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -308,4 +344,4 @@ const UserDetail2 = () => {
 	)
 }
 
-export default UserDetail2
+export default UserDetails

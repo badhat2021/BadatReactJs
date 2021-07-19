@@ -21,7 +21,9 @@ import {
   //ENDPOINT_GET_TRUECALLER_RESPONSE,
 } from "../Constant";
 import Swal from "sweetalert2";
-import { storeToken, getToken, storeId, getId } from "../Util";
+import { storeToken, storeId, getId } from "../Util";
+const TOKEN = JSON.parse(localStorage.getItem("badhat_token"));
+
 
 export const getCategory = async () => {
   const res = await axios.get(BASE_URL + ENDPOINT_CATEGORIES);
@@ -97,30 +99,27 @@ export const login = async () => {
 };
 
 export const addToCartApi = async (body) => {
-  const token = await getToken();
   const res = await axios.post(BASE_URL + ENDPOINT_ADD_TO_CART, body, {
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + TOKEN,
     },
   });
   return res;
 };
 
 export const getCartData = async () => {
-  const token = await getToken();
   const res = await axios.get(BASE_URL + ENDPOINT_GET_CART_DATA, {
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + TOKEN,
     },
   });
   return res.data.data;
 };
 
 export const deleteCartData = async (id) => {
-  const token = await getToken();
   await axios.delete(`${BASE_URL + ENDPOINT_DELETE_CART_DATA}/${id}`, {
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + TOKEN,
     },
   });
 };
@@ -136,10 +135,9 @@ export const registerUser = async (body) => {
 };
 
 export const placeOrder = async (body) => {
-  const token = await getToken();
   const res = await axios.get(BASE_URL + ENDPOINT_PLACE_ORDER, {
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + TOKEN,
     },
   });
   if (res.status === 200) {
@@ -159,13 +157,12 @@ export const removeFromCart = async (id) => {
   let body = {
     cart_id: id,
   };
-  const token = await getToken();
   const res = await axios.post(
     BASE_URL + ENDPOINT_SUB_QUANTITY_FROM_CART,
     body,
     {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + TOKEN,
       },
     }
   );
@@ -204,80 +201,77 @@ export const getTruecallerResponse = async (id) => {
 };
 
 export const getOrderRecieved = async (body) => {
-  const token = await getToken();
   const res = await axios.get(BASE_URL + "receivedOrders", {
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + TOKEN,
     },
   });
   return res.data.data;
 };
 
 export const getOrderPlaced = async (body) => {
-  const token = await getToken();
   const res = await axios.get(BASE_URL + "placedOrders", {
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + TOKEN,
     },
   });
   return res.data.data;
 };
 
 export const acceptOrder = async (id) => {
-  const token = await getToken();
+
   const res = await axios.get(BASE_URL + "acceptOrder/"+id, {
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + TOKEN,
     },
   });
   return res.data;
 };
 
 export const declineOrder = async (id) => {
-  const token = await getToken();
   const res = await axios.get(BASE_URL + "cancelOrder/"+id, {
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + TOKEN,
     },
   });
   return res.data;
 };
 
 export const getOrderById = async (id) => {
-  const token = await getToken();
+
   const res = await axios.get(BASE_URL + "order/"+id, {
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + TOKEN,
     },
   });
   return res.data.data;
 };
 
-export const updateProfile = async (id) => {
-  const token = await getToken();
+export const updateProfile = async (dataset) => {
 
-  var data = new FormData(); 
-  data.append('id', id); 
-  data.append('business_category', 'test'); 
-  data.append('name', 'test'); 
-  data.append('business_name', '123'); 
-  data.append('email', 'test@test.com'); 
-  data.append('mobile', '1234567890'); 
-  data.append('state', 'Gujarat'); 
-  data.append('district', 'rajkot'); 
-  data.append('pincode', '360002'); 
-  data.append('latitude', '1.3'); 
-  data.append('longitude', '1.2'); 
-  data.append('address', 'rajkot'); 
-  data.append('city', 'rajkot'); 
-  data.append('gstin', '113166565'); 
-  data.append('business_type', 'Retail');  
+  var data = new FormData();
+  data.append('id', '431');
+  data.append('business_category', 'Clothing');
+  //data.append('image', fs.createReadStream('/C:/Users/HP/Pictures/wallpapers/daniel-leone-g30P1zcOzXo-unsplash.jpg'));
+  data.append('name', 'testupdate12');
+  data.append('business_name', '123');
+  data.append('email', 'test@test.com');
+  data.append('mobile', '1234567890');
+  data.append('state', 'Gujarat');
+  data.append('district', 'rajkot');
+  data.append('pincode', '360002');
+  data.append('latitude', '1.3');
+  data.append('longitude', '1.2');
+  data.append('address', 'rajkot');
+  data.append('city', 'rajkot');
+  data.append('gstin', '113166565');
+  data.append('business_type', 'Retail');
 
   var config = {   
       method: 'post',   
       url: 'https://badhat.app/api/updateProfile',   
       headers: {      
-        "Authorization": "Bearer " + token,
+        "Authorization": "Bearer " + TOKEN,
         "content-type": 'multipart/form-data'
       },   
       data : data 
@@ -295,7 +289,7 @@ export const updateProfile = async (id) => {
 //updateProfile(416)
 
 export const addProduct = async (dataset, files) => {
-    const token = await getToken();
+  
     console.log(dataset)
     console.log(files.[0])
     if(dataset.name === null || dataset.verticalId === null || dataset.subCategoryId === null || dataset.categoryId === null || dataset.description === null || dataset.moq === null || dataset.price === null || files.length===0)
@@ -317,7 +311,7 @@ export const addProduct = async (dataset, files) => {
       method: 'post',
       url: 'https://badhat.app/api/addProduct',
       headers: { 
-        "Authorization": "Bearer " + token,
+        "Authorization": "Bearer " + TOKEN,
         "content-type": 'multipart/form-data'
       },
       data : data
@@ -340,7 +334,6 @@ export const addProduct = async (dataset, files) => {
 
 
 export const editProduct = async (dataset, files) => {
-    const token = await getToken();
     console.log(dataset)
     console.log(files.[0])
     var data = new FormData();
@@ -361,7 +354,7 @@ export const editProduct = async (dataset, files) => {
       method: 'post',
       url: 'https://badhat.app/api/editProduct',
       headers: { 
-        "Authorization": "Bearer " + token,
+        "Authorization": "Bearer " + TOKEN,
         "content-type": 'multipart/form-data'
       },
       data : data
@@ -382,11 +375,10 @@ export const editProduct = async (dataset, files) => {
 
 
 export const getNotifications = async () => {
-  const token = await getToken();
   const res = await axios.get(
     "https://badhat.app/api/notifications",{
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + TOKEN,
       },
     });
   return res.data;
@@ -394,11 +386,10 @@ export const getNotifications = async () => {
 
 
 export const getNotificationCount = async () => {
-  const token = JSON.parse(localStorage.getItem("badhat_token"));
   const res = await axios.get(
     "https://badhat.app/api/appState",{
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + TOKEN,
       },
     });
   return res.data.data.notification;
@@ -406,44 +397,41 @@ export const getNotificationCount = async () => {
 
 
 export const markAsRead = async () => {
-  const token = await getToken();
+
   const res = await axios.get(
     "https://badhat.app/api/markAllRead",{
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + TOKEN,
       },
     });
 };
 
 
 export const getMyProducts = async () => {
-  const token = JSON.parse(localStorage.getItem("badhat_token"));
   const res = await axios.get(
     "https://badhat.app/api/products",{
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + TOKEN,
       },
     });
   return res;
 };
 
 export const delProduct = async (id) => {
-  const token = JSON.parse(localStorage.getItem("badhat_token"));
   const res = await axios.delete(
     `https://badhat.app/api/product/${id}`,{
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + TOKEN,
       },
     });
   return res;
 };
 
 export const delProductImg = async (prd_id,img_id) => {
-  const token = JSON.parse(localStorage.getItem("badhat_token"));
   const res = await axios.delete(
     `https://badhat.app/api/products/${prd_id}/images/${img_id}`,{
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + TOKEN,
       },
     });
   return res;
