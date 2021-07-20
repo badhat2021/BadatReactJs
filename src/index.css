@@ -16,3 +16,7 @@ code {
 .MuiBox-root{
   padding: 0!important;
 }
+
+.MuiIconButton-label{
+  flex-direction: column;
+}

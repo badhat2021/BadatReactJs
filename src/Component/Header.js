@@ -16,6 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import ListItemText from '@material-ui/core/ListItemText';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -36,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: "4px 15px",
     display: "flex",
+    borderRadius: "25px",
     alignItems: "center",
     width: "100%",
   },
@@ -59,8 +61,9 @@ const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
-  menuButton: {
+  homeButton: {
     marginRight: theme.spacing(2),
+    flexDirection: "column"
   },
   title: {
     display: "none",
@@ -126,6 +129,11 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: "5px",
       marginRight: "2px",
     },
+  },
+  homelabel:{
+    fontSize: "10px",
+    paddingTop: "5px",
+    fontWeight: "500"
   },
   myOrderButton: {
     marginLeft: "5%",
@@ -241,12 +249,13 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
       <Toolbar>
         <IconButton
           edge="start"
-          className={classes.menuButton}
+          className={classes.homeButton}
           color="inherit"
           aria-label="open drawer"
           onClick={() => history.push("/")}
         >
           <Avatar alt="logo" src={Logo} />
+          <div className={classes.homelabel}> Home</div>
         </IconButton>
         <Typography className={classes.title} variant="h5" noWrap>
           Badat
@@ -322,6 +331,10 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
               <Badge badgeContent={unreadCount()} color="primary">
                 <NotificationsIcon />
               </Badge>
+            </IconButton>
+
+            <IconButton aria-label="add new product" onClick={() => {history.push("/products/new")}}>
+                <AddBoxIcon />
             </IconButton>
 
             <IconButton

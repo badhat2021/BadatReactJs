@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
 //import LoadingOverlay from "react-loading-overlay";
-import { getSellerDetail, getCategory, } from "../AppApi";
+import { getSellerDetail, getCategory, getState, getDistrict, getPincodeData, updateProfile } from "../AppApi";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -47,8 +47,8 @@ const URA = [
     label: 'None',
   },
   {
-    value: 'Retailer',
-    label: 'Retailer',
+    value: 'Retail',
+    label: 'Retail',
   },
   {
     value: 'Distributer',
@@ -89,61 +89,14 @@ const URA = [
 ];
 
 
-const bCaegory = [
-  {
-    value: 'None',
-    label: 'None',
-  },
-  {
-    value: 'Retailer',
-    label: 'Retailer',
-  },
-  {
-    value: 'Distributer',
-    label: 'Distributer',
-  },
-  {
-    value: 'StockList',
-    label: 'StockList', 
-  },
-  {
-    value: 'Manufacturer',
-    label: 'Manufacturer',
-  },
-  {
-    value: 'Wholeseller',
-    label: 'Wholeseller',
-  },
-  {
-    value: 'Agent',
-    label: 'Agent',
-  },
-  {
-    value: 'Brand',
-    label: 'Brand',
-  },
-  {
-    value: 'Supplier',
-    label: 'Supplier',
-  },
-  {
-    value: 'OnlineSeller',
-    label: 'OnlineSeller',
-  },
-  {
-    value: 'Reseller',
-    label: 'Reseller',
-  },
-];
-
-
-
-
 const UserDetails = () => {
 	const [user, setUser] = useState({load:true,data:{}})
 	const [updateUser, setUpdate] = useState({data:user.data})
+  const [stateData, setStateData] = useState()
+  const [districtData, setDistrictData] = useState()
 	const [categoryData, setCategory] = useState([]);
   const [backdrop, setBackdrop] = useState(user.load)
+  const [error, seterror] = useState(false)
   
   const [name, setname] = useState(user.data.name)
   const [about_us, setabout_us] = useState()
@@ -166,14 +119,19 @@ const UserDetails = () => {
   const [state, setstate] = useState()
 
 	const classes = useStyles();
+
 	useEffect(() => {
    		async function fetchData() {    
      		const res = await getSellerDetail();    
 			  const categoryDatares = await getCategory();
+        const stateres = await getState();
+        const districtres = await getDistrict(res.state);
      		setUser({ load: false, data: res });
      		setUpdate({data: res });
-        console.log(res)
      		setCategory(categoryDatares.data.data);
+        setStateData(stateres)
+        setDistrictData(districtres)
+        console.log(res)
    		  setname(res.name)
         setemail(res.email)
         setgstin(res.gstin)
@@ -185,32 +143,61 @@ const UserDetails = () => {
         setdistrict(res.district)
         setstate(res.state)
         setpincode(res.pincode)
+        setstarted_since(res.started_since)
+        setdiscount_upto(res.discount_upto)
+        setreturn_policy(res.return_policy)
+        setpayment_policy(res.payment_policy)
+        setdelivery_policy(res.delivery_policy)
+        setabout_us(res.about_us)
       }
    		fetchData();
 	 }, []);
+
+  const handlePincode = async (pincode) => {
+    const res = await getPincodeData(pincode);
+    console.log(res)
+  }
 
 	const handleChange = (event) => {
     	updateUser.data.ura = event.target.value
   	};
 
-  const handleSubmit = (e) => {
+  const handleStateChange = async (newstate) => {
+      setdistrict(null);
+      seterror(true);
+      setDistrictData(null);
+      const districtres = await getDistrict(newstate);
+      console.log(districtres)
+      setDistrictData(districtres);
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    var dataset = {
-      "id" : user.data.id,
-      "name" : name,
-      "email" : email,
-      "gstin" : gstin,
-      "business_name" : business_name,
-      "business_category" : business_category,
-      "business_type" : business_type,
-      "address" : address,
-      "city" : city,
-      "district" : district,
-      "state" : state,
-      "pincode" : pincode,
-      "mobile" : user.data.mobile,
+    if (!error) {
+      var dataset = {
+        "id" : user.data.id,
+        "name" : name,
+        "email" : email,
+        "gstin" : gstin,
+        "business_name" : business_name,
+        "business_category" : business_category,
+        "business_type" : business_type,
+        "address" : address,
+        "city" : city,
+        "district" : district,
+        "state" : state,
+        "pincode" : pincode,
+        "started_since" : started_since,
+        "mobile" : user.data.mobile,
+        "discount_upto" : discount_upto,
+        "return_policy" : return_policy,
+        "payment_policy" : payment_policy,
+        "delivery_policy" : delivery_policy,
+        "about_us" : about_us
+      }
+      setBackdrop(true);
+      const res = await updateProfile(dataset);
     }
-    console.log(dataset)
   };
 
 	return (
@@ -249,7 +236,7 @@ const UserDetails = () => {
             <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
-                value={user.data.mobile?user.data.mobile:"0000"}
+                value={user.data.mobile}
                 disabled
                 fullWidth
                 id="mobileno"                
@@ -262,7 +249,7 @@ const UserDetails = () => {
                 autoComplete="email"
                 name="email"
                 variant="outlined"
-                required
+                disabled
                 defaultValue={user.data.email}
                 onChange={(e) => {setemail(e.target.value)}}
                 fullWidth
@@ -275,8 +262,7 @@ const UserDetails = () => {
                 autoComplete="gst"
                 name="gstin"
                 variant="outlined"
-                required
-                defaultValue={gstin}
+                defaultValue={user.data.gstin}
                 onChange={(e) => {setgstin(e.target.value)}}
                 fullWidth
                 id="gstin"
@@ -288,11 +274,24 @@ const UserDetails = () => {
                 variant="outlined"
                 required
                 fullWidth
-                value={user.data.business_name?user.data.business_name:"none"}
+                defaultValue={user.data.business_name}
+                onChange={(e) => {setbusiness_name(e.target.value)}}
                 id="shopname"
                 label="Shop/Business Name"
                 name="shopname"
                 autoComplete="shop"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name="started_since"
+                variant="outlined"
+                type="number"
+                defaultValue={user.data.started_since}
+                onChange={(e) => {setstarted_since(e.target.value)}}
+                fullWidth
+                id="started_since"
+                label="Started since"
               />
             </Grid>
         	  <Grid item xs={12} sm={6}>
@@ -302,8 +301,8 @@ const UserDetails = () => {
           	 	  required
           	 	  fullWidth
           	 	  label="Business Domain"
-          	 	  value={user.data.business_category?user.data.business_category:"none"}
-          	 	  //onChange={handleChange}
+          	 	  defaultValue={user.data.business_category}
+          	 	  onChange={(e) => {setbusiness_category(e.target.business_category)}}
           	 	  helperText="Please select your business category"
           	 	  variant="outlined"
         	    > 
@@ -322,9 +321,10 @@ const UserDetails = () => {
                 select
                 required
                 fullWidth
+                displayEmpty
                 label="You are a"
-                value={user.data.business_type?user.data.business_type:"None"}
-                onChange={handleChange}
+                defaultValue={user.data.business_type?user.data.business_type:"None"}
+                onChange={(e) => {setbusiness_type(e.target.value)}}
                 helperText="Please select your business type"
                 variant="outlined"
               >
@@ -340,7 +340,7 @@ const UserDetails = () => {
                 variant="outlined"
                 required
                 fullWidth
-                defaultValue={address}
+                defaultValue={user.data.address}
                 onChange={(e) => {setaddress(e.target.value)}}                
                 name="shopstreet"
                 label="Shop/House No. & Street Name"
@@ -353,7 +353,7 @@ const UserDetails = () => {
                 variant="outlined"
                 required
                 fullWidth
-                defaultValue={city}
+                defaultValue={user.data.city}
                 onChange={(e) => {setcity(e.target.value)}}                
                 name="cityarea"
                 label="City/Town/Village Area"
@@ -366,7 +366,8 @@ const UserDetails = () => {
                 variant="outlined"
                 required
                 fullWidth
-                defaultValue={pincode}
+                type="number"
+                defaultValue={user.data.pincode}
                 onChange={(e) => {setpincode(e.target.value)}}                
                 name="pincode"
                 label="Pincode"
@@ -377,27 +378,114 @@ const UserDetails = () => {
             <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
-                required
                 fullWidth
-                defaultValue={district}
-                onChange={(e) => {setdistrict(e.target.value)}}                
-                name="state"
-                label="State"
-                id="state"
-                autoComplete="State"
-              />
+                error={district?false:true}
+                helperText={district?null:"required"}
+                required
+                select
+                defaultValue={user.data.district}
+                onChange={(e) => {setdistrict(e.target.value);seterror(false)}}                
+                name="district"
+                label="District"
+                id="district"
+              >
+                {districtData?districtData.map((option) => (
+                  <MenuItem key={option} value={option}>
+                      {option}
+                  </MenuItem>
+                )):<MenuItem key={"none"} value={null}>
+                      None
+                  </MenuItem>}                
+              </TextField>
             </Grid>
 		        <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
-                required
                 fullWidth
-                defaultValue={state}
-                onChange={(e) => {setstate(e.target.value)}}                
+                select
+                required
+                defaultValue={user.data.state}
+                onChange={(e) => {setstate(e.target.value); handleStateChange(e.target.value);}}                
                 name="state"
                 label="State"
                 id="state"
                 autoComplete="State"
+              >
+                {stateData?stateData.map((option) => (
+                  <MenuItem key={option} value={option}>
+                      {option}
+                  </MenuItem>
+                )):<MenuItem key="none" value={null}>
+                      None
+                  </MenuItem>}                
+              </TextField>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="discount_upto"
+                defaultValue={user.data.discount_upto}
+                fullWidth
+                label="Discount upto"
+                onChange={(e) => {
+                  setdiscount_upto(e.target.value)
+                }}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="about_us"
+                defaultValue={user.data.about_us}
+                fullWidth
+                label="About us"
+                multiline
+                rows={3}
+                onChange={(e) => {
+                  setabout_us(e.target.value)
+                }}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="return_policy"
+                defaultValue={user.data.return_policy}
+                fullWidth
+                label="Return policy"
+                multiline
+                rows={3}
+                onChange={(e) => {
+                  setreturn_policy(e.target.value)
+                }}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="payment_policy"              
+                defaultValue={user.data.payment_policy}
+                fullWidth
+                label="Payment policy"
+                multiline
+                rows={3}
+                onChange={(e) => {
+                  setpayment_policy(e.target.value)
+                }}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="delivery_policy"
+                defaultValue={user.data.delivery_policy}
+                fullWidth
+                label="Delivery policy"
+                multiline
+                rows={3}
+                onChange={(e) => {
+                  setdelivery_policy(e.target.value)
+                }}
+                variant="outlined"
               />
             </Grid>
           </Grid>

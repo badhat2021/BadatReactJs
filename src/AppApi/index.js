@@ -248,25 +248,30 @@ export const getOrderById = async (id) => {
 };
 
 export const updateProfile = async (dataset) => {
-
+  console.log(dataset)
   var data = new FormData();
-  data.append('id', '431');
-  data.append('business_category', 'Clothing');
   //data.append('image', fs.createReadStream('/C:/Users/HP/Pictures/wallpapers/daniel-leone-g30P1zcOzXo-unsplash.jpg'));
-  data.append('name', 'testupdate12');
-  data.append('business_name', '123');
-  data.append('email', 'test@test.com');
-  data.append('mobile', '1234567890');
-  data.append('state', 'Gujarat');
-  data.append('district', 'rajkot');
-  data.append('pincode', '360002');
-  data.append('latitude', '1.3');
-  data.append('longitude', '1.2');
-  data.append('address', 'rajkot');
-  data.append('city', 'rajkot');
-  data.append('gstin', '113166565');
-  data.append('business_type', 'Retail');
-
+  data.append("id", dataset.id)
+  data.append("name", dataset.name)
+  data.append("email", dataset.email)
+  data.append("gstin", dataset.gstin)
+  data.append("business_name", dataset.business_name)
+  data.append("business_category", dataset.business_category)
+  data.append("business_type", dataset.business_type)
+  data.append("address", dataset.address)
+  data.append("city", dataset.city)
+  data.append("district", dataset.district)
+  data.append("state", dataset.state)
+  data.append("lol", "lol")
+  data.append("pincode", dataset.pincode)
+  data.append("started_since", dataset.started_since)
+  data.append("mobile", dataset.mobile)
+  data.append("discount_upto", dataset.discount_upto)
+  data.append("return_policy", dataset.return_policy)
+  data.append("payment_policy", dataset.payment_policy)
+  data.append("delivery_policy", dataset.delivery_policy)
+  data.append("about_us", dataset.about_us)
+  console.log(data)
   var config = {   
       method: 'post',   
       url: 'https://badhat.app/api/updateProfile',   
@@ -279,7 +284,8 @@ export const updateProfile = async (dataset) => {
 
     await axios(config)
     .then(function (response) {   
-      console.log(response); 
+      console.log(response);
+      window.location.href="/products/new";      
     })
     .catch(function (error) {   
       console.log(error); 
@@ -434,5 +440,10 @@ export const delProductImg = async (prd_id,img_id) => {
         Authorization: "Bearer " + TOKEN,
       },
     });
+  return res;
+};
+
+export const getPincodeData = async (pincode) => {
+  const res = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`);
   return res;
 };
