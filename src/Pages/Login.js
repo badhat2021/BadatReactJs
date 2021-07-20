@@ -99,6 +99,8 @@ class Login extends Component {
     this.setState({ otpError: false, errorMessage: "" });
     if (this.state.otp !== "") {
       const res = await sendOtp(this.state.mobile, this.state.otp);
+      console.log("-----------------11111111");
+      console.log(res);
       if (res) {
         if (
           res &&
@@ -107,6 +109,7 @@ class Login extends Component {
           res.data.data.user &&
           res.data.data.user.name === null
         ) {
+          console.log("-----------------22222222");
           if (
             this.props.location.state &&
             this.props.location.state.itemDetail
@@ -148,6 +151,7 @@ class Login extends Component {
           res.data.data.user.name &&
           res.data.data.user.name !== null
         ) {
+          console.log("-----------------3333333333");
           storeToken(res.data.data.access_token);
           if (
             this.props.location.state &&
