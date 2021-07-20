@@ -58,9 +58,6 @@
   .subCategoryGridContainer_Less_item::-webkit-scrollbar {
     display: none;
   }
-  .subCategorySliderCard {
-    width: 38%;
-  }
 }
 
 

@@ -78,8 +78,8 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    marginRight: theme.spacing(1),
-    marginLeft: -15,
+    marginRight: 10,
+    marginLeft: -10,
     width: "100%",
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
@@ -136,6 +136,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "500"
   },
   myOrderButton: {
+    display: "flex",
     marginLeft: "5%",
     marginRight: "-10px",
     [theme.breakpoints.up("sm")]: {
@@ -247,16 +248,27 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
   return (
     <div className="HeaderContainer">
       <Toolbar>
-        <IconButton
-          edge="start"
-          className={classes.homeButton}
-          color="inherit"
-          aria-label="open drawer"
-          onClick={() => history.push("/")}
-        >
-          <Avatar alt="logo" src={Logo} />
-          <div className={classes.homelabel}> Home</div>
-        </IconButton>
+            <IconButton
+            className="headerIconbtns"
+              aria-label="more"
+              aria-controls="long-menu"
+              aria-haspopup="true"
+              onClick={() => history.push("/")}    
+            >
+              <div
+                style={{
+                  display: "flex",
+                  marginRight: 7,
+                  flexDirection: "column",
+                  textAlign: "center",
+                }}
+              >
+                <Avatar alt="logo" src={Logo} />      
+                <div style={{ marginTop: "-12px" }}>
+                  <span style={{ fontSize: "x-small" }}>Home</span>
+                </div>
+              </div>
+            </IconButton>
         <Typography className={classes.title} variant="h5" noWrap>
           Badat
         </Typography>
@@ -284,7 +296,7 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
         {checkLogin() ? null : (
           <div
             className={classes.sellButton}
-            onClick={() => onSaleClickHandle()}
+            onClick={() => onLoginClickHandle()}
           >
             <IconButton aria-label="sell">
               <span
@@ -327,17 +339,18 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
         )}
         {!checkLogin() ? null : (
           <div className={classes.myOrderButton}>
-            <IconButton aria-label="show new notifications" onClick={handleClickNotify}>
+            <IconButton aria-label="show new notifications" className="headerIconbtns" onClick={handleClickNotify}>
               <Badge badgeContent={unreadCount()} color="primary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
 
-            <IconButton aria-label="add new product" onClick={() => {history.push("/products/new")}}>
+            <IconButton aria-label="add new product" className="headerIconbtns" onClick={() => {history.push("/products/new")}}>
                 <AddBoxIcon />
             </IconButton>
 
             <IconButton
+              className="headerIconbtns"
               aria-label="more"
               aria-controls="long-menu"
               aria-haspopup="true"
@@ -376,14 +389,11 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
                 Logout
               </MenuItem>
             </Menu>
-          </div>
-        )}
-        {checkLogin() ? (
           <div
             className={classes.sectionDesktop}
             onClick={() => onClickCartHandle()}
           >
-            <IconButton aria-label="cart">
+            <IconButton aria-label="cart" className="headerIconbtns">
               {cartCount ? (
                 <StyledBadge badgeContent={cartCount} color="primary">
                   <ShoppingCartIcon />
@@ -392,8 +402,10 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
                 <ShoppingCartIcon />
               )}
             </IconButton>
+            </div>
           </div>
-        ) : null}
+
+        )}
       </Toolbar>
     </div>
   );
