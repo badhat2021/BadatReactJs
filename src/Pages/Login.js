@@ -114,6 +114,7 @@ class Login extends Component {
             this.props.location.state &&
             this.props.location.state.itemDetail
           ) {
+            console.log("----------------44444");
             this.props.history.push({
               pathname: `/${ROUTE_REGISTER}`,
               state: {
@@ -126,6 +127,7 @@ class Login extends Component {
             this.props.location.state &&
             this.props.location.state.fromLoginButton
           ) {
+            console.log("-----------------55555");
             this.props.history.push({
               pathname: `/${ROUTE_REGISTER}`,
               state: {
@@ -135,6 +137,7 @@ class Login extends Component {
               },
             });
           } else {
+            console.log("-----------------66666");
             this.props.history.push({
               pathname: `/${ROUTE_REGISTER}`,
               state: {
