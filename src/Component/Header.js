@@ -30,7 +30,7 @@ import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
 import Logo from "../AppAsset/Badhat App Icon.jpg";
 import { ROUTE_CART, ROUTE_ALL_PRODUCT, ROUTE_LOGIN } from "../Constant";
 import "../AppAsset/CSS/Header.css";
-import {getNotificationCount, markAsRead} from '../AppApi'
+import {getAppState, markAsRead} from '../AppApi'
 import { installOurApp, handleLogout, checkLogin } from "../Util";
 
 const useStyles = makeStyles((theme) => ({
@@ -157,17 +157,20 @@ const StyledBadge = withStyles((theme) => ({
 
 const Header = ({ history, cartCount, login, cartItemCount }) => {
   const [search, setSearch] = useState("");
+  const [notificationCount, setNotificationCount] = useState(0)
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   useEffect(() => {
-    getCartCount();
     async function fetchData(){
-      const data = await getNotificationCount();
+      const login = await checkLogin()
+        if (login) {
+          getCartCount();
+          const data = await getAppState();
+          setNotificationCount(data.data.data.notification)     
+        }
     }
     fetchData();
   }, []);
-
-  const [notifyData, setNotifyData] = useState(0)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -183,17 +186,6 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
   const onClickCartHandle = () => {
     history.push(`/${ROUTE_CART}`);
   };
-
-  const unreadCount = () => {
-    var c = 0;
-    if(notifyData){
-      notifyData.map((msg) => {
-        if(msg.is_read === 0)
-          c++;
-      })
-    }
-    return c;
-  }
 
   const onSaleClickHandle = () => {
     installOurApp(`Want to sell on Badat at wholesale prices or in bulk? 
@@ -340,7 +332,7 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
         {!checkLogin() ? null : (
           <div className={classes.myOrderButton}>
             <IconButton aria-label="show new notifications" className="headerIconbtns" onClick={handleClickNotify}>
-              <Badge badgeContent={unreadCount()} color="primary">
+              <Badge badgeContent={notificationCount} color="primary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

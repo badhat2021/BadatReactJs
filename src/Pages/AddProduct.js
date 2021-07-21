@@ -16,6 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Backdrop from '@material-ui/core/Backdrop';
 import Alert from '@material-ui/lab/Alert';
+import { checkLogin } from "../Util";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -87,6 +88,10 @@ const AddProductForm = () => {
 
   useEffect(() => {
       async function fetchData() {  
+        const login = await checkLogin()
+        if (!login) {
+          window.location.href="/login"
+        }
         //console.log("objectgfdfghjk")
         const cat1 = await getCategory();
         //console.log(cat1.data.data)

@@ -65,7 +65,7 @@ class Homepage extends Component {
         >
           Open App
         </Fab>
-
+        {checkLogin()?
       <Snackbar
         anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
         open={true}
@@ -77,6 +77,8 @@ class Homepage extends Component {
           </Button>
         </Link>
       </Snackbar>
+      :""}
+
         <Category />
 
         <Footer />

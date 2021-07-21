@@ -13,6 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Backdrop from '@material-ui/core/Backdrop';
 import Container from '@material-ui/core/Container';
 import MenuItem from '@material-ui/core/MenuItem';
+import { checkLogin } from "../Util";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -121,7 +122,11 @@ const UserDetails = () => {
 	const classes = useStyles();
 
 	useEffect(() => {
-   		async function fetchData() {    
+   		async function fetchData() {
+              const login = await checkLogin()
+      if (!login) {
+        window.location.href="/login"
+      }
      		const res = await getSellerDetail();    
 			  const categoryDatares = await getCategory();
         const stateres = await getState();

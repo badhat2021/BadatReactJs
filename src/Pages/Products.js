@@ -15,6 +15,8 @@ import NoDataFound from '../Component/NoDataFound'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import AddIcon from '@material-ui/icons/Add';
+import { checkLogin } from "../Util";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,6 +57,10 @@ export default function ProductsPage() {
 
 	useEffect(() => {
 		async function fetchData(){
+      const login = await checkLogin()
+      if (!login) {
+        window.location.href="/login"
+      }
       const res1 = await getMyProducts()
       setMyProductsList(res1.data.data);
       console.log(res1.data.data)

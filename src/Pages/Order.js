@@ -8,6 +8,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import { checkLogin } from "../Util";
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -61,12 +63,19 @@ export default function FullWidthTabs() {
   const [OrderPlacedList, setOrderPlacedList] = useState([])
 
 
-	useEffect(async() => {
+	useEffect(() => {
+   async function fetchData(){
+    const login = await checkLogin()
+      if (!login) {
+        window.location.href="/login"
+      }
 		const res1 = await getOrderRecieved()
     const res2 = await getOrderPlaced()
 		//console.log(res1);
 		setOrderRecList(res1);
     setOrderPlacedList(res2);
+   }
+   fetchData()
 	},[]);
 
   return (

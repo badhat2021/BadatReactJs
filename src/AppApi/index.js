@@ -391,14 +391,14 @@ export const getNotifications = async () => {
 };
 
 
-export const getNotificationCount = async () => {
+export const getAppState = async () => {
   const res = await axios.get(
     "https://badhat.app/api/appState",{
       headers: {
         Authorization: "Bearer " + TOKEN,
       },
     });
-  return res.data.data.notification;
+  return res;
 };
 
 
