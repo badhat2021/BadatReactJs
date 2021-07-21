@@ -10,7 +10,11 @@ import { Helmet } from "react-helmet";
 import Footer from "../Component/Footer";
 import Logo from "../AppAsset/Badhat App Icon.jpg";
 import Fab from "@material-ui/core/Fab";
-
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import AddIcon from '@material-ui/icons/Add';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import { Link } from 'react-router-dom';
 import "../AppAsset/CSS/common.css";
 
 class Homepage extends Component {
@@ -61,6 +65,18 @@ class Homepage extends Component {
         >
           Open App
         </Fab>
+
+      <Snackbar
+        anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+        open={true}
+        key={"bottom right"}
+      >
+        <Link to="/products/new" className="linkStyle">
+          <Button variant="contained" className="addprdBTN" color="primary" startIcon={<AddIcon />}>
+            Add Product
+          </Button>
+        </Link>
+      </Snackbar>
         <Category />
 
         <Footer />

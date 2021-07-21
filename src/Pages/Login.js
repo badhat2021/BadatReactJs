@@ -282,6 +282,7 @@ class Login extends Component {
         res.data.user.name &&
         res.data.user.name !== null
       ) {
+        console.log("-----------------11616166161")
         storeToken(res.data.access_token);
         if (this.props.location.state && this.props.location.state.itemDetail) {
           const addToCartres = await addToCartApi(

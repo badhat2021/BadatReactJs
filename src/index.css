@@ -29,3 +29,13 @@ code {
 .headerIconbtns{
   padding: 12px 8px !important;
 }
+
+.linkStyle{
+  text-decoration: none !important;
+}
+
+.addprdBTN{
+  color: white !important;
+  border-radius: 30px !important;
+  background-color: #0d992f !important;
+}

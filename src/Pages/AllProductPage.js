@@ -14,6 +14,11 @@ import {
   ROUTE_SUBCATEGORIES,
   ENDPOINT_GET_VERTICALS_BANNER,
 } from "../Constant";
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import AddIcon from '@material-ui/icons/Add';
+import { Link } from 'react-router-dom';
 import Product from "../Component/Product";
 import "../AppAsset/CSS/AllProductPage.css";
 import Banners from "../Component/Banners";
@@ -356,7 +361,7 @@ class AllProductPage extends Component {
         <Fab
           variant="extended"
           size="small"
-          // color="red"
+          color="red"
           aria-label="add"
           style={{
             zIndex: "5",
@@ -380,6 +385,19 @@ class AllProductPage extends Component {
         >
           Open App
         </Fab>
+
+      <Snackbar
+        anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+        open={true}
+        key={"bottom right"}
+      >
+        <Link to="/products/new" className="linkStyle">
+          <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+            Add Product
+          </Button>
+        </Link>
+      </Snackbar>
+
         <div className="AllProductPageContainer">
           <div className="AllProductPageCategoryCardContainer">
             <SliderCategory

@@ -13,7 +13,8 @@ import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import NoDataFound from '../Component/NoDataFound'
 import CircularProgress from '@material-ui/core/CircularProgress';
-import AddIcon from '@material-ui/icons/AddBox';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,7 +73,7 @@ export default function ProductsPage() {
         key={"bottom right"}
       >
         <Link to="/products/new" className={classes.linkStyle}>
-          <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+          <Button variant="contained" className="addprdBTN" color="primary" startIcon={<AddIcon />}>
             Add Product
           </Button>
         </Link>

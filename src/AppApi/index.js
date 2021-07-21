@@ -285,7 +285,7 @@ export const updateProfile = async (dataset) => {
     await axios(config)
     .then(function (response) {   
       console.log(response);
-      window.location.href="/products/new";      
+      window.location.href="/";      
     })
     .catch(function (error) {   
       console.log(error); 
