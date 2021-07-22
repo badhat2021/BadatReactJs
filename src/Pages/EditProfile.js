@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
 //import LoadingOverlay from "react-loading-overlay";
-import { getSellerDetail, getCategory, getState, getDistrict, getPincodeData, updateProfile } from "../AppApi";
+import { getMyDetail, getCategory, getState, getDistrict, getPincodeData, updateProfile } from "../AppApi";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -132,11 +132,12 @@ const UserDetails = () => {
       if (!login) {
         window.location.href="/login"
       }
-     		const res = await getSellerDetail();    
+     		const res = await getMyDetail();    
 			  const categoryDatares = await getCategory();
         const stateres = await getState();
         const districtres = await getDistrict(res.state);
      		setUser({ load: false, data: res });
+        setBackdrop(false)
      		setUpdate({data: res });
      		setCategory(categoryDatares.data.data);
         setStateData(stateres)
@@ -184,6 +185,7 @@ const UserDetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!error) {
+      setBackdrop(true);
       var dataset = {
         "id" : user.data.id,
         "name" : name,
@@ -205,7 +207,6 @@ const UserDetails = () => {
         "delivery_policy" : delivery_policy,
         "about_us" : about_us
       }
-      setBackdrop(true);
       const res = await updateProfile(dataset);
     }
   };
@@ -514,9 +515,12 @@ const UserDetails = () => {
             color="primary"
             className={classes.submit}
           >
-            Update Profile
+            SAVE
           </Button>
         </form>
+        <Backdrop className={classes.backdrop} open={backdrop}>
+          <CircularProgress />
+        </Backdrop>
       </div>
     }
     </Container>

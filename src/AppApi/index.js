@@ -147,7 +147,13 @@ export const placeOrder = async (body) => {
   }
 };
 
-export const getSellerDetail = async () => {
+export const getSellerDetail = async (id) => {
+  //const id = await getId();
+  const  res = await axios.get(BASE_URL + ENDPOINT_GET_SELLER_DETAIL + id);
+  return res.data.data;
+};
+
+export const getMyDetail = async () => {
   const id = await getId();
   const  res = await axios.get(BASE_URL + ENDPOINT_GET_SELLER_DETAIL + id);
   return res.data.data;
