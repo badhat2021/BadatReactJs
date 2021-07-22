@@ -13,6 +13,16 @@ import { Drawer, Button, Fab } from "@material-ui/core";
 import { ROUTE_CART, ROUTE_USER_DETAIL, ROUTE_LOGIN } from "../Constant";
 import Swal from "sweetalert2";
 import Carousel from "react-material-ui-carousel";
+import DialogContent from '@material-ui/core/DialogContent';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import PersonIcon from '@material-ui/icons/Person';
+import AddIcon from '@material-ui/icons/Add';
+import Typography from '@material-ui/core/Typography';
 import {
   FacebookShareButton,
   PinterestShareButton,
@@ -42,6 +52,7 @@ class ProductDetail extends Component {
       data: [],
       showAddtoCart: true,
       drawer: false,
+      open: false,
     };
   }
 
@@ -81,6 +92,15 @@ class ProductDetail extends Component {
         state: { itemDetail: body },
       });
     }
+  };
+
+  handleClickOpen = () => {
+      this.setState({ open: true });
+  };
+
+  handleClose = (value) => {
+        this.setState({ open: false });
+
   };
 
   goToCartClickHandle = async () => {
@@ -282,6 +302,7 @@ class ProductDetail extends Component {
                     ? this.state.data.price
                     : ""
                 }/Item`}
+                <Button color='primary' variant="contained" style={{marginLeft:40}} onClick={this.handleClickOpen}>Policy</Button>
               </div>
               <div className="productDetailCardMoq">
                 {`Minimum Order Quantity : ${
@@ -407,9 +428,57 @@ class ProductDetail extends Component {
             </div>
           </div>
         </div>
+        <SimpleDialog open={this.state.open} data={this.state.data.user} onClose={this.handleClose} />
       </LoadingOverlay>
     );
   }
 }
 
 export default ProductDetail;
+
+
+function SimpleDialog(props) {
+  const { onClose, open, data } = props;
+
+  console.log(data)
+
+  const handleClose = () => {
+    onClose();
+  };
+
+  const handleListItemClick = (value) => {
+    onClose();
+  };
+
+  return (
+    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+      <DialogTitle id="simple-dialog-title">User Policies</DialogTitle>
+        <DialogContent dividers>
+          <Typography gutterBottom>
+            <strong>Return policy</strong>
+            <Divider/>
+            {data?data.return_policy:""}
+          </Typography>
+          <br/>
+          <Typography gutterBottom>
+            <strong>Delivery policy</strong>
+            <Divider/>
+            {data?data.delivery_policy:""}
+          </Typography>
+          <br/>
+          <Typography gutterBottom>
+            <strong>Payment policy</strong>
+            <Divider/>
+            {data?data.payment_policy:""}
+          </Typography>
+          <br/>
+          <Typography gutterBottom>
+            <strong>Discount upto</strong>
+            <Divider/>
+            {data?data.discount_upto:""}
+          </Typography>
+          <br/>
+        </DialogContent>
+    </Dialog>
+  );
+}

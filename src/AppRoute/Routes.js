@@ -23,7 +23,7 @@ import UserDetail from "../Pages/UserDetail";
 import Register from "../Pages/Register";
 import PrivacyPolicy from "../Pages/PrivacyPolicy";
 import Help from "../Pages/Help";
-//import Profile from "../Pages/Profile"
+import EditProfile from "../Pages/EditProfile"
 import Order from '../Pages/Order'
 import Products from '../Pages/Products'
 import Notification from '../Pages/Notification'
@@ -57,7 +57,7 @@ const Routes = () => {
       <Route exact path={`/${ROUTE_USER_DETAIL}/:id`} component={UserDetail} />
       <Route exact path="/privacy-policy" component={PrivacyPolicy} />
       <Route exact path="/help" component={Help} />
-      <Route exact path="/profile" component={UserDetail} />
+      <Route exact path="/profile" component={EditProfile} />
       <Route exact path="/order" component={Order} />
       <Route exact path="/notification" component={Notification} />
       <Route exact path="/products" component={Products} />
