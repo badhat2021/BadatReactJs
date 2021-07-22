@@ -103,7 +103,7 @@ const UserDetails = () => {
 	const [categoryData, setCategory] = useState([]);
   const [backdrop, setBackdrop] = useState(user.load)
   const [error, seterror] = useState(false)
-  
+  const [edit, setEdit] = useState(false)
   const [name, setname] = useState(user.data.name)
   const [about_us, setabout_us] = useState()
   const [address, setaddress] = useState()
@@ -177,7 +177,6 @@ const UserDetails = () => {
   const onFileChange = event => {
     console.log(event.target.files[0])
     setImage(event.target.files[0])
-//    setImgLoad(false);
   };
 
   const handleStateChange = async (newstate) => {
@@ -193,6 +192,7 @@ const UserDetails = () => {
     e.preventDefault()
     if (!error) {
       setBackdrop(true);
+      setEdit(false)
       var dataset = {
         "id" : user.data.id,
         "name" : name,
@@ -218,6 +218,13 @@ const UserDetails = () => {
     }
   };
 
+  const onEditSave = (e) => {    
+    if (edit) {
+      handleSubmit(e);
+    }
+    setEdit(true)
+  }
+
 	return (
     <Container component="main" maxWidth="lg">
       <CssBaseline />
@@ -229,13 +236,15 @@ const UserDetails = () => {
         :        
 
       <div className={classes.paper}>
-      	
+      	<div style={{display:"flex",justifyContent:"space-between",width:"100%", alignItems: "center"}}>
+        <div>
         {user.data.image ? <Avatar className={classes.avatar} src={user.data.image }/> : <Avatar className={classes.avatar}> {user.data.name ? user.data.name : "Z"  } </Avatar>}
         
           <Button
             variant="contained"
             color={image==0?"primary":"inherit"}
             component="label"         
+            disabled={!edit}
             style={{marginBottom:20}} 
           >
             {image==0?"Upload Profile Image":"Upload Successful"}
@@ -247,7 +256,18 @@ const UserDetails = () => {
               hidden
             />
           </Button>
-
+        </div>
+        <div>
+          <Button
+            variant="contained"
+            color={"primary"}
+            component="label"         
+            onClick={(e) => {onEditSave(e)}}
+          >
+          {edit?"Save":"Edit"}
+          </Button>
+        </div>
+        </div>
         <Typography component="h1" variant="h5">
           Profile
         </Typography>
@@ -256,6 +276,7 @@ const UserDetails = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 autoComplete="name"
                 name="name"
                 variant="outlined"
@@ -293,6 +314,7 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 autoComplete="gst"
                 name="gstin"
                 variant="outlined"
@@ -305,6 +327,7 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 variant="outlined"
                 required
                 fullWidth
@@ -318,6 +341,7 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 name="started_since"
                 variant="outlined"
                 type="number"
@@ -339,6 +363,7 @@ const UserDetails = () => {
             </Grid>
         	  <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
           	 	  id="businessd"
           	 	  select
           	 	  required
@@ -360,6 +385,7 @@ const UserDetails = () => {
         	  </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 id="ura"
                 select
                 required
@@ -380,6 +406,7 @@ const UserDetails = () => {
             </Grid>
 		        <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 variant="outlined"
                 required
                 fullWidth
@@ -393,6 +420,7 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 variant="outlined"
                 required
                 fullWidth
@@ -406,6 +434,7 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 variant="outlined"
                 required
                 fullWidth
@@ -420,6 +449,7 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 variant="outlined"
                 fullWidth
                 error={district?false:true}
@@ -443,6 +473,7 @@ const UserDetails = () => {
             </Grid>
 		        <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 variant="outlined"
                 fullWidth
                 select
@@ -465,10 +496,12 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 id="discount_upto"
                 defaultValue={user.data.discount_upto}
                 fullWidth
-                label="Discount upto"
+                multiline
+                label="Discount policy"
                 onChange={(e) => {
                   setdiscount_upto(e.target.value)
                 }}
@@ -477,6 +510,7 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 id="about_us"
                 defaultValue={user.data.about_us}
                 fullWidth
@@ -491,6 +525,7 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 id="return_policy"
                 defaultValue={user.data.return_policy}
                 fullWidth
@@ -505,6 +540,7 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 id="payment_policy"              
                 defaultValue={user.data.payment_policy}
                 fullWidth
@@ -519,6 +555,7 @@ const UserDetails = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                disabled={!edit}
                 id="delivery_policy"
                 defaultValue={user.data.delivery_policy}
                 fullWidth
@@ -532,14 +569,6 @@ const UserDetails = () => {
               />
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            SAVE
-          </Button>
         </form>
         <Backdrop className={classes.backdrop} open={backdrop}>
           <CircularProgress />

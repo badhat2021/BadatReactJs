@@ -58,8 +58,7 @@ const Routes = () => {
       <Route exact path={`/${ROUTE_USER_DETAIL}/:id`} component={UserDetail} />
       <Route exact path="/privacy-policy" component={PrivacyPolicy} />
       <Route exact path="/help" component={Help} />
-      <Route exact path="/profile" component={Profile} />
-      <Route exact path="/profile/edit" component={EditProfile} />
+      <Route exact path="/profile" component={EditProfile} />
       <Route exact path="/order" component={Order} />
       <Route exact path="/notification" component={Notification} />
       <Route exact path="/products" component={Products} />

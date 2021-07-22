@@ -473,7 +473,7 @@ function SimpleDialog(props) {
           </Typography>
           <br/>
           <Typography gutterBottom>
-            <strong>Discount upto</strong>
+            <strong>Discount policy</strong>
             <Divider/>
             {data?data.discount_upto:""}
           </Typography>
