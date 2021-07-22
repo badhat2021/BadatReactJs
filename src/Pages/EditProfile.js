@@ -123,6 +123,7 @@ const UserDetails = () => {
   const [return_policy, setreturn_policy] = useState()
   const [started_since, setstarted_since] = useState()
   const [state, setstate] = useState()
+  const [image, setImage] = useState(0);
 
 	const classes = useStyles();
 
@@ -173,6 +174,12 @@ const UserDetails = () => {
     	updateUser.data.ura = event.target.value
   	};
 
+  const onFileChange = event => {
+    console.log(event.target.files[0])
+    setImage(event.target.files[0])
+//    setImgLoad(false);
+  };
+
   const handleStateChange = async (newstate) => {
       setdistrict(null);
       seterror(true);
@@ -207,7 +214,7 @@ const UserDetails = () => {
         "delivery_policy" : delivery_policy,
         "about_us" : about_us
       }
-      const res = await updateProfile(dataset);
+      const res = await updateProfile(dataset,image);
     }
   };
 
@@ -225,6 +232,22 @@ const UserDetails = () => {
       	
         {user.data.image ? <Avatar className={classes.avatar} src={user.data.image }/> : <Avatar className={classes.avatar}> {user.data.name ? user.data.name : "Z"  } </Avatar>}
         
+          <Button
+            variant="contained"
+            color={image==0?"primary":"inherit"}
+            component="label"         
+            style={{marginBottom:20}} 
+          >
+            {image==0?"Upload Profile Image":"Upload Successful"}
+            <input
+              type="file"
+              accept="image/*"
+              type="file"
+              onChange={onFileChange}  
+              hidden
+            />
+          </Button>
+
         <Typography component="h1" variant="h5">
           Profile
         </Typography>

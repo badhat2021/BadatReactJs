@@ -253,7 +253,7 @@ export const getOrderById = async (id) => {
   return res.data.data;
 };
 
-export const updateProfile = async (dataset) => {
+export const updateProfile = async (dataset,file) => {
   console.log(dataset)
   var data = new FormData();
   //data.append('image', fs.createReadStream('/C:/Users/HP/Pictures/wallpapers/daniel-leone-g30P1zcOzXo-unsplash.jpg'));
@@ -277,7 +277,9 @@ export const updateProfile = async (dataset) => {
   data.append("payment_policy", dataset.payment_policy)
   data.append("delivery_policy", dataset.delivery_policy)
   data.append("about_us", dataset.about_us)
-  console.log(data)
+  if(file!=0)
+    data.append("image", file)
+  
   var config = {   
       method: 'post',   
       url: 'https://badhat.app/api/updateProfile',   
