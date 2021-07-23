@@ -428,7 +428,7 @@ class ProductDetail extends Component {
             </div>
           </div>
         </div>
-        <SimpleDialog open={this.state.open} data={this.state.data.user} onClose={this.handleClose} />
+        <SimpleDialog open={this.state.open} data={this.state.data.user?this.state.data.user:false} onClose={this.handleClose} />
       </LoadingOverlay>
     );
   }
@@ -450,32 +450,48 @@ function SimpleDialog(props) {
     onClose();
   };
 
+
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">User Policies</DialogTitle>
+      <DialogTitle id="simple-dialog-title">Seller Policies</DialogTitle>
         <DialogContent dividers>
           <Typography gutterBottom>
+            {data.return_policy!==null?
+            <>
             <strong>Return policy</strong>
             <Divider/>
-            {data?data.return_policy:""}
+            {data.return_policy}
+            </>
+            :""}
           </Typography>
           <br/>
-          <Typography gutterBottom>
+          <Typography gutterBottom> 
+          {data.delivery_policy!==null?
+            <>
             <strong>Delivery policy</strong>
             <Divider/>
-            {data?data.delivery_policy:""}
+            {data.delivery_policy}
+            </>
+            :""}
           </Typography>
           <br/>
           <Typography gutterBottom>
+            {data.payment_policy!==null?
+              <>
             <strong>Payment policy</strong>
             <Divider/>
-            {data?data.payment_policy:""}
+            {data.payment_policy}
+            </>
+            :""}
           </Typography>
           <br/>
           <Typography gutterBottom>
+            {data.discount_upto!==null?<div>
             <strong>Discount policy</strong>
             <Divider/>
-            {data?data.discount_upto:""}
+            {data.discount_upto}
+            </div>
+            :""}
           </Typography>
           <br/>
         </DialogContent>

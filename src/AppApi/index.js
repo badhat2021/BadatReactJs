@@ -256,7 +256,6 @@ export const getOrderById = async (id) => {
 export const updateProfile = async (dataset,file) => {
   console.log(dataset)
   var data = new FormData();
-  //data.append('image', fs.createReadStream('/C:/Users/HP/Pictures/wallpapers/daniel-leone-g30P1zcOzXo-unsplash.jpg'));
   data.append("id", dataset.id)
   data.append("name", dataset.name)
   data.append("email", dataset.email)
@@ -293,7 +292,7 @@ export const updateProfile = async (dataset,file) => {
     await axios(config)
     .then(function (response) {   
       console.log(response);
-      window.location.href="/";      
+      //window.location.href="/";      
     })
     .catch(function (error) {   
       console.log(error); 

@@ -56,8 +56,8 @@ const URA = [
     label: 'Distributer',
   },
   {
-    value: 'StockList',
-    label: 'StockList',
+    value: 'Stockist',
+    label: 'Stockist',
   },
   {
     value: 'Manufacturer',

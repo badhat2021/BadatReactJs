@@ -352,10 +352,12 @@ class AllProductPage extends Component {
           <link
             rel="apple-touch-icon"
             href={
-              this.state.productData && this.state.productData.length > 0
-                ? this.state.productData[0].category.bg_image
-                : "https://drive.google.com/file/d/1hZFX14ynp6EuS-Sdtkt0fqbA6FsHl7NU/view"
-            }
+            //   this.state.productData && this.state.productData.length > 0
+            //     ? this.state.productData[0].category.bg_image
+            //     : "https://drive.google.com/file/d/1hZFX14ynp6EuS-Sdtkt0fqbA6FsHl7NU/view"
+            // 
+            "https://drive.google.com/file/d/1hZFX14ynp6EuS-Sdtkt0fqbA6FsHl7NU/view"
+          }
           />
         </Helmet>
         <Fab

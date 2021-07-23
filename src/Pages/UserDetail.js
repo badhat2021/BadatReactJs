@@ -306,42 +306,72 @@ function SimpleDialog(props) {
 
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">User Policies</DialogTitle>
+      <DialogTitle id="simple-dialog-title">Seller Policies</DialogTitle>
         <DialogContent dividers>
           <Typography gutterBottom>
+            {data.about_us?
+              <div>
             <strong>About us</strong>
             <Divider/>
             {data.about_us}
+              </div>
+              :""
+            }
           </Typography>
           <br/>
           <Typography gutterBottom>
+            {data.started_since?
+            <>
             <strong>Started since</strong>
             <Divider/>
             {data.started_since}
+            </>
+            :""
+          }
           </Typography>
           <br/>
           <Typography gutterBottom>
-            <strong>Return policy</strong>
+            {data.return_policy?
+            <div><strong>Return policy</strong>
             <Divider/>
             {data.return_policy}
+            </div>
+            :""
+          }
           </Typography>
           <br/>
           <Typography gutterBottom>
+                      { data.delivery_policy?
+                        <>
             <strong>Delivery policy</strong>
             <Divider/>
             {data.delivery_policy}
+            </>
+            :
+            ""
+          }
           </Typography>
           <br/>
           <Typography gutterBottom>
+            { data.payment_policy?
+            <div> 
             <strong>Payment policy</strong>
             <Divider/>
-            {data.payment_policy}
+              {data.payment_policy}
+            </div>
+            :""}
           </Typography>
           <br/>
           <Typography gutterBottom>
-            <strong>Discount policy</strong>
-            <Divider/>
-            {data.discount_upto}
+            { data.discount_upto?
+              <>
+              <strong>Discount policy</strong>
+              <Divider/>
+              {data.discount_upto}
+              </>
+              :
+              ""
+            }
           </Typography>
           <br/>
         </DialogContent>
