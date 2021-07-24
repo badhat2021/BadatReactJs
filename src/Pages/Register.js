@@ -98,7 +98,7 @@ class Register extends Component {
             });
             console.log("--------------12121212")
             this.props.cartItemCount();
-            // this.props.history.push(`/${ROUTE_CART}`);
+            this.props.history.push(`/${ROUTE_CART}`);
           } else {
             Swal.fire({
               title: "Something Went wrong",
@@ -114,11 +114,11 @@ class Register extends Component {
         ) {
           console.log("------------8888888888")
           this.props.cartItemCount();
-          // this.props.history.go(-2);
+          this.props.history.go(-2);
         } else {
           console.log("------------999999999")
           this.props.cartItemCount();
-          // this.props.history.push(`/`);
+          this.props.history.push(`/`);
         }
       } else {
         console.log("---------------10101010")
@@ -403,7 +403,7 @@ class Register extends Component {
                 {this.state.bussinessDomainData &&
                 this.state.bussinessDomainData.length > 0
                   ? this.state.bussinessDomainData.map((res) => (
-                      <MenuItem key={res.name} value={res.name}>
+                      <MenuItem key={res.id} value={res.id}>
                         {res.name}
                       </MenuItem>
                     ))

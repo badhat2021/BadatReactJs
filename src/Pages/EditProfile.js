@@ -107,7 +107,7 @@ const UserDetails = () => {
   const [name, setname] = useState(user.data.name)
   const [about_us, setabout_us] = useState()
   const [address, setaddress] = useState()
-  const [business_category, setbusiness_category] = useState()
+  const [business_category, setbusiness_category] = useState(0)
   const [business_name, setbusiness_name] = useState()
   const [business_type, setbusiness_type] = useState()
   const [city, setcity] = useState()
@@ -136,31 +136,31 @@ const UserDetails = () => {
      		const res = await getMyDetail();    
 			  const categoryDatares = await getCategory();
         const stateres = await getState();
-        const districtres = await getDistrict(res.state);
+        if (res)
+        var districtres = await getDistrict(res.state);
      		setUser({ load: false, data: res });
         setBackdrop(false)
      		setUpdate({data: res });
      		setCategory(categoryDatares.data.data);
         setStateData(stateres)
         setDistrictData(districtres)
-        console.log(res)
-   		  setname(res.name)
-        setemail(res.email)
-        setgstin(res.gstin)
-        setbusiness_name(res.business_name)
+   		  setname(res.name==null?"":res.name)
+        setemail(res.email==null?"":res.email)
+        setgstin(res.gstin==null?"":res.gstin)
+        setbusiness_name(res.business_name==null?"":res.business_name)
         setbusiness_category(res.business_category)
         setbusiness_type(res.business_type)
-        setaddress(res.address)
-        setcity(res.city)
+        setaddress(res.address==null?"":res.address)
+        setcity(res.city==null?"":res.city)
         setdistrict(res.district)
         setstate(res.state)
         setpincode(res.pincode)
         setstarted_since(res.started_since)
-        setdiscount_upto(res.discount_upto)
-        setreturn_policy(res.return_policy)
-        setpayment_policy(res.payment_policy)
-        setdelivery_policy(res.delivery_policy)
-        setabout_us(res.about_us)
+        setdiscount_upto(res.discount_upto==null?"":res.discount_upto)
+        setreturn_policy(res.return_policy==null?"":res.return_policy)
+        setpayment_policy(res.payment_policy==null?"":res.payment_policy)
+        setdelivery_policy(res.delivery_policy==null?"":res.delivery_policy)
+        setabout_us(res.about_us==null?"":res.about_us)
       }
    		fetchData();
 	 }, []);
@@ -178,6 +178,9 @@ const UserDetails = () => {
     console.log(event.target.files[0])
     setImage(event.target.files[0])
   };
+
+  const datasub = [];
+  const ressub = [];
 
   const handleStateChange = async (newstate) => {
       setdistrict(null);
@@ -214,7 +217,8 @@ const UserDetails = () => {
         "delivery_policy" : delivery_policy,
         "about_us" : about_us
       }
-      const res = await updateProfile(dataset,image);
+
+      const res = await updateProfile(dataset,image, user.data.id, user.data.mobile, datasub, ressub);
     }
   };
 
@@ -282,7 +286,7 @@ const UserDetails = () => {
                 variant="outlined"
                 required
                 defaultValue={user.data.name}
-                onChange={(e) => {setname(e.target.value)}}
+                onChange={(e) => {datasub.push("name"); ressub.push(e.target.value); setname(e.target.value)}}
                 fullWidth
                 id="name"
                 label="Name"
@@ -319,7 +323,7 @@ const UserDetails = () => {
                 name="gstin"
                 variant="outlined"
                 defaultValue={user.data.gstin}
-                onChange={(e) => {setgstin(e.target.value)}}
+                onChange={(e) => {datasub.push("gstin"); ressub.push(e.target.value);setgstin(e.target.value)}}
                 fullWidth
                 id="gstin"
                 label="GSTIN"
@@ -332,7 +336,7 @@ const UserDetails = () => {
                 required
                 fullWidth
                 defaultValue={user.data.business_name}
-                onChange={(e) => {setbusiness_name(e.target.value)}}
+                onChange={(e) => {datasub.push("business_name"); ressub.push(e.target.value); setbusiness_name(e.target.value)}}
                 id="shopname"
                 label="Shop/Business Name"
                 name="shopname"
@@ -347,7 +351,7 @@ const UserDetails = () => {
                 type="number"
                 select
                 defaultValue={user.data.started_since}
-                onChange={(e) => {setstarted_since(e.target.value)}}
+                onChange={(e) => {datasub.push("started_since"); ressub.push(e.target.value);setstarted_since(e.target.value)}}
                 fullWidth
                 id="started_since"
                 label="Business started in"
@@ -370,13 +374,13 @@ const UserDetails = () => {
           	 	  fullWidth
           	 	  label="Business Domain"
           	 	  defaultValue={user.data.business_category}
-          	 	  onChange={(e) => {setbusiness_category(e.target.business_category)}}
+          	 	  onChange={(e) => {datasub.push("business_category"); ressub.push(e.target.value); setbusiness_category(e.target.value)}}
           	 	  helperText="Please select your business category"
           	 	  variant="outlined"
         	    > 
           	 	
                 {categoryData.map((option) => (
-              		<MenuItem key={option.name} value={option.name}>
+              		<MenuItem key={option.id} value={option.name}>
                 			{option.name}
               		</MenuItem>
           	 	  ))}
@@ -393,7 +397,7 @@ const UserDetails = () => {
                 displayEmpty
                 label="You are a"
                 defaultValue={user.data.business_type?user.data.business_type:"None"}
-                onChange={(e) => {setbusiness_type(e.target.value)}}
+                onChange={(e) => {datasub.push("business_type"); ressub.push(e.target.value);setbusiness_type(e.target.value)}}
                 helperText="Please select your business type"
                 variant="outlined"
               >
@@ -411,7 +415,7 @@ const UserDetails = () => {
                 required
                 fullWidth
                 defaultValue={user.data.address}
-                onChange={(e) => {setaddress(e.target.value)}}                
+                onChange={(e) => {datasub.push("address"); ressub.push(e.target.value); setaddress(e.target.value)}}                
                 name="shopstreet"
                 label="Shop/House No. & Street Name"
                 id="shopstreet"
@@ -425,7 +429,7 @@ const UserDetails = () => {
                 required
                 fullWidth
                 defaultValue={user.data.city}
-                onChange={(e) => {setcity(e.target.value)}}                
+                onChange={(e) => {datasub.push("city"); ressub.push(e.target.value);setcity(e.target.value)}}                
                 name="cityarea"
                 label="City/Town/Village Area"
                 id="cityarea"
@@ -440,7 +444,7 @@ const UserDetails = () => {
                 fullWidth
                 type="number"
                 defaultValue={user.data.pincode}
-                onChange={(e) => {setpincode(e.target.value)}}                
+                onChange={(e) => {datasub.push("pincode"); ressub.push(e.target.value);setpincode(e.target.value)}}                
                 name="pincode"
                 label="Pincode"
                 id="pincode"
@@ -457,7 +461,7 @@ const UserDetails = () => {
                 required
                 select
                 defaultValue={user.data.district}
-                onChange={(e) => {setdistrict(e.target.value);seterror(false)}}                
+                onChange={(e) => {datasub.push("district"); ressub.push(e.target.value);setdistrict(e.target.value);seterror(false)}}                
                 name="district"
                 label="District"
                 id="district"
@@ -479,7 +483,7 @@ const UserDetails = () => {
                 select
                 required
                 defaultValue={user.data.state}
-                onChange={(e) => {setstate(e.target.value); handleStateChange(e.target.value);}}                
+                onChange={(e) => {datasub.push("state"); ressub.push(e.target.value);setstate(e.target.value); handleStateChange(e.target.value);}}                
                 name="state"
                 label="State"
                 id="state"
@@ -518,6 +522,7 @@ const UserDetails = () => {
                 multiline
                 rows={3}
                 onChange={(e) => {
+                  datasub.push("about_us"); ressub.push(e.target.value);
                   setabout_us(e.target.value)
                 }}
                 variant="outlined"
@@ -533,6 +538,7 @@ const UserDetails = () => {
                 multiline
                 rows={3}
                 onChange={(e) => {
+                  datasub.push("return_policy"); ressub.push(e.target.value);
                   setreturn_policy(e.target.value)
                 }}
                 variant="outlined"
@@ -548,6 +554,7 @@ const UserDetails = () => {
                 multiline
                 rows={3}
                 onChange={(e) => {
+                  datasub.push("payment_policy"); ressub.push(e.target.value);
                   setpayment_policy(e.target.value)
                 }}
                 variant="outlined"
@@ -563,6 +570,7 @@ const UserDetails = () => {
                 multiline
                 rows={3}
                 onChange={(e) => {
+                  datasub.push("delivery_policy"); ressub.push(e.target.value);
                   setdelivery_policy(e.target.value)
                 }}
                 variant="outlined"
