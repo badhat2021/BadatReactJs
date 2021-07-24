@@ -372,7 +372,7 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
                 My Profile
               </MenuItem>
               <MenuItem key="myOrder" onClick={() => onMyOrderClickHandle()}>
-                My Order
+                Order Bookings
               </MenuItem>
               <MenuItem key="myProducts" onClick={() => onMyProductsClickHandle()}>
                 My Products
