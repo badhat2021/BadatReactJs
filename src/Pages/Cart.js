@@ -218,7 +218,7 @@ class Cart extends Component {
                   color="primary"
                   style={{ height: "100%" }}
                 >
-                  Place Order
+                  Book Order
                 </Button>
               </div>
             </>
