@@ -183,7 +183,7 @@ class UserDetail extends Component {
                 </span>
               </div>
               <div className="userDetailPolicy">
-                <Button color='primary' variant="contained" style={{padding:"5px"}} onClick={this.handleClickOpen}> DETAILS</Button>
+                <Button color='inherit' variant="contained" style={{padding:"5px",marginTop:10, textTransform:"none"}} onClick={this.handleClickOpen}> Details</Button>
               </div>
             </div>
           </div>

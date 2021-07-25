@@ -282,6 +282,7 @@ class ProductDetail extends Component {
                       this.state.data.name &&
                       this.state.data.name
                     }
+                    style={{objectFit: "contain"}}
                     width="100%"
                     height="400px"
                   />
@@ -302,7 +303,7 @@ class ProductDetail extends Component {
                     ? this.state.data.price
                     : ""
                 }/Item`}
-                <Button color='primary' variant="contained" style={{marginLeft:40}} onClick={this.handleClickOpen}>Policy</Button>
+                <Button color='inherit' variant="contained" style={{marginLeft:40,textTransform:"none"}} onClick={this.handleClickOpen}>Policy</Button>
               </div>
               <div className="productDetailCardMoq">
                 {`Minimum Order Quantity : ${

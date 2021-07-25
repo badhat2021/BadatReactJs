@@ -51,6 +51,11 @@ class Register extends Component {
       shopNameError: false,
       shopName: "",
       showDistrict: false,
+      about_us: "",
+      delivery_policy: "",
+      discount_upto: "",
+      return_policy: "",
+      payment_policy: "",
     };
   }
 
@@ -74,8 +79,11 @@ class Register extends Component {
       business_type: this.state.user,
       business_category: this.state.bussinessDomain,
       pincode: this.state.pincode,
-      address: this.state.streetAddress,
-      city: this.state.cityAddress,
+      about_us: this.state.about_us,
+      delivery_policy: this.state.delivery_policy, 
+      discount_upto: this.state.discount_upto,
+      return_policy: this.state.return_policy,
+      payment_policy: this.state.payment_policy
     };
     if (this.validation()) {
       const registerTemp = await registerUser(param);
@@ -181,7 +189,8 @@ class Register extends Component {
         errorMessage: "This field is required",
       });
       return false;
-    } else if (this.state.user === "") {
+    } 
+    else if (this.state.user === "") {
       this.setState({
         userError: true,
         errorMessage: "This field is required",
@@ -193,19 +202,22 @@ class Register extends Component {
         errorMessage: "This field is required",
       });
       return false;
-    } else if (this.state.streetAddress === "") {
-      this.setState({
-        streetAddressError: true,
-        errorMessage: "This field is required",
-      });
-      return false;
-    } else if (this.state.cityAddress === "") {
-      this.setState({
-        cityAddressError: true,
-        errorMessage: "This field is required",
-      });
-      return false;
-    } else if (
+    } 
+      //else if (this.state.streetAddress === "") {
+      //this.setState({
+      //  streetAddressError: true,
+      //  errorMessage: "This field is required",
+      //});
+      //return false;
+      //} 
+      //else if (this.state.cityAddress === "") {
+      //this.setState({
+      //  cityAddressError: true,
+      //  errorMessage: "This field is required",
+      //});
+      //return false;
+      //} 
+      else if (
       this.state.pincode === "" ||
       this.state.pincode.length < 6 ||
       this.state.pincode.length > 6
@@ -417,7 +429,7 @@ class Register extends Component {
             <div className="loginFormField">
               <TextField
                 fullWidth
-                required
+                style={{display:"none"}}
                 defaultValue={this.state.streetAddress}
                 name="streetAddress"
                 label="Shop/House No. & Street Name"
@@ -439,7 +451,7 @@ class Register extends Component {
             <div className="loginFormField">
               <TextField
                 fullWidth
-                required
+                style={{display:"none"}}
                 defaultValue={this.state.cityAddress}
                 name="cityAddress"
                 label="City/Town/Village Area"
@@ -546,6 +558,76 @@ class Register extends Component {
                 ) : null}
               </div>
             ) : null}
+                        <div className="loginFormField">
+              <TextField
+                fullWidth
+                defaultValue={this.state.about_us}
+                multiline
+                style={{display:"none"}}                
+                rows={3}
+                name="about_us"
+                type="text"
+                label="About us"
+                variant="outlined"
+                onChange={this.onChangeHandle}
+              />
+            </div>
+                        <div className="loginFormField">
+              <TextField
+                fullWidth
+                defaultValue={this.state.payment_policy}
+                multiline
+                style={{display:"none"}}                
+                rows={3}
+                name="payment_policy"
+                type="text"
+                label="Payment policy"
+                variant="outlined"
+                onChange={this.onChangeHandle}
+              />
+            </div>
+                        <div className="loginFormField">
+              <TextField
+                fullWidth
+                defaultValue={this.state.return_policy}
+                multiline
+                style={{display:"none"}}                
+                rows={3}
+                name="return_policy"
+                type="text"
+                label="Return policy"
+                variant="outlined"
+                onChange={this.onChangeHandle}
+              />
+            </div>
+                        <div className="loginFormField">
+              <TextField
+                fullWidth
+                defaultValue={this.state.delivery_policy}
+                style={{display:"none"}}
+                multiline
+                rows={3}
+                name="delivery_policy"
+                type="text"
+                label="Delivery policy"
+                variant="outlined"
+                onChange={this.onChangeHandle}
+              />
+            </div>
+                        <div className="loginFormField">
+              <TextField
+                fullWidth
+                defaultValue={this.state.discount_upto}
+                style={{display:"none"}}
+                multiline
+                rows={3}
+                name="discount_upto"
+                type="text"
+                label="Discount policy"
+                variant="outlined"
+                onChange={this.onChangeHandle}
+              />
+            </div>
             <div className="loginFormField">
               <Button
                 variant="contained"

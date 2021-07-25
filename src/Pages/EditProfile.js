@@ -248,7 +248,7 @@ const UserDetails = () => {
             disabled={!edit}
             style={{marginBottom:20}} 
           >
-            {image==0?"Upload Profile Image":"Upload Successful"}
+            {image==0?"Select Image":"Image Selected"}
             <input
               type="file"
               accept="image/*"
@@ -305,7 +305,7 @@ const UserDetails = () => {
                 autoComplete="email"
                 name="email"
                 variant="outlined"
-                disabled
+                disabled={!edit}                
                 defaultValue={user.data.email}
                 onChange={(e) => {setemail(e.target.value)}}
                 fullWidth

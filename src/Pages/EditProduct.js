@@ -314,12 +314,13 @@ const EditProductForm = (props) => {
           <Grid item xs={12} sm={6} className={classes.filebtn}>
           <Button
             variant="contained"
-            color="secondary"
+            color={images.length===0?"secondary":"inherit"}
             component="label"
             onClick={() => {setImgLoad(true)}}
             endIcon={imgLoad?<CircularProgress size={20}/>:""}
+            style={{marginRight:10}}
           >
-            Upload New Images
+            {images.length===0?"Select Images":"Images Selected"}
             <input
               type="file"
               accept="image/*"
