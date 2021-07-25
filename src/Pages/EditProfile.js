@@ -409,7 +409,6 @@ const UserDetails = () => {
               <TextField
                 disabled={!edit}
                 variant="outlined"
-                required
                 fullWidth
                 defaultValue={user.data.address}
                 onChange={(e) => {datasub.push("address"); ressub.push(e.target.value); setaddress(e.target.value)}}                
@@ -423,7 +422,6 @@ const UserDetails = () => {
               <TextField
                 disabled={!edit}
                 variant="outlined"
-                required
                 fullWidth
                 defaultValue={user.data.city}
                 onChange={(e) => {datasub.push("city"); ressub.push(e.target.value);setcity(e.target.value)}}                
