@@ -44,7 +44,7 @@ export default function SimpleList() {
                 className={classes.inline}
                 color="textPrimary"
               >
-              		<b>Orders:</b> After placement of order by buyer, the seller will contact the buyer and confirm details of the order
+              		<b>Order:</b> After placement of order booking by buyer, the seller shall contact the buyer and confirm details of the order booking.
               </Typography>
             </React.Fragment>
           }
@@ -61,7 +61,7 @@ export default function SimpleList() {
                 className={classes.inline}
                 color="textPrimary"
               >
-                <b>Payments: </b>All payment terms are discussed between buyers & sellers. Badat is not responsible for any payment loss or fraud. Still, Badat recommends cash on delivery
+                <b>Payment: </b>Badat does not collect payment from buyers. All payment terms shall be discussed between buyers & sellers. Badat is not responsible for any payment loss or fraud. Badat recommends cash on delivery.
               </Typography>
             </React.Fragment>
           }
@@ -78,7 +78,7 @@ export default function SimpleList() {
                 className={classes.inline}
                 color="textPrimary"
               >
-                <b>Logistics:</b> All logistics terms will be discussed between the buyer and seller. In future, we will provide logistics services at a cheaper rate from verified partners
+                <b>Delivery:</b> All delivery terms will be discussed between the buyer and seller. Badat does not offer delivery service.
               </Typography>
             </React.Fragment>
           }
@@ -95,7 +95,7 @@ export default function SimpleList() {
                 className={classes.inline}
                 color="textPrimary"
               >
-                <b>Quality: </b>Promised quality should be delivered by the seller else he should offer either  to replace the bad quality items or refund the money
+                <b>Quality: </b> Promised quality should be delivered by the seller else he should offer either to replace the bad quality items or refund the money.
               </Typography>
             </React.Fragment>
           }
@@ -112,7 +112,7 @@ export default function SimpleList() {
                 className={classes.inline}
                 color="textPrimary"
               >
-                 <b>Defective</b> All defective items should be replaced or offer refund the money of same value by the seller
+                 <b>Defective:</b> All defective items should be replaced or offer refund the money of same value by the seller.
               </Typography>
             </React.Fragment>
           }
@@ -129,7 +129,7 @@ export default function SimpleList() {
                 className={classes.inline}
                 color="textPrimary"
               >
-                 <b>Return</b> All the return terms should be discussed between both parties in case required
+                 <b>Return:</b> All the return terms should be discussed between both parties in case required.
               </Typography>
             </React.Fragment>
           }
@@ -146,35 +146,17 @@ export default function SimpleList() {
                 className={classes.inline}
                 color="textPrimary"
               >
-                 <b>Frauds:</b> Report fraud to us on 8750317898 
+                 <b>Fraud:</b> Report fraud to us on 8750317898 or contact@badat.in 
               </Typography>
             </React.Fragment>
           }
           />
         </ListItem>
-                <ListItem button>
-          <ListItemText  
-          	secondary={
-            <React.Fragment>
-            <br/>	
-              <Typography
-                component="span"
-                variant="body1"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                 <b>So why use Badat:</b> To get free of Commission & free of Charge Orders. For any other things message Badat or call 8750317898.
-              </Typography>
-            </React.Fragment>
-          }
-          />
-        </ListItem>
-
       </List>
       <Divider />
       <List component="nav" aria-label="secondary">
         <ListItem button>
-          <ListItemText primary="For any other things message Badat or call 8750317898" />
+          <ListItemText primary="For any other things message wa.me/918750317898 or call 8750317898" />
         </ListItem>
 	  </List>
     </div>
