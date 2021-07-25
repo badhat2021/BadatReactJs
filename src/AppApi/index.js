@@ -254,7 +254,6 @@ export const getOrderById = async (id) => {
 };
 
 export const updateProfile = async (dataset,file) => {
-  console.log(dataset)
   var data = new FormData();
   data.append("id", dataset.id)
   data.append("name", dataset.name)
@@ -291,7 +290,6 @@ export const updateProfile = async (dataset,file) => {
 
     await axios(config)
     .then(function (response) {   
-      console.log(response);
       window.location.href="/";      
     })
     .catch(function (error) {   
@@ -303,8 +301,6 @@ export const updateProfile = async (dataset,file) => {
 
 export const addProduct = async (dataset, files) => {
   
-    console.log(dataset)
-    console.log(files.[0])
     if(dataset.name === null || dataset.verticalId === null || dataset.subCategoryId === null || dataset.categoryId === null || dataset.description === null || dataset.moq === null || dataset.price === null || files.length===0)
               window.location.href="/products/new";
     var data = new FormData();
@@ -315,7 +311,6 @@ export const addProduct = async (dataset, files) => {
     data.append('category_id', dataset.categoryId);
     data.append('sub_category_id', dataset.subCategoryId);
     data.append('vertical_id', dataset.verticalId);
-    console.log(files)
     for (var i = 0; i < files.length; i++) {
       data.append(`images[${i}]`, files.[i]);
     }
@@ -332,7 +327,6 @@ export const addProduct = async (dataset, files) => {
     
     axios(config)
     .then(function (response) {
-      console.log(response.data);
       if(response.data.message==="Product added"){
         window.location.href="/products";
       }
@@ -347,8 +341,7 @@ export const addProduct = async (dataset, files) => {
 
 
 export const editProduct = async (dataset, files) => {
-    console.log(dataset)
-    console.log(files.[0])
+
     var data = new FormData();
     data.append('id', dataset.id);
     data.append('name', dataset.name);
@@ -358,7 +351,6 @@ export const editProduct = async (dataset, files) => {
     data.append('category_id', dataset.categoryId);
     data.append('sub_category_id', dataset.subCategoryId);
     data.append('vertical_id', dataset.verticalId);
-    console.log(files)
     for (var i = 0; i < files.length; i++) {
       data.append(`images[${i}]`, files.[i]);
     }
@@ -375,7 +367,6 @@ export const editProduct = async (dataset, files) => {
     
     axios(config)
     .then(function (response) {
-      console.log(response.data);
       if(response.data.message==="Product Updated"){
         window.location.href="/products";
       }

@@ -75,8 +75,6 @@ export default function TitlebarGridList(props) {
 
   const handleClickOpen = tile => {
     setSelectedTile(tile);
-    console.log("clicked");
-    console.log(tile);
   };
 
   const handleClose = () => {

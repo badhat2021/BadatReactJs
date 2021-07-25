@@ -38,8 +38,6 @@ const Notification = () => {
     	fetchData()
 	},[]);
 
-	console.log(notify)
-
 	return (
 		<div className={classes.root}>
 			<div className={classes.title}>Notifications</div>

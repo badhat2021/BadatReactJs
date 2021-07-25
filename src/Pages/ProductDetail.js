@@ -440,8 +440,6 @@ export default ProductDetail;
 function SimpleDialog(props) {
   const { onClose, open, data } = props;
 
-  console.log(data)
-
   const handleClose = () => {
     onClose();
   };

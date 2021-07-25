@@ -116,7 +116,6 @@ const EditProductForm = (props) => {
       fetchData();
    }, []);
         
-  console.log(props.proData)
 
   useEffect(() => {
     if (isFirstRun.current) {
@@ -130,7 +129,6 @@ const EditProductForm = (props) => {
       async function fetchData() {  
         const cat2 = await getSubCategory(categoryId);
         setSubCategoryData(cat2.data.data);
-        console.log(cat2)
       }
       fetchData();
    }, [categoryId]);
@@ -151,13 +149,12 @@ const EditProductForm = (props) => {
 
 
   const handleChange = (event) => {
-    console.log(event.target.value)
+    //console.log(event.target.value)
   };
 
   const onFileChange = event => {
     setImages(event.target.files)
     setImgLoad(false);
-    console.log(event.target.files)
   };
 
   const handleSubmit = (e) => {
@@ -196,7 +193,6 @@ const EditProductForm = (props) => {
                 defaultValue={props.proData.name}
                 fullWidth
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setName(e.target.value);
                 }}
                 id="name"
@@ -213,7 +209,6 @@ const EditProductForm = (props) => {
               multiline
               rows={3}
               onChange={(e) => {
-                console.log(e.target.value);
                 setDiscription(e.target.value)
               }}
               variant="outlined"
@@ -228,7 +223,6 @@ const EditProductForm = (props) => {
                 id="moq"
                 defaultValue={props.proData.moq}
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setMoq(e.target.value);
                 }}                
                 label="Minimum Order Quantity"
@@ -245,7 +239,6 @@ const EditProductForm = (props) => {
                 defaultValue={props.proData.price}      
                 type="number"
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setPrice(e.target.value);
                 }}    
                 name="price"
@@ -259,7 +252,7 @@ const EditProductForm = (props) => {
               required
               defaultValue={props.proData.category_id}
               label="Category"
-              onChange={(e) => {console.log(e.target.value);setCategoryId(e.target.value)}}
+              onChange={(e) => {setCategoryId(e.target.value)}}
               variant="outlined"
           >
             { categoryData.length > 0 ?
@@ -281,7 +274,7 @@ const EditProductForm = (props) => {
               fullWidth
               defaultValue={props.proData.sub_category_id}
               label="Subcategory"
-              onChange={(e) => {console.log(e.target.value); setSubCategoryId(e.target.value)}}
+              onChange={(e) => {setSubCategoryId(e.target.value)}}
               variant="outlined"
           >
             { subCategoryData.length > 0 ?
@@ -303,7 +296,7 @@ const EditProductForm = (props) => {
               fullWidth
               defaultValue={props.proData.vertical_id}
               label="Section"
-              onChange={(e) => {console.log(e.target.value);setVerticalId(e.target.value)}}
+              onChange={(e) => {setVerticalId(e.target.value)}}
               variant="outlined"
           >
             { verticalData.length > 0 ?

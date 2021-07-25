@@ -55,10 +55,8 @@ class Register extends Component {
   }
 
   componentDidMount = async () => {
-    console.log("mounted await register")
     const tempCategoryData = await getCategory();
     const tempState = await getState();
-    console.log("mounted recieved register")
     this.setState({
       bussinessDomainData: tempCategoryData.data.data || [],
       load: false,
@@ -83,7 +81,6 @@ class Register extends Component {
       const registerTemp = await registerUser(param);
       if (registerTemp) {
         storeToken(this.props.location.state.token);
-        console.log("-------------77777777")
         if (this.props.location.state && this.props.location.state.itemDetail) {
           const addToCartres = await addToCartApi(
             this.props.location.state.itemDetail
@@ -96,7 +93,6 @@ class Register extends Component {
               toast: true,
               position: "top",
             });
-            console.log("--------------12121212")
             this.props.cartItemCount();
             this.props.history.push(`/${ROUTE_CART}`);
           } else {
@@ -112,16 +108,13 @@ class Register extends Component {
           this.props.location.state &&
           this.props.location.state.fromLoginButton
         ) {
-          console.log("------------8888888888")
           this.props.cartItemCount();
           this.props.history.go(-2);
         } else {
-          console.log("------------999999999")
           this.props.cartItemCount();
           this.props.history.push(`/`);
         }
       } else {
-        console.log("---------------10101010")
         Swal.fire({
           title: "Something Went wrong",
           showConfirmButton: false,

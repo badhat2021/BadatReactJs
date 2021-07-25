@@ -37,7 +37,6 @@ export const SimpleDialog = (props) => {
   useEffect( () => {
     async function fetchData(){
       const res = await getOrderById(props.data.id)
-      //console.log(res)
       setOrderDetails(res)
     }
     fetchData();
@@ -167,13 +166,11 @@ export const CardButtons = (props) => {
 
   const declineOrderClick = async () => {
     const res = await declineOrder(props.data_id);
-    //console.log("declined "+props.data_id)
     window.location.reload();    
     setreload(true)
   }
   const acceptOrderClick = async () => {
     const res = await acceptOrder(props.data_id);
-    //console.log("accepted "+props.data_id)
     window.location.reload();
     setreload(true)
   }

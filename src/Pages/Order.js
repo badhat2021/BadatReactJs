@@ -71,7 +71,6 @@ export default function FullWidthTabs() {
       }
 		const res1 = await getOrderRecieved()
     const res2 = await getOrderPlaced()
-		//console.log(res1);
 		setOrderRecList(res1);
     setOrderPlacedList(res2);
    }

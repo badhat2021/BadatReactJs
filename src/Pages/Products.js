@@ -63,7 +63,6 @@ export default function ProductsPage() {
       }
       const res1 = await getMyProducts()
       setMyProductsList(res1.data.data);
-      console.log(res1.data.data)
     }
     fetchData()
 	},[]);

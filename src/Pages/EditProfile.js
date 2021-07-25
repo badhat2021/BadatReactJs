@@ -167,7 +167,6 @@ const UserDetails = () => {
 
   const handlePincode = async (pincode) => {
     const res = await getPincodeData(pincode);
-    console.log(res)
   }
 
 	const handleChange = (event) => {
@@ -175,7 +174,6 @@ const UserDetails = () => {
   	};
 
   const onFileChange = event => {
-    console.log(event.target.files[0])
     setImage(event.target.files[0])
   };
 
@@ -187,7 +185,6 @@ const UserDetails = () => {
       seterror(true);
       setDistrictData(null);
       const districtres = await getDistrict(newstate);
-      console.log(districtres)
       setDistrictData(districtres);
   }
 

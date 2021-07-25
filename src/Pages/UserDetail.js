@@ -73,7 +73,6 @@ class UserDetail extends Component {
       window.location.href.lastIndexOf("/") + 1
     );
     const res = await getSellerDetail(id);
-    console.log(res)
     this.setState({ load: false, data: res });
   };
 
