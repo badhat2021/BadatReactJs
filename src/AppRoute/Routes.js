@@ -65,6 +65,7 @@ const Routes = () => {
       <Route exact path="/products/new" component={AddProduct} />
       <Route exact path="/products/edit/:id" component={EditProduct} />
       <Route exact path="/" component={Homepage} />
+      <Route exact path="/app" component={() => {window.location.href="http://bit.ly/Badat"; return null;} />
     </Switch>
   );
 };
