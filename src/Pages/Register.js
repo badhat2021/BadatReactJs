@@ -563,7 +563,6 @@ class Register extends Component {
                 fullWidth
                 defaultValue={this.state.about_us}
                 multiline
-                style={{display:"none"}}                
                 rows={3}
                 name="about_us"
                 type="text"
@@ -577,7 +576,6 @@ class Register extends Component {
                 fullWidth
                 defaultValue={this.state.payment_policy}
                 multiline
-                style={{display:"none"}}                
                 rows={3}
                 name="payment_policy"
                 type="text"
@@ -591,7 +589,6 @@ class Register extends Component {
                 fullWidth
                 defaultValue={this.state.return_policy}
                 multiline
-                style={{display:"none"}}                
                 rows={3}
                 name="return_policy"
                 type="text"
@@ -604,7 +601,6 @@ class Register extends Component {
               <TextField
                 fullWidth
                 defaultValue={this.state.delivery_policy}
-                style={{display:"none"}}
                 multiline
                 rows={3}
                 name="delivery_policy"
@@ -618,7 +614,6 @@ class Register extends Component {
               <TextField
                 fullWidth
                 defaultValue={this.state.discount_upto}
-                style={{display:"none"}}
                 multiline
                 rows={3}
                 name="discount_upto"
