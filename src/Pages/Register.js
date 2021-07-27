@@ -17,6 +17,12 @@ import { storeToken, checkLogin } from "../Util";
 import { Redirect } from "react-router-dom";
 import Footer from "../Component/Footer";
 
+const yearsData = [];
+
+for (let i = 1900; i < 2021; i++) {
+  yearsData.push(i);
+}
+
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -53,6 +59,7 @@ class Register extends Component {
       showDistrict: false,
       about_us: "",
       delivery_policy: "",
+      started_since: "",
       discount_upto: "",
       return_policy: "",
       payment_policy: "",
@@ -83,6 +90,7 @@ class Register extends Component {
       delivery_policy: this.state.delivery_policy, 
       discount_upto: this.state.discount_upto,
       return_policy: this.state.return_policy,
+      started_since: this.state.started_since,
       payment_policy: this.state.payment_policy
     };
     if (this.validation()) {
@@ -558,6 +566,27 @@ class Register extends Component {
                 ) : null}
               </div>
             ) : null}
+                        <div className="loginFormField">            
+              <TextField
+                name="started_since"
+                variant="outlined"
+                type="number"
+                select
+                defaultValue={this.state.started_since}
+                onChange={this.onChangeHandle}
+                fullWidth
+                id="started_since"
+                label="Business started in"
+              >
+                {
+                  yearsData.map((value) => (
+                    <MenuItem key={value} value={value}>
+                      {value}
+                    </MenuItem>
+                  ))
+                }
+              </TextField>
+              </div>
                         <div className="loginFormField">
               <TextField
                 fullWidth

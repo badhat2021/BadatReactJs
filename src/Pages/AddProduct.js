@@ -245,8 +245,7 @@ const AddProductForm = () => {
             <TextField
               id="subCategoryId"
               select              
-              fullWidth
-              required
+              fullWidth              
               label="Subcategory"
               onChange={(e) => { setSubCategoryId(e.target.value)}}
               variant="outlined"
