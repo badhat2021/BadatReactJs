@@ -11,7 +11,7 @@ import { ROUTE_REGISTER, ROUTE_CART } from "../Constant";
 import "../AppAsset/CSS/Login.css";
 import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
 import Swal from "sweetalert2";
-import { storeToken, checkLogin } from "../Util";
+import { storeToken, checkLogin, storeId } from "../Util";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
@@ -276,6 +276,7 @@ class Login extends Component {
         res.data.user.name !== null
       ) {
         storeToken(res.data.access_token);
+        storeId(res.data.user.id)
         if (this.props.location.state && this.props.location.state.itemDetail) {
           const addToCartres = await addToCartApi(
             this.props.location.state.itemDetail

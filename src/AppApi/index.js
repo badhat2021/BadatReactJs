@@ -21,7 +21,7 @@ import {
   //ENDPOINT_GET_TRUECALLER_RESPONSE,
 } from "../Constant";
 import Swal from "sweetalert2";
-import { storeToken, storeId, getId } from "../Util";
+import { storeToken, storeId } from "../Util";
 const TOKEN = JSON.parse(localStorage.getItem("badhat_token"));
 
 
@@ -148,17 +148,21 @@ export const placeOrder = async (body) => {
 };
 
 export const getSellerDetail = async (id) => {
-  //const id = await getId();
   const  res = await axios.get(BASE_URL + ENDPOINT_GET_SELLER_DETAIL + id);
   return res.data.data;
 };
 
 export const getMyDetail = async () => {
-  const id = await getId();
-  const  res = await axios.get(BASE_URL + ENDPOINT_GET_SELLER_DETAIL + id);
+  const res = await axios.get(
+    "https://badhat.app/api/userProfile",{
+      headers: {
+        Authorization: "Bearer " + TOKEN,
+      },
+    });
+  console.log(res.data.data)
   return res.data.data;
 };
-
+getMyDetail();
 export const removeFromCart = async (id) => {
   let body = {
     cart_id: id,
@@ -290,7 +294,7 @@ export const updateProfile = async (dataset,file) => {
 
     await axios(config)
     .then(function (response) {   
-      window.location.href="/";      
+      window.location.href="/profile";      
     })
     .catch(function (error) {   
       console.log(error); 

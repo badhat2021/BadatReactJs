@@ -13,7 +13,7 @@ import "../AppAsset/CSS/Login.css";
 import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet";
-import { storeToken, checkLogin } from "../Util";
+import { storeToken, storeId, checkLogin } from "../Util";
 import { Redirect } from "react-router-dom";
 import Footer from "../Component/Footer";
 
@@ -254,6 +254,7 @@ class Register extends Component {
     return true;
   };
 
+
   render() {
     // if (checkLogin()) {
     //   console.log("-----------14141414")
@@ -485,6 +486,11 @@ class Register extends Component {
                 defaultValue={this.state.pincode}
                 name="pincode"
                 label="Pincode"
+                InputProps={{
+                    inputProps: { 
+                        max: 999999, min: 100000 
+                    }
+                }}
                 variant="outlined"
                 type="number"
                 onChange={this.onChangeHandle}

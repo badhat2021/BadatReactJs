@@ -228,14 +228,14 @@ const UserDetails = () => {
 
 	return (
     <Container component="main" maxWidth="lg">
-      <CssBaseline />
       {user.load
         ?
         <Backdrop className={classes.backdrop} open={backdrop}>
           <CircularProgress />
         </Backdrop>
         :        
-
+        <div>
+      <CssBaseline />
       <div className={classes.paper}>
       	<div style={{display:"flex",justifyContent:"space-between",width:"100%", alignItems: "center"}}>
         <div>
@@ -438,7 +438,11 @@ const UserDetails = () => {
                 required
                 fullWidth
                 type="number"
-                defaultValue={user.data.pincode}
+                InputProps={{
+                    inputProps: { 
+                        max: 999999, min: 100000 
+                    }
+                }}                defaultValue={user.data.pincode}
                 onChange={(e) => {datasub.push("pincode"); ressub.push(e.target.value);setpincode(e.target.value)}}                
                 name="pincode"
                 label="Pincode"
@@ -576,6 +580,7 @@ const UserDetails = () => {
         <Backdrop className={classes.backdrop} open={backdrop}>
           <CircularProgress />
         </Backdrop>
+      </div>
       </div>
     }
     </Container>

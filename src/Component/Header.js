@@ -166,7 +166,7 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
         if (login) {
           getCartCount();
           const data = await getAppState();
-          setNotificationCount(data.data.data.notification)     
+          setNotificationCount(data.data.data.notification?data.data.data.notification:0)     
         }
     }
     fetchData();

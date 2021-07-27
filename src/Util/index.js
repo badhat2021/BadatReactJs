@@ -81,7 +81,10 @@ export const getId = () => {
 export const getCartCount = async () => {
   if (checkLogin()) {
     const data = await getCartData();
-    return data.length;
+    if(data.length)
+      return data.length;
+    else
+      return 0;
   }
   return 0;
 };
