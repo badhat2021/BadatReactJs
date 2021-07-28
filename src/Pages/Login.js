@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 import { storeToken, checkLogin, storeId } from "../Util";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class Login extends Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class Login extends Component {
       stateData: {},
       disableResendButton: true,
       uniqueId: "",
+      trueLoad: false,
     };
   }
 
@@ -228,6 +230,7 @@ class Login extends Component {
   };
 
   handleTrueCallerResponse = async () => {
+    this.setState({trueLoad: true});
     const res = await getTruecallerResponse(this.state.uniqueId);
     if (res && res.data && res.truecallerStatus) {
       clearInterval(this.truecaller);
@@ -498,6 +501,7 @@ class Login extends Component {
                     marginRight: "5%",
                   }}
                   onClick={this.onClickTrueCallerLogin}
+                  endIcon={this.state.trueLoad?<CircularProgress color="inherit" size={28}/>:""}
                 >
                   Login With Truecaller
                 </Button>
