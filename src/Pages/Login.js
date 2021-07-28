@@ -375,7 +375,6 @@ class Login extends Component {
               </div>
               <div className="loginFormField">
                 <TextField
-                  autoFocus={true}
                   fullWidth
                   required
                   defaultValue={this.state.mobile}
