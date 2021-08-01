@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { TextField, Divider, Button } from "@material-ui/core";
+
+import LoadingOverlay from "react-loading-overlay";
 import {
   sendMobileNumber,
   sendOtp,
@@ -11,10 +13,9 @@ import { ROUTE_REGISTER, ROUTE_CART } from "../Constant";
 import "../AppAsset/CSS/Login.css";
 import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
 import Swal from "sweetalert2";
-import { storeToken, checkLogin, storeId } from "../Util";
+import { storeToken, checkLogin } from "../Util";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 class Login extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ class Login extends Component {
       stateData: {},
       disableResendButton: true,
       uniqueId: "",
-      trueLoad: false,
+      stopTimer: 0,
     };
   }
 
@@ -230,10 +231,12 @@ class Login extends Component {
   };
 
   handleTrueCallerResponse = async () => {
-    this.setState({trueLoad: true});
+    console.log("231");
     const res = await getTruecallerResponse(this.state.uniqueId);
+    this.setState({ stopTimer: this.state.stopTimer + 1 });
     if (res && res.data && res.truecallerStatus) {
       clearInterval(this.truecaller);
+      this.setState({ load: false });
       if (
         res &&
         res.data &&
@@ -279,7 +282,6 @@ class Login extends Component {
         res.data.user.name !== null
       ) {
         storeToken(res.data.access_token);
-        storeId(res.data.user.id)
         if (this.props.location.state && this.props.location.state.itemDetail) {
           const addToCartres = await addToCartApi(
             this.props.location.state.itemDetail
@@ -314,6 +316,16 @@ class Login extends Component {
           this.props.history.push(`/`);
         }
       }
+    } else if (this.state.stopTimer > 3) {
+      clearInterval(this.truecaller);
+      this.setState({ load: false });
+      Swal.fire({
+        title: "Something went wrong",
+        showConfirmButton: false,
+        timer: 4000,
+        toast: true,
+        position: "top",
+      });
     }
   };
 
@@ -331,7 +343,8 @@ class Login extends Component {
           position: "top",
         });
       } else {
-        this.truecaller = setInterval(this.handleTrueCallerResponse, 4000);
+        this.setState({ load: true });
+        this.truecaller = setInterval(this.handleTrueCallerResponse, 6000);
       }
     }, 600);
   };
@@ -367,59 +380,31 @@ class Login extends Component {
             href="https://drive.google.com/file/d/1hZFX14ynp6EuS-Sdtkt0fqbA6FsHl7NU/view"
           />
         </Helmet>
-        <div className="loginContainer">
-          <div className="loginFormContainer">
-            <div className="loginFormDiv">
-              <div style={{ textAlign: "center" }}>
-                Enter Mobile Number To Login
-              </div>
-              <div className="loginFormField">
-                <TextField
-                  fullWidth
-                  required
-                  defaultValue={this.state.mobile}
-                  name="mobile"
-                  label="Mobile Number"
-                  variant="outlined"
-                  type="tel"
-                  onChange={this.onChangeHandle}
-                  inputProps={{ maxLength: 10 }}
-                  helperText={`${this.state.mobile.length}/10`}
-                  FormHelperTextProps={{
-                    className: "helperTextMobile",
-                  }}
-                />
-                {this.state.mobileerror ? (
-                  <span
-                    style={{
-                      color: "red",
-                      fontSize: "x-small",
-                      fontWeight: "700",
-                    }}
-                  >
-                    {this.state.errorMessage}
-                  </span>
-                ) : null}
-              </div>
-              {this.state.showOtp ? (
+        <LoadingOverlay active={this.state.load} spinner text="Loading...">
+          <div className="loginContainer">
+            <div className="loginFormContainer">
+              <div className="loginFormDiv">
+                <div style={{ textAlign: "center" }}>
+                  Enter Mobile Number To Login
+                </div>
                 <div className="loginFormField">
                   <TextField
-                    autoFocus={this.state.showOtp}
+                    autoFocus={true}
                     fullWidth
                     required
-                    defaultValue={this.state.otp}
-                    name="otp"
-                    type="tel"
-                    label="OTP"
+                    defaultValue={this.state.mobile}
+                    name="mobile"
+                    label="Mobile Number"
                     variant="outlined"
+                    type="tel"
                     onChange={this.onChangeHandle}
-                    inputProps={{ maxLength: 4 }}
-                    helperText={`${this.state.otp.length}/4`}
+                    inputProps={{ maxLength: 10 }}
+                    helperText={`${this.state.mobile.length}/10`}
                     FormHelperTextProps={{
-                      className: "helperTextOtp",
+                      className: "helperTextMobile",
                     }}
                   />
-                  {this.state.otpError ? (
+                  {this.state.mobileerror ? (
                     <span
                       style={{
                         color: "red",
@@ -431,83 +416,113 @@ class Login extends Component {
                     </span>
                   ) : null}
                 </div>
-              ) : null}
-              {!this.state.showOtp ? (
+                {this.state.showOtp ? (
+                  <div className="loginFormField">
+                    <TextField
+                      autoFocus={this.state.showOtp}
+                      fullWidth
+                      required
+                      defaultValue={this.state.otp}
+                      name="otp"
+                      type="tel"
+                      label="OTP"
+                      variant="outlined"
+                      onChange={this.onChangeHandle}
+                      inputProps={{ maxLength: 4 }}
+                      helperText={`${this.state.otp.length}/4`}
+                      FormHelperTextProps={{
+                        className: "helperTextOtp",
+                      }}
+                    />
+                    {this.state.otpError ? (
+                      <span
+                        style={{
+                          color: "red",
+                          fontSize: "x-small",
+                          fontWeight: "700",
+                        }}
+                      >
+                        {this.state.errorMessage}
+                      </span>
+                    ) : null}
+                  </div>
+                ) : null}
+                {!this.state.showOtp ? (
+                  <div className="loginFormField">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{
+                        width: "50%",
+                        marginLeft: "25%",
+                        marginRight: "25%",
+                      }}
+                      onClick={this.onClickRequestOtp}
+                      disabled={this.state.mobile.length === 10 ? false : true}
+                    >
+                      Request Otp
+                    </Button>
+                  </div>
+                ) : null}
+                {this.state.showOtp ? (
+                  <div className="loginFormField">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{
+                        width: "50%",
+                        marginLeft: "5%",
+                        marginRight: "5%",
+                      }}
+                      onClick={this.onClickResendOtp}
+                      disabled={this.state.disableResendButton}
+                    >
+                      Resend Otp
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{
+                        width: "30%",
+                        marginLeft: "5%",
+                        marginRight: "5%",
+                      }}
+                      onClick={this.onClickSubmitOtp}
+                      disabled={this.state.otp.length === 4 ? false : true}
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                ) : null}
+                {this.state.disableResendButton && this.state.showOtp ? (
+                  <div style={{ fontSize: "x-small", fontWeight: "700" }}>
+                    Resend OTP : <span>{this.state.timer}</span>
+                  </div>
+                ) : null}
+                <br />
+                <Divider />
+                <div style={{ textAlign: "center" }}>OR</div>
+                <Divider />
                 <div className="loginFormField">
                   <Button
                     variant="contained"
                     color="primary"
+                    sizw="large"
                     style={{
-                      width: "50%",
-                      marginLeft: "25%",
-                      marginRight: "25%",
-                    }}
-                    onClick={this.onClickRequestOtp}
-                    disabled={this.state.mobile.length === 10 ? false : true}
-                  >
-                    Request Otp
-                  </Button>
-                </div>
-              ) : null}
-              {this.state.showOtp ? (
-                <div className="loginFormField">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{
-                      width: "50%",
+                      width: "90%",
+                      height: "70px",
                       marginLeft: "5%",
                       marginRight: "5%",
                     }}
-                    onClick={this.onClickResendOtp}
-                    disabled={this.state.disableResendButton}
+                    onClick={this.onClickTrueCallerLogin}
                   >
-                    Resend Otp
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{
-                      width: "30%",
-                      marginLeft: "5%",
-                      marginRight: "5%",
-                    }}
-                    onClick={this.onClickSubmitOtp}
-                    disabled={this.state.otp.length === 4 ? false : true}
-                  >
-                    Submit
+                    Login With Truecaller
                   </Button>
                 </div>
-              ) : null}
-              {this.state.disableResendButton && this.state.showOtp ? (
-                <div style={{ fontSize: "x-small", fontWeight: "700" }}>
-                  Resend OTP : <span>{this.state.timer}</span>
-                </div>
-              ) : null}
-              <br />
-              <Divider />
-              <div style={{ textAlign: "center" }}>OR</div>
-              <Divider />
-              <div className="loginFormField">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sizw="large"
-                  style={{
-                    width: "90%",
-                    height: "70px",
-                    marginLeft: "5%",
-                    marginRight: "5%",
-                  }}
-                  onClick={this.onClickTrueCallerLogin}
-                  endIcon={this.state.trueLoad?<CircularProgress color="inherit" size={28}/>:""}
-                >
-                  Login With Truecaller
-                </Button>
               </div>
             </div>
           </div>
-        </div>
+        </LoadingOverlay>
       </>
     );
   }
