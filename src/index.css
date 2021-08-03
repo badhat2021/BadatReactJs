@@ -39,3 +39,15 @@ code {
   border-radius: 30px !important;
   background-color: #0d992f !important;
 }
+
+.MuiGridListTileBar-title{
+    overflow: visible !important;
+    white-space: nowrap;
+    top: 2px;
+    right: 14px;
+    position: absolute;
+}
+
+.MuiGridListTileBar-subtitle{
+  padding-right: 23px;
+}

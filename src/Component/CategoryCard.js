@@ -15,19 +15,18 @@ const CategoryCard = ({ data = [], history }) => {
       <GridList cellHeight={180} className="categoryCards">
         {data.map((tile) => (
           <GridListTile key={tile.id} onClick={() => onClickHandler(tile.id)}>
-            <img src={tile.bg_image} alt={tile.name} />
+            <img src={tile.bg_image} alt={tile.name}  />
             <GridListTileBar
-              title={tile.title}
+              title={                  
+                <div className="categoryIcon">
+                  <Avatar alt="icon" src={tile.icon} />
+                </div>
+              }
               subtitle={
                 <div>
-                  <div className="categoryIcon">
-                    <Avatar alt="icon" src={tile.icon} />
-                  </div>
-                  <div>
-                    <span style={{ textAlign: "center" }}>
-                      <h3>{tile.name}</h3>
-                    </span>
-                  </div>
+                  <span style={{ textAlign: "left", whiteSpace: "break-spaces" }}>
+                    <h4 style={{fontWeight:"normal"}}>{tile.name}</h4>
+                  </span>
                 </div>
               }
             />
