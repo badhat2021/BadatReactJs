@@ -104,7 +104,7 @@ const UserDetails = () => {
   const [backdrop, setBackdrop] = useState(user.load)
   const [error, seterror] = useState(false)
   const [edit, setEdit] = useState(false)
-  const [name, setname] = useState(user.data.name)
+  const [name, setname] = useState()
   const [about_us, setabout_us] = useState()
   const [address, setaddress] = useState()
   const [business_category, setbusiness_category] = useState(0)

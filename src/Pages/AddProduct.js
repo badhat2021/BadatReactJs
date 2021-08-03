@@ -286,13 +286,13 @@ const AddProductForm = () => {
           <Button
             required  
             variant="contained"
-            color="secondary"
+            color={images.length===0?"secondary":"inherit"}
             component="label"
             style={{marginRight: "20px"}}
             onClick={() => {setImgLoad(true)}}
             endIcon={imgLoad?<CircularProgress size={20}/>:""}
           >
-            Upload Images
+          {images.length===0?"Select Images":"Images Selected"}
             <input
               type="file"
               accept="image/*"

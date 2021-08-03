@@ -337,10 +337,6 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
               </Badge>
             </IconButton>
 
-            <IconButton aria-label="add new product" className="headerIconbtns" onClick={() => {history.push("/products/new")}}>
-                <AddBoxIcon />
-            </IconButton>
-
             <IconButton
               className="headerIconbtns"
               aria-label="more"

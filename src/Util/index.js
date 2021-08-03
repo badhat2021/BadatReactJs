@@ -1,4 +1,4 @@
-import { addToCartApi, getCartData } from "../AppApi";
+import { addToCartApi, getCartData, getAppState } from "../AppApi";
 import Swal from "sweetalert2";
 import "../AppAsset/CSS/Util.css";
 import { getTruecallerResponse } from "../AppApi";
@@ -80,11 +80,9 @@ export const getId = () => {
 
 export const getCartCount = async () => {
   if (checkLogin()) {
-    const data = await getCartData();
-    if(data.length)
-      return data.length;
-    else
-      return 0;
+    const data = await getAppState();
+    //console.log(data.data.data.cart)
+    return data.data.data.cart;
   }
   return 0;
 };

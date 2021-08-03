@@ -8,6 +8,7 @@ import {
   getVerticalCategory,
   getDistrict,
 } from "../AppApi";
+
 import { Helmet } from "react-helmet";
 import { Drawer, Fab } from "@material-ui/core";
 import {
@@ -387,18 +388,19 @@ class AllProductPage extends Component {
         >
           Open App
         </Fab>
-
+        {checkLogin()?
       <Snackbar
         anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
         open={true}
         key={"bottom right"}
       >
         <Link to="/products/new" className="linkStyle">
-          <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+          <Button variant="contained" className="addprdBTN" color="primary" startIcon={<AddIcon />}>
             Add Product
           </Button>
         </Link>
       </Snackbar>
+      :""}
 
         <div className="AllProductPageContainer">
           <div className="AllProductPageCategoryCardContainer">

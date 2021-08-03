@@ -112,7 +112,7 @@ export default function MyProductCard(props) {
   }
 
   //const url = window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/product/"+props.product.id
-  const url = "https://badat-in.vercel.app/"+"/product/"+props.product.id;
+  const url = window.location.protocol+"//"+window.location.hostname+"/product/"+props.product.id;
 
   const body = (
     <div className={classes.mdlPaper}>
