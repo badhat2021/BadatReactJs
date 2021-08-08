@@ -153,10 +153,11 @@ export const getSellerDetail = async (id) => {
 };
 
 export const getMyDetail = async () => {
+  const TOKEN_live = JSON.parse(localStorage.getItem("badhat_token"));
   const res = await axios.get(
     "https://badhat.app/api/userProfile",{
       headers: {
-        Authorization: "Bearer " + TOKEN,
+        Authorization: "Bearer " + TOKEN_live,
       },
     });
   console.log(res.data.data)
