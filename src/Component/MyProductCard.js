@@ -121,21 +121,21 @@ export default function MyProductCard(props) {
         <FacebookShareButton
           className={classes.socialBtns}
           url={url}
-          quote={`Checkout this product in badat`}>
+          quote={`Checkout this product in badhat`}>
           <FacebookIcon size={32} round={true}/>
         </FacebookShareButton>
   
         <TwitterShareButton
           className={classes.socialBtns}
           url={url}
-          hashtags={["badat"]}
-          title={`Checkout this product in badat`}>
+          hashtags={["badhat"]}
+          title={`Checkout this product in badhat`}>
           <TwitterIcon size={32} round={true} />        
         </TwitterShareButton>
   
         <EmailShareButton
           className={classes.socialBtns}
-          subject={`Check out the product in badat`}
+          subject={`Check out the product in badhat`}
           body={`${url}`}>
           <EmailIcon size={32} round={true}/>
         </EmailShareButton>
@@ -144,21 +144,21 @@ export default function MyProductCard(props) {
           className={classes.socialBtns}
           url={url}
           summary={props.product.name}
-          title={`Checkout this product in badat`}>
+          title={`Checkout this product in badhat`}>
           <LinkedinIcon size={32} round={true} />        
         </LinkedinShareButton>       
 
         <TelegramShareButton
           className={classes.socialBtns}
           url={url}
-          title={`Checkout this product in badat`}>
+          title={`Checkout this product in badhat`}>
           <TelegramIcon size={32} round={true} />        
         </TelegramShareButton>
 
         <RedditShareButton
           className={classes.socialBtns}
           url={url}
-          title={`Checkout this product in badat`}>
+          title={`Checkout this product in badhat`}>
           <RedditIcon size={32} round={true} />        
         </RedditShareButton>
 
@@ -166,7 +166,7 @@ export default function MyProductCard(props) {
           className={classes.socialBtns}
           url={url}
           separator=" || "
-          title={`Checkout this product in badat`}>
+          title={`Checkout this product in badhat`}>
           <WhatsappIcon size={32} round={true} />        
         </WhatsappShareButton>                         
       </div>

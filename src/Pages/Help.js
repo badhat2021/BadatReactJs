@@ -61,7 +61,7 @@ export default function SimpleList() {
                 className={classes.inline}
                 color="textPrimary"
               >
-                <b>Payment: </b>Badat does not collect payment from buyers. All payment terms shall be discussed between buyers & sellers. Badat is not responsible for any payment loss or fraud. Badat recommends cash on delivery.
+                <b>Payment: </b>Badhat does not collect payment from buyers. All payment terms shall be discussed between buyers & sellers. Badhat is not responsible for any payment loss or fraud. Badhat recommends cash on delivery.
               </Typography>
             </React.Fragment>
           }
@@ -78,7 +78,7 @@ export default function SimpleList() {
                 className={classes.inline}
                 color="textPrimary"
               >
-                <b>Delivery:</b> All delivery terms will be discussed between the buyer and seller. Badat does not offer delivery service.
+                <b>Delivery:</b> All delivery terms will be discussed between the buyer and seller. Badhat does not offer delivery service.
               </Typography>
             </React.Fragment>
           }

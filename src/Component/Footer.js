@@ -100,7 +100,7 @@ const Footer = ({ history }) => {
           onClick={() => onClickHandle("WHY_USE_BADHAT")}
           style={{ textDecoration: "none", color: "black" }}
         >
-          Why Use Badat?
+          Why Use Badhat?
         </Link>
       </div>
     </div>

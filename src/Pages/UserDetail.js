@@ -82,7 +82,7 @@ class UserDetail extends Component {
 
   onLikeChatClick = () => {
     installOurApp(
-      "To like or chat with seller download the app, Download Badat app click below"
+      "To like or chat with seller download the app, Download Badhat app click below"
     );
   };
 
@@ -98,14 +98,14 @@ class UserDetail extends Component {
         <Helmet>
           <title>
             {`${this.state.data.business_name} by ${this.state.data.name}` ||
-              "Badat"}
+              "Badhat"}
           </title>
-          <meta name="keywords" content="badhat,badat,badat.in" />
+          <meta name="keywords" content="badhat,badat,Badhat.app" />
           <meta
             name="description"
             content={
               `${this.state.data.business_type} OF ${this.state.data.business_category} from ${this.state.data.district}, ${this.state.data.state}` ||
-              "Badat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
+              "Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
             }
           />
           <link

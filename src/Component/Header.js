@@ -188,8 +188,8 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
   };
 
   const onSaleClickHandle = () => {
-    installOurApp(`Want to sell on Badat at wholesale prices or in bulk? 
-    Download Badat app by clicking below`);
+    installOurApp(`Want to sell on Badhat at wholesale prices or in bulk? 
+    Download Badhat app by clicking below`);
   };
 
   const onClickSearchHandle = () => {
@@ -262,7 +262,7 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
               </div>
             </IconButton>
         <Typography className={classes.title} variant="h5" noWrap>
-          Badat
+          Badhat
         </Typography>
         <div className={classes.search}>
           <Paper component="form" className={classes.root}>

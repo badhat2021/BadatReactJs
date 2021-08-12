@@ -342,13 +342,13 @@ class AllProductPage extends Component {
                   this.state.productData[0].subcategory.name) ||
                 (this.state.productData[0].category &&
                   this.state.productData[0].category.name) ||
-                "Badat"
-              : "Badat"}
+                "Badhat"
+              : "Badhat"}
           </title>
-          <meta name="keywords" content="badhat,badat,badat.in" />
+          <meta name="keywords" content="badhat,badat,badhat.app" />
           <meta
             name="description"
-            content="Badat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
+            content="Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
           />
           <link
             rel="apple-touch-icon"

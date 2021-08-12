@@ -124,8 +124,8 @@ export const SimpleDialog = (props) => {
       <List style={{padding:20,marginBottom:10}}>
         <Typography style={{color: "red",fontWeight:"bold"}}> Note: </Typography>
         <ListItem>1. All payment & Delivery terms will be discussed between buyers and sellers</ListItem>
-        <ListItem>2. Badat helps in connecting & booking orders only</ListItem>
-        <ListItem>3. Badat does not offer any kind of assurance on products</ListItem>
+        <ListItem>2. Badhat helps in connecting & booking orders only</ListItem>
+        <ListItem>3. Badhat does not offer any kind of assurance on products</ListItem>
       </List>
     </Dialog>
   );
