@@ -312,6 +312,7 @@ export const addProduct = async (dataset, files) => {
     data.append('name', dataset.name);
     data.append('description', dataset.desc);
     data.append('moq', dataset.moq);
+    data.append('mrp_price', 0);
     data.append('price', dataset.price);
     data.append('category_id', dataset.categoryId);
     data.append('sub_category_id', dataset.subCategoryId);
