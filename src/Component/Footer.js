@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // import Link from "@material-ui/core/Link";
 import { withRouter, Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import ABOUT_US from "../AppAsset/About-us.jpg";
+import ABOUT_US from "../AppAsset/About-us2.png";
 import WHY_USE_BADHAT from "../AppAsset/Why-use-badhat.jpg";
 import "../AppAsset/CSS/Footer.css";
 
