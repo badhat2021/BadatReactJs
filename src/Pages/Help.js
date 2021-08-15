@@ -61,8 +61,8 @@ export default function SimpleList() {
                 className={classes.inline}
                 color="textPrimary"
               >
-                <b>Payment: </b>Badhat does not collect payment from buyers. All payment terms shall be discussed between buyers & sellers. Badhat is not responsible for any payment loss or fraud. Badhat recommends cash on delivery.
-              </Typography>
+                <b>Payment: </b> Badhat does not collect payment from buyers. All payment terms shall be discussed between buyers & sellers. Badhat is not responsible for any payment loss or fraud.  
+	      </Typography>
             </React.Fragment>
           }
           />
@@ -146,7 +146,7 @@ export default function SimpleList() {
                 className={classes.inline}
                 color="textPrimary"
               >
-                 <b>Fraud:</b> Report fraud to us on 8750317898 or contact@badat.in 
+                 <b>Fraud:</b> Report fraud to us on 8750317898 or badhat.b2b@gmail.com 
               </Typography>
             </React.Fragment>
           }
@@ -156,7 +156,7 @@ export default function SimpleList() {
       <Divider />
       <List component="nav" aria-label="secondary">
         <ListItem button>
-          <ListItemText primary="For any other things message wa.me/918750317898 or call 8750317898" />
+          <ListItemText primary="For any other things message Badhat or call 8750317898" />
         </ListItem>
 	  </List>
     </div>
