@@ -30,7 +30,7 @@ class Product extends Component {
       stateData: [],
       offset: 0,
       data: [],
-      perPage: 10,
+      perPage: 20,
       currentPage: 0
     };
     this.handlePageClick = this

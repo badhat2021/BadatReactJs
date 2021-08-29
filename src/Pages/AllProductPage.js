@@ -48,7 +48,6 @@ import {
   checkBadatExpiration,
 } from "../Util";
 import Footer from "../Component/Footer";
-import Skeleton from '@material-ui/lab/Skeleton';
 
 const vertical = "vertical=";
 const categoryId = "categoryId=";
@@ -333,7 +332,7 @@ class AllProductPage extends Component {
       loginPopUp(this.props.history);
     }
     return (
-      <div active={this.state.load} spinner text="Loading...">
+      <LoadingOverlay active={this.state.load} spinner text="Loading...">
         <Helmet>
           <title>
             {this.state.productData && this.state.productData.length > 0
@@ -507,51 +506,8 @@ class AllProductPage extends Component {
                 id={this.state.verticleCategories}
               />
             ) : null}
-            {true?
-              <div className="d-flex flex-row flex-wrap mx-5">
-                <div className="d-flex my-2 col-6">
-              <Skeleton variant="rect" width={90} height={90} />
-              <div className="mx-3">
-                <Skeleton variant="text" width={210} />
-                <Skeleton variant="text" width={150} />
-              </div>
-                </div>
-                <div className="d-flex my-2 col-6">
-              <Skeleton variant="rect" width={90} height={90} />
-              <div className="mx-3">
-                <Skeleton variant="text" width={210} />
-                <Skeleton variant="text" width={150} />
-              </div>
-                </div>
-                <div className="d-flex my-2 col-6">
-              <Skeleton variant="rect" width={90} height={90} />
-              <div className="mx-3">
-                <Skeleton variant="text" width={210} />
-                <Skeleton variant="text" width={150} />
-              </div>
-                </div>
-                <div className="d-flex my-2 col-6">
-              <Skeleton variant="rect" width={90} height={90} />
-              <div className="mx-3">
-                <Skeleton variant="text" width={210} />
-                <Skeleton variant="text" width={150} />
-              </div>
-                </div>
-                <div className="d-flex my-2 col-6">
-              <Skeleton variant="rect" width={90} height={90} />
-              <div className="mx-3">
-                <Skeleton variant="text" width={210} />
-                <Skeleton variant="text" width={150} />
-              </div>
-                </div>
-                <div className="d-flex my-2 col-6">
-              <Skeleton variant="rect" width={90} height={90} />
-              <div className="mx-3">
-                <Skeleton variant="text" width={210} />
-                <Skeleton variant="text" width={150} />
-              </div>
-                </div>
-              </div>
+            {this.state.load?
+              ""
               :
             <Product
               showCategoryFilter={true}
@@ -581,7 +537,7 @@ class AllProductPage extends Component {
           </div>
         </div>
         <Footer />
-      </div>
+      </LoadingOverlay>
     );
   }
 }
