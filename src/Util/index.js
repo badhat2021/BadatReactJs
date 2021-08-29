@@ -81,7 +81,7 @@ export const getId = () => {
 export const getCartCount = async () => {
   if (checkLogin()) {
     const data = await getAppState();
-    //console.log(data.data.data.cart)
+    // console.log(data)
     return data.data.data.cart;
   }
   return 0;

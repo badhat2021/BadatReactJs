@@ -25,6 +25,8 @@ import {
   checkBadatExpiration,
 } from "../Util";
 import Footer from "../Component/Footer";
+import Skeleton from '@material-ui/lab/Skeleton';
+
 
 class SubCategory extends Component {
   constructor() {
@@ -59,6 +61,7 @@ class SubCategory extends Component {
     };
     const res = await getSubCategory(id);
     const prod = await getProducts(params);
+    console.log(prod)
     this.setState({
       load: false,
       data: res.data.data,
@@ -173,7 +176,7 @@ class SubCategory extends Component {
       loginPopUp(this.props.history);
     }
     return (
-      <LoadingOverlay active={this.state.load} spinner text="Loading...">
+      <div active={this.state.load} spinner text="Loading...">
         <Helmet>
           <title>
             {this.state.productData && this.state.productData.length > 0
@@ -185,6 +188,7 @@ class SubCategory extends Component {
             name="description"
             content="Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
           />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"/>
           <link
             rel="apple-touch-icon"
             href={
@@ -266,6 +270,52 @@ class SubCategory extends Component {
             endPoint={ENDPOINT_GET_CATEGORIES_BANNER}
             id={this.state.categoryId}
           />
+          {this.state.load?
+            <div className="d-flex flex-row flex-wrap mx-5">
+            <div className="d-flex my-2 col-6">
+              <Skeleton variant="rect" width={90} height={90} />
+              <div className="mx-3">
+                <Skeleton variant="text" width={210} />
+                <Skeleton variant="text" width={150} />
+              </div>
+            </div>
+            <div className="d-flex my-2 col-6">
+              <Skeleton variant="rect" width={90} height={90} />
+              <div className="mx-3">
+                <Skeleton variant="text" width={210} />
+                <Skeleton variant="text" width={150} />
+              </div>
+            </div>
+            <div className="d-flex my-2 col-6">
+              <Skeleton variant="rect" width={90} height={90} />
+              <div className="mx-3">
+                <Skeleton variant="text" width={210} />
+                <Skeleton variant="text" width={150} />
+              </div>
+            </div>
+            <div className="d-flex my-2 col-6">
+              <Skeleton variant="rect" width={90} height={90} />
+              <div className="mx-3">
+                <Skeleton variant="text" width={210} />
+                <Skeleton variant="text" width={150} />
+              </div>
+            </div>
+            <div className="d-flex my-2 col-6">
+              <Skeleton variant="rect" width={90} height={90} />
+              <div className="mx-3">
+                <Skeleton variant="text" width={210} />
+                <Skeleton variant="text" width={150} />
+              </div>
+            </div>
+            <div className="d-flex my-2 col-6">
+              <Skeleton variant="rect" width={90} height={90} />
+              <div className="mx-3">
+                <Skeleton variant="text" width={210} />
+                <Skeleton variant="text" width={150} />
+              </div>
+            </div>
+          </div>
+            :
           <Product
             showCategoryFilter={false}
             showVerticleCategoriesFilter={true}
@@ -278,9 +328,7 @@ class SubCategory extends Component {
             onFilterChangeHandle={this.onFilterChangeHandle}
             onFilterReset={this.onFilterReset}
             onFilterSubmit={this.onFilterSubmit}
-            verticalCategoriesId={
-              this.state.subCategories ? this.state.subCategories : null
-            }
+            verticalCategoriesId={ this.state.subCategories ? this.state.subCategories : null}
             productData={this.state.productData}
             subCategoryList={this.state.subCategoryList}
             verticalCategoryList={this.state.verticalCategoryList}
@@ -290,10 +338,10 @@ class SubCategory extends Component {
             sortOrderValue={this.state.sortOrder}
             drawer={this.state.drawer}
             onDrawerClick={this.onDrawerClick}
-          />
+          />}
         </div>
         <Footer />
-      </LoadingOverlay>
+      </div>
     );
   }
 }

@@ -13,11 +13,14 @@ import NoDataFound from "../Component/NoDataFound";
 import "../AppAsset/CSS/Product.css";
 import { getCategory, getState } from "../AppApi";
 import ProductCard from "./ProductCard";
+import ReactPaginate from 'react-paginate';
+import axios from 'axios'
 
 class Product extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activePage: 15,
       load: true,
       categorydata: [],
       subCategoryData: [],
@@ -25,12 +28,22 @@ class Product extends Component {
       data: [],
       drawer: false,
       stateData: [],
+      offset: 0,
+      data: [],
+      perPage: 10,
+      currentPage: 0
     };
+    this.handlePageClick = this
+            .handlePageClick
+            .bind(this);
   }
 
   componentDidMount = async () => {
     const categoryTempData = await getCategory();
     const tempState = await getState();
+
+    this.receivedData()
+
     this.setState({
       categorydata:
         categoryTempData &&
@@ -43,6 +56,34 @@ class Product extends Component {
       stateData: (tempState && tempState) || [],
     });
   };
+
+    receivedData() {
+                const data = this.props.productData;
+                const slice = data.slice(this.state.offset, this.state.offset + this.state.perPage)
+                const postData = slice.map(pd => <ProductCard data={pd}/>)
+                this.setState({
+                    pageCount: Math.ceil(data.length / this.state.perPage),                   
+                    postData
+          })
+    }
+
+    handlePageClick = (e) => {
+        const selectedPage = e.selected;
+        const offset = selectedPage * this.state.perPage;
+
+        this.setState({
+            currentPage: selectedPage,
+            offset: offset
+        }, () => {
+            this.receivedData()
+        });
+
+    };
+
+  handlePageChange(pageNumber) {
+    console.log(`active page is ${pageNumber}`);
+    this.setState({activePage: pageNumber});
+  }
 
   onDrawerClick = (p) => {
     this.setState({ drawer: p });
@@ -235,13 +276,32 @@ class Product extends Component {
             </div>
           </Drawer>
         </div>
+        
+
         {this.props.productData && this.props.productData.length > 0 ? (
-          <div className="productListing">
+          <div className="productListing">            
+
             {this.props &&
             this.props.productData &&
             this.props.productData.length > 0
-              ? this.props.productData.map((res) => <ProductCard data={res} />)
+              ?this.state.postData 
+
               : "no data found"}
+
+            <ReactPaginate
+              previousLabel={"prev"}
+              nextLabel={"next"}
+              breakLabel={"..."}
+              breakClassName={"break-me"}
+              pageCount={this.state.pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick}
+              containerClassName={"pagination"}
+              subContainerClassName={"pages pagination"}
+              activeClassName={"active"}
+            />
+
           </div>
         ) : (
           <NoDataFound content="No Product Found" />

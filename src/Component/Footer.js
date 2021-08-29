@@ -43,7 +43,7 @@ const Footer = ({ history }) => {
           onClick={() => onClickHandle("ABOUT_US")}
           style={{ textDecoration: "none", color: "black" }}
         >
-          About us
+          How to use Badhat
         </Link>
       </div>
       <div
@@ -82,25 +82,6 @@ const Footer = ({ history }) => {
           style={{ textDecoration: "none", color: "black" }}
         >
           Privacy Policy
-        </Link>
-      </div>
-      <div
-        style={{
-          width: "30%",
-          marginTop: "10px",
-          marginLeft: "2%",
-          marginRight: "1%",
-          textAlign: "center",
-          fontSize: "15px",
-        }}
-      >
-        <Link
-          // component="button"
-          // variant="body3"
-          onClick={() => onClickHandle("WHY_USE_BADHAT")}
-          style={{ textDecoration: "none", color: "black" }}
-        >
-          Why Use Badhat?
         </Link>
       </div>
     </div>

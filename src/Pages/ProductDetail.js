@@ -456,12 +456,13 @@ function SimpleDialog(props) {
         <DialogContent dividers>
           <Typography gutterBottom>
             {data.return_policy!==null?
+            data.return_policy!=""?
             <>
             <strong>Return policy</strong>
             <Divider/>
             {data.return_policy}
             </>
-            :""}
+            :"":""}
           </Typography>
           <br/>
           <Typography gutterBottom> 
