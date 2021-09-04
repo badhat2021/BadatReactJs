@@ -451,3 +451,31 @@ export const getPincodeData = async (pincode) => {
   const res = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`);
   return res;
 };
+
+export const postMessage = async (dataset) => {
+    var data = new FormData();
+    //data.append('image', dataset.categoryId);
+    data.append('message', dataset.message);
+    data.append('vendor_id', dataset.vendor_id);
+    //for (var i = 0; i < files.length; i++) {
+      // data.append(`images[${i}]`, files.[i]);
+    // }
+    
+    var config = {
+      method: 'post',
+      url: 'https://badhat.club/api/addChat',
+      headers: { 
+        "Authorization": "Bearer " + TOKEN,
+        "content-type": 'multipart/form-data'
+      },
+      data : data
+    };
+    
+    axios(config)
+    .then(function (response) {
+      console.log(response)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });  
+}

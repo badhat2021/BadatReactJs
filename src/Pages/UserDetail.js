@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import LoadingOverlay from "react-loading-overlay";
-import { getSellerDetail } from "../AppApi";
+import { getSellerDetail, postMessage } from "../AppApi";
 import { Chip, Drawer, Divider, Fab, Button } from "@material-ui/core";
 import Product from "../Component/Product";
 import { Helmet } from "react-helmet";
@@ -24,6 +24,7 @@ import {
 } from "react-share";
 import DialogContent from '@material-ui/core/DialogContent';
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import SendIcon from '@material-ui/icons/Send';
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import ChatIcon from "@material-ui/icons/Chat";
 import ShareIcon from "@material-ui/icons/Share";
@@ -36,6 +37,7 @@ import Dialog from '@material-ui/core/Dialog';
 import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
 import {
   loginPopUp,
   checkSkip,
@@ -55,6 +57,7 @@ class UserDetail extends Component {
       showAddtoCart: true,
       drawer: false,
       open: false,
+      chatBox: false
     };
   }
 
@@ -64,7 +67,14 @@ class UserDetail extends Component {
 
   handleClose = (value) => {
         this.setState({ open: false });
+  };
 
+  handleOpenChat = () => {
+      this.setState({ chatBox: true });
+  };
+
+  handleCloseChat = (value) => {
+        this.setState({ chatBox: false });
   };
 
 
@@ -108,6 +118,7 @@ class UserDetail extends Component {
               "Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
             }
           />
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
           <link
             rel="apple-touch-icon"
             href={
@@ -116,7 +127,7 @@ class UserDetail extends Component {
                 : "https://drive.google.com/file/d/1hZFX14ynp6EuS-Sdtkt0fqbA6FsHl7NU/view"
             }
           />
-        </Helmet>
+        </Helmet>        
         <Fab
           variant="extended"
           size="small"
@@ -183,9 +194,10 @@ class UserDetail extends Component {
                 </span>
               </div>
               <div className="userDetailPolicy">
-                <Button color='inherit' variant="contained" style={{padding:"5px",marginTop:10, textTransform:"none"}} onClick={this.handleClickOpen}> Details</Button>
+                <Button color='inherit' variant="contained" style={{padding:"5px",marginTop:10, textTransform:"none"}} onClick={this.handleClickOpen}> Details</Button>              
+                <Button color='inherit' variant="contained" className="btn btn-success ml-2" style={{padding:"5px",marginTop:10, textTransform:"none"}} onClick={this.handleOpenChat}> Chat</Button>
               </div>
-            </div>
+            </div>            
           </div>
           <Divider />
           <div className="userDetailshare">
@@ -285,6 +297,7 @@ class UserDetail extends Component {
         </div>
         <Footer />
         <SimpleDialog open={this.state.open} data={this.state.data} onClose={this.handleClose} />
+        {this.state.chatBox?<Chatpop onClose={this.handleCloseChat}/>:""}
       </LoadingOverlay>
     );
   }
@@ -375,5 +388,51 @@ function SimpleDialog(props) {
           <br/>
         </DialogContent>
     </Dialog>
+  );
+}
+
+const Chatpop = (props) => {
+
+  const onSubmit = async (event) => {
+    event.preventDefault(); // Prevent default submission
+    try {
+      // await postMessage();
+      alert('Your registration was successfully submitted!');
+    } catch (e) {
+      alert(`Registration failed! ${e.message}`);
+    }
+  }
+
+  const closeClick = () => {
+    props.onClose()
+  }
+
+  return(
+    <div class="chat-pos">
+      <div class="card bg-white mt-5">
+          <div className="card-header d-flex justify-content-center align-items-center bg-success text-white h6 rounded-top">
+            <span>Chat</span>
+            <div className="ml-auto"><CloseIcon onClick={closeClick} /></div>
+          </div>
+          <div className="card-body">
+            <div class="d-flex flex-row p-3">
+                <div class="bg-white mr-2 p-3"><span class="text-muted">Hello and thankyou for visiting birdlynind.</span></div> <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="30" height="30"/>
+            </div>
+            <div class="d-flex flex-row p-3"> <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="30" height="30"/>
+                <div class="chat text-wrap ml-2 p-3">asd asd a  s d as f a  s sd a sf a s d asd a sd</div>
+            </div>
+          </div>
+          <div className="card-footer p-0 m-0 bg-white">
+            
+            <form onSubmit={onSubmit} class="form-container">
+                <div class="input-group my-3 px-2">
+                  <input type="text" class="form-control rounded-pill" placeholder="Message..." aria-describedby="button-addon2"/>
+                  <button type="submit" class="btn btn-success d-flex justify-content-center align-items-center rounded-circle ml-1" id="button-addon2"><SendIcon fontSize="small"/></button>
+                </div>            
+            </form>
+        
+        </div>
+    </div>
+</div>
   );
 }
