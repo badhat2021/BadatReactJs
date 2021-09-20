@@ -137,21 +137,32 @@ const AddProductForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (images.length>0) {
+  /*if (images.length>0) {
+      setBackdrop(true)
+      var dataset = {
+        "name" : name,
+        "desc" : description,
+        "moq" : moq,
+        "price" : price,
+        "categoryId" : categoryId,
+        "subCategoryId" : subCategoryId,
+        "verticalId" : verticalId
+      }
+      addProduct(dataset,images);    
+    }else{
+      setFileError(true)
+    }*/
     setBackdrop(true)
-    var dataset = {
-      "name" : name,
-      "desc" : description,
-      "moq" : moq,
-      "price" : price,
-      "categoryId" : categoryId,
-      "subCategoryId" : subCategoryId,
-      "verticalId" : verticalId
-    }
-    addProduct(dataset,images);    
-  }else{
-    setFileError(true)
-  }
+      var dataset = {
+        "name" : name,
+        "desc" : description,
+        "moq" : moq,
+        "price" : price,
+        "categoryId" : categoryId,
+        "subCategoryId" : subCategoryId,
+        "verticalId" : verticalId
+      }
+      addProduct(dataset,images); 
   }
 
   return (
@@ -284,7 +295,6 @@ const AddProductForm = () => {
           </Grid>
           <Grid item xs={12} sm={6} className={classes.filebtn}>     
           <Button
-            required  
             variant="contained"
             color={images.length===0?"secondary":"inherit"}
             component="label"

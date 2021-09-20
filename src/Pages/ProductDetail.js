@@ -166,7 +166,7 @@ class ProductDetail extends Component {
           <link
             rel="apple-touch-icon"
             href={
-              this.state.data && this.state.data.images
+              this.state.data && this.state.data.images && this.state.data.images[0]
                 ? this.state.data.images[0].thumbnail
                 : "https://drive.google.com/file/d/1hZFX14ynp6EuS-Sdtkt0fqbA6FsHl7NU/view"
             }
@@ -275,7 +275,7 @@ class ProductDetail extends Component {
             <div>
               <Carousel autoPlay={false}>
                 {this.state.data.images.map((item, i) => (
-                  <img
+                  <><img
                     src={item.image}
                     alt={
                       this.state.data &&
@@ -286,10 +286,19 @@ class ProductDetail extends Component {
                     width="100%"
                     height="400px"
                   />
+                  </>
                 ))}
               </Carousel>
             </div>
-          ) : null}
+          ) : (<Carousel autoPlay={false}>                                
+                  <img
+                    src="../default-img.png"
+                    alt={"no image"}
+                    style={{objectFit: "contain"}}
+                    width="100%"
+                    height="400px"
+                  />                
+              </Carousel>)}
           <div className="productDetailCardContainer">
             <div className="productDetailCardDetailContainer">
               <div className="productDetailCardName">

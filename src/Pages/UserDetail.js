@@ -195,7 +195,7 @@ class UserDetail extends Component {
               </div>
               <div className="userDetailPolicy">
                 <Button color='inherit' variant="contained" style={{padding:"5px",marginTop:10, textTransform:"none"}} onClick={this.handleClickOpen}> Details</Button>              
-                <Button color='inherit' variant="contained" className="btn btn-success ml-2" style={{padding:"5px",marginTop:10, textTransform:"none"}} onClick={this.handleOpenChat}> Chat</Button>
+                <Button color='inherit' variant="contained" className="btn d-none btn-success ml-2" style={{padding:"5px",marginTop:10, textTransform:"none"}} onClick={this.handleOpenChat}> Chat</Button>
               </div>
             </div>            
           </div>

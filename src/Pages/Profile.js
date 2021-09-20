@@ -202,7 +202,7 @@ class UserDetail extends Component {
               Share
             </div>
             <div
-              style={{ width: "33%" }}
+              style={{ width: "33%",display:"none" }}
               onClick={() => this.onLikeChatClick()}
             >
               <ChatIcon />

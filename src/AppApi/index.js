@@ -306,7 +306,7 @@ export const updateProfile = async (dataset,file) => {
 
 export const addProduct = async (dataset, files) => {
   
-    if(dataset.name === null || dataset.verticalId === null || dataset.subCategoryId === null || dataset.categoryId === null || dataset.description === null || dataset.moq === null || dataset.price === null || files.length===0)
+    if(dataset.name === null || dataset.verticalId === null || dataset.subCategoryId === null || dataset.categoryId === null || dataset.description === null || dataset.moq === null || dataset.price === null)
               window.location.href="/products/new";
     var data = new FormData();
     data.append('name', dataset.name);
@@ -317,9 +317,10 @@ export const addProduct = async (dataset, files) => {
     data.append('category_id', dataset.categoryId);
     data.append('sub_category_id', dataset.subCategoryId);
     data.append('vertical_id', dataset.verticalId);
-    for (var i = 0; i < files.length; i++) {
-      data.append(`images[${i}]`, files.[i]);
-    }
+    if(files.length>0)
+      for (var i = 0; i < files.length; i++) {
+        data.append(`images[${i}]`, files.[i]);
+      }
     
     var config = {
       method: 'post',

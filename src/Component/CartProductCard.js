@@ -32,7 +32,7 @@ class CartProductCard extends Component {
               this.props.data.product.images &&
               this.props.data.product.images.length > 0
                 ? this.props.data.product.images[0].thumbnail
-                : ""
+                : "../default-img.png"
             }
             alt={this.props.data.product.name}
             width="100%"

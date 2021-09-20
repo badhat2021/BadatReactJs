@@ -101,16 +101,16 @@ class ProductCard extends Component {
         >
           <img
             src={
-              (this.props.data &&
+                this.props.data &&
                 this.props.data.images &&
                 this.props.data.images.length > 0 &&
-                this.props.data.images[0].thumbnail) ||
-              ""
+                this.props.data.images[0].thumbnail?this.props.data.images[0].thumbnail :
+              "../../default-img.png"
             }
             alt={this.props.data.name}
             width="100%"
             height="100%"
-            style={{ borderRadius: "10px" }}
+            style={{ borderRadius: "10px",objectFit:"cover" }}
           />
         </div>
 
