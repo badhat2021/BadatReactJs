@@ -73,6 +73,7 @@ export default function ProductsPage() {
       {myProductsList ? myProductsList.length>0 ? myProductsList.map((product) => (<MyProductCard product={product}/>)) : <NoDataFound content={"No Products Added"} /> : <CircularProgress />}
     </div> 
       <Snackbar
+        className="Snackbar-br"
         anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
         open={true}
         key={"bottom right"}

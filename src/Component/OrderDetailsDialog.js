@@ -20,12 +20,20 @@ import {declineOrder,acceptOrder,getOrderById} from '../AppApi'
 
 const useStyles = makeStyles({
   declinebtn: {
-    backgroundColor: "#CF352E22",
-    color: "#8b0000"
+    backgroundColor: "#CF352EBA",
+    color: "#fff",
+    "&:hover": {
+      backgroundColor: "#CF352E",
+      color: "#fff"
+    }
   },
   acceptbtn: {
-    backgroundColor: "#0cf02a22",
-    color: "#0cf02a"
+    backgroundColor: "#0bf036cf",
+    color: "#fff",
+    "&:hover":{
+      backgroundColor: "#0bf036",
+      color: "#fff",
+    }
   }
 });
 
@@ -57,7 +65,7 @@ export const SimpleDialog = (props) => {
       </Box>
       </DialogTitle>
       <Divider/>
-      {props.data.status=="Placed"?<CardButtons data_id={props.data.id}/>:""}
+      {props.data.status=="Placed"?<CardButtons type={props.type} data_id={props.data.id}/>:""}
       <Divider style={{height:3}}/>
       <List>
           <ListItem button>
@@ -175,7 +183,7 @@ export const CardButtons = (props) => {
     setreload(true)
   }
   return(
-      <CardActions>
+      <CardActions className={props.type==="none"?"d-none":"d-block"}>
         <Button size="medium" fullWidth className={classes.declinebtn} onClick={declineOrderClick}>Decline</Button>
         <Button size="medium" fullWidth className={classes.acceptbtn} onClick={acceptOrderClick}>Accept</Button>
       </CardActions>

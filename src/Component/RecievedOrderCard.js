@@ -231,7 +231,7 @@ export default function RecievedOrderCard(props) {
           </>
         }
       />
-        <SimpleDialog selectedValue={selectedValue} open={openDialog} data={props.value} date={dateTime} onClose={handleCloseDialog} itemsCount={items} totPrice={totalPrice}/>
+        <SimpleDialog selectedValue={selectedValue} type="block" open={openDialog} data={props.value} date={dateTime} onClose={handleCloseDialog} itemsCount={items} totPrice={totalPrice}/>
     </Paper>
   );
 }

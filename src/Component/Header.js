@@ -238,7 +238,7 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
 
 
   return (
-    <div className="HeaderContainer">
+    <div className="HeaderContainer overflow-hidden">
       <Toolbar>
             <IconButton
             className="headerIconbtns"

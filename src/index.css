@@ -93,3 +93,20 @@ code {
 .app{
   min-height: 100vh;
 }
+
+.d-none{
+  display: none !important;
+}
+
+.d-block{
+  display: block !important;
+}
+
+.Snackbar-br{
+  right: 20px !important;
+  bottom: 35px !important;
+}
+
+.overflow-hidden{
+  overflow: hidden;
+}

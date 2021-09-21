@@ -290,15 +290,7 @@ class ProductDetail extends Component {
                 ))}
               </Carousel>
             </div>
-          ) : (<Carousel autoPlay={false}>                                
-                  <img
-                    src="../default-img.png"
-                    alt={"no image"}
-                    style={{objectFit: "contain"}}
-                    width="100%"
-                    height="400px"
-                  />                
-              </Carousel>)}
+          ) : null}
           <div className="productDetailCardContainer">
             <div className="productDetailCardDetailContainer">
               <div className="productDetailCardName">

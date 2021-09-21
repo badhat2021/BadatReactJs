@@ -67,6 +67,7 @@ class Homepage extends Component {
         </Fab>
         {checkLogin()?
       <Snackbar
+        className="Snackbar-br"
         anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
         open={true}
         key={"bottom right"}
