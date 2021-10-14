@@ -59,23 +59,23 @@ export default function FullWidthTabs() {
   };
 
 
-	const [OrderRecList, setOrderRecList] = useState([])
+  const [OrderRecList, setOrderRecList] = useState([])
   const [OrderPlacedList, setOrderPlacedList] = useState([])
 
 
-	useEffect(() => {
+  useEffect(() => {
    async function fetchData(){
     const login = await checkLogin()
       if (!login) {
         window.location.href="/login"
       }
-		const res1 = await getOrderRecieved()
+    const res1 = await getOrderRecieved()
     const res2 = await getOrderPlaced()
-		setOrderRecList(res1);
+    setOrderRecList(res1);
     setOrderPlacedList(res2);
    }
    fetchData()
-	},[]);
+  },[]);
 
   return (
     <div className={classes.root}>
@@ -95,7 +95,7 @@ export default function FullWidthTabs() {
       </Paper>
         <TabPanel value={value} index={0} dir={theme.direction}>
           <Box display="flex" flexDirection="row" flexWrap="wrap">
-          	{OrderRecList.map(item => <RecievedOrderCard key={item.id} value={item} />)}
+            {OrderRecList.map(item => <RecievedOrderCard key={item.id} value={item} />)}
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>

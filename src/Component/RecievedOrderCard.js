@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
     maxWidth: 350,
-    margin: "10px 0px",
+    margin: "10px 10px",
     padding: 10
   },
   bullet: {

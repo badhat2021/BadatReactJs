@@ -11,7 +11,7 @@ import {
   removeFromCart,
 } from "../AppApi";
 import { Helmet } from "react-helmet";
-import { Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import { addToCart, checkLogin } from "../Util";
 import Swal from "sweetalert2";
 
@@ -19,6 +19,8 @@ import {
   Table,
   TableBody,
   TableCell,
+  Dialog,
+  DialogTitle,
   TableContainer,
   TableHead,
   TableRow,
@@ -34,6 +36,9 @@ class Cart extends Component {
       load: true,
       data: [],
       temp: true,
+      open: false,
+      verify: false,
+      value: ""
     };
   }
 
@@ -89,7 +94,11 @@ class Cart extends Component {
     this.setState({ data: cartData, load: false });
   };
 
-  placeOrderHandle = async () => {
+  placeOrderHandle = () => {
+    this.setState({ open: true });
+  }
+
+  verifiedClick = async () => {
     const res = await placeOrder();
     if (res) {
       Swal.fire({
@@ -102,6 +111,13 @@ class Cart extends Component {
       const cartData = await getCartData();
       this.props.cartItemCount();
       this.setState({ data: cartData });
+    }
+  };
+
+  handleClose = (value) => {
+    this.setState({ open: false, value: value });
+    if(this.state.value === 1){
+      this.verifiedClick();
     }
   };
 
@@ -221,6 +237,11 @@ class Cart extends Component {
                   Book Order
                 </Button>
               </div>
+              <SimpleDialog
+                selectedValue={this.state.value}
+                open={this.state.open}
+                onClose={this.handleClose}
+              />  
             </>
           ) : (
             <NoDataFound content="Your Cart Is Empty" />
@@ -236,3 +257,51 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(null, mapDispatchToProps)(Cart);
+
+function SimpleDialog(props) {
+  
+  const { onClose, selectedValue, open } = props;
+
+  const [valueData, setValueData] = React.useState(0)
+
+  const handleClose = () => {
+    if(valueData == randomNr.current.randomNr1 + randomNr.current.randomNr2 ){
+      console.log("verified!!")
+      onClose(1);
+    }else{
+      console.log("verification failed!!!")
+      onClose(0);
+    }
+  };
+
+  const randomNr = React.useRef({
+        randomNr1: Math.floor(Math.random()*10),
+        randomNr2: Math.floor(Math.random()*10),
+    })
+
+
+  const handleSubmit = event => {
+   event.preventDefault();
+    if(valueData == randomNr.current.randomNr1 + randomNr.current.randomNr2 ){
+      onClose(1);
+    }else{
+      alert('Captcha verification Failed. Try again!')
+      onClose(0);
+    }
+   
+ }
+  
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>
+      <form onSubmit={handleSubmit}>
+          <label id="ebcaptchatext">What is {randomNr.current.randomNr1} + {randomNr.current.randomNr2}?</label>
+          <br/>
+          <TextField type="number" style={{marginTop: "10px"}} onChange={(e)=>{setValueData(parseInt(e.target.value))}} id="outlined-basic" label="Answer" variant="outlined" />
+          <br/>
+          <Button style={{marginTop: "10px"}} type="submit" onClick={handleClose} color="primary" variant="contained">Book Order</Button>
+        </form>
+      </DialogTitle>
+    </Dialog>
+  );
+}
