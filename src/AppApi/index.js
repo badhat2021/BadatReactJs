@@ -18,6 +18,7 @@ import {
   ENDPOINT_GET_SELLER_DETAIL,
   ENDPOINT_GET_STATES,
   ENDPOINT_GET_DISTRICT,
+  ENDPOINT_QUANTITY,
   //ENDPOINT_GET_TRUECALLER_RESPONSE,
 } from "../Constant";
 import Swal from "sweetalert2";
@@ -27,6 +28,11 @@ const TOKEN = JSON.parse(localStorage.getItem("badhat_token"));
 
 export const getCategory = async () => {
   const res = await axios.get(BASE_URL + ENDPOINT_CATEGORIES);
+  return res;
+};
+
+export const getQuantity = async () => {
+  const res = await axios.get(BASE_URL + ENDPOINT_QUANTITY);
   return res;
 };
 

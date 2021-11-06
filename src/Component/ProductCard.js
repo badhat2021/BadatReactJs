@@ -119,8 +119,9 @@ class ProductCard extends Component {
           onClick={() => this.onProductClickHandle(this.props.data.id)}
         >
           <div className="productDetailName">{this.props.data.name}</div>
-          <div className="productDetailPrice">Rs {this.props.data.price}</div>
-          <div className="productDetailMoq">MOQ : {this.props.data.moq}</div>
+          <div className="productDetailMoq1">Selling Price: Rs {this.props.data.price}</div>
+          <div className="productDetailPrice">MRP:Rs {this.props.data.price}</div>
+          <div className="productDetailPrice">MOQ : {this.props.data.moq}</div>
         </div>
         <div className="productCardButton">
           <div className="productCardButtons">

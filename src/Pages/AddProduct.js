@@ -1,6 +1,6 @@
 import React,{useEffect, useState, useRef} from 'react'
 //import LoadingOverlay from "react-loading-overlay";
-import { getSubCategory, getVerticalCategory, getCategory, addProduct } from "../AppApi";
+import { getSubCategory, getVerticalCategory, getCategory, addProduct ,getQuantity} from "../AppApi";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,12 +8,14 @@ import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import Checkbox from "@material-ui/core/Checkbox";
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import MenuItem from '@material-ui/core/MenuItem';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Backdrop from '@material-ui/core/Backdrop';
 import Alert from '@material-ui/lab/Alert';
 import { checkLogin } from "../Util";
@@ -57,7 +59,10 @@ const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: 1,
     color: '#fff',
-  },  
+  },
+    floatingLabelFocusStyle: {
+    color: "Red"
+}
 }));
 
 
@@ -74,13 +79,16 @@ const AddProductForm = () => {
   const [imgLoad, setImgLoad] = useState(false)
   const [fileError, setFileError] = useState(false)
   const [images, setImages] = useState([]);
-  const [backdrop, setBackdrop] = useState(false)
-
+  const [backdrop, setBackdrop] = useState(false);
+  const [productQuantity ,setProductQuantity] = useState(0);
+  const [status ,setStatus]=useState(true);  
+  const [mrp ,setMrp] = useState(0);
 
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
   const [verticalData, setVerticalData] = useState([]);
 
+  const [listUnit, setUnits] = useState();
   const isFirstRun = useRef(true);
 
   const classes = useStyles();
@@ -94,6 +102,8 @@ const AddProductForm = () => {
         }
         const cat1 = await getCategory();
         setCategoryData(cat1.data.data);
+        const result1 = await getQuantity();
+        setUnits(result1.data.data);
       }
       fetchData();
    }, []);
@@ -129,7 +139,9 @@ const AddProductForm = () => {
   const handleChange = (event) => {
     //console.log(event.target.value)
   };
-
+  const statusHandler =() =>{
+    setStatus(!status)
+  }
   const onFileChange = event => {
     setImages(event.target.files);
     setImgLoad(false);
@@ -160,7 +172,9 @@ const AddProductForm = () => {
         "price" : price,
         "categoryId" : categoryId,
         "subCategoryId" : subCategoryId,
-        "verticalId" : verticalId
+        "verticalId" : verticalId,
+        'quantity':productQuantity,
+        "mrp_price":mrp
       }
       addProduct(dataset,images); 
   }
@@ -175,6 +189,28 @@ const AddProductForm = () => {
         <Typography component="h1" variant="h5">
           Add Product
         </Typography>
+        <Grid item xs={12} sm={12}  className={classes.filebtn}>     
+          <Button
+            variant="contained"
+            color={images.length===0?"secondary":"inherit"}
+            component="label"
+            style={{marginRight: "20px"}}
+            onClick={() => {setImgLoad(true)}}
+            endIcon={imgLoad?<CircularProgress size={20}/>:""}
+          >
+          {images.length===0?"Select Images":"Images Selected"}
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              type="file"
+              onChange={onFileChange}  
+              hidden
+            />
+          </Button>
+          {images.length===1?"1 file":images.length>1?`${images.length }files`:"0 files"} 
+                  {fileError?<Alert style={{marginLeft: "20px"}} severity="error">Image is required!</Alert>:""}         
+            </Grid>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -186,14 +222,52 @@ const AddProductForm = () => {
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
+                InputLabelProps={{
+                  className: classes.floatingLabelFocusStyle,
+              }}              
                 id="name"
-                label="Produt Title Name"
+                label="Product Title Name"
               />
             </Grid>
+            <Grid item xs={6} sm={6}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                id="product quantity"  
+                label="Quantity per Unit"      
+                type="number"
+                onChange={(e) => {
+                  setProductQuantity(e.target.value);
+                }}    
+                name="product quantity"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            <TextField
+              id="Quantity's Unit"
+              select          
+              required    
+              fullWidth
+              label="Quantity's Unit"
+              InputLabelProps={{
+                className: classes.floatingLabelFocusStyle,
+            }}          
+              onChange={(e) => {setMoq(e.target.value)}}
+              variant="outlined"
+          >
+            { listUnit &&
+              listUnit?.map((option) => (
+                <MenuItem key={option.id} value={option.id}>
+                    {option.name}
+                </MenuItem>
+              )) 
+            }
+          </TextField> 
+          </Grid>
+          
         <Grid item xs={12} sm={6}>
             <TextField
               id="description"
-              required
               fullWidth
               multiline
               rows={3}
@@ -207,23 +281,13 @@ const AddProductForm = () => {
             <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
+                fullWidth
                 required
-                fullWidth
-                type="number"
-                id="moq"
-                onChange={(e) => {
-                  setMoq(e.target.value);
-                }}                
-                label="Minimum Order Quantity"
-                name="moq"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                fullWidth
                 id="price"  
-                label="Price per Quantity"      
+                label="Selling Price per Quantity"      
+                InputLabelProps={{
+                  className: classes.floatingLabelFocusStyle,
+                }}          
                 type="number"
                 onChange={(e) => {
                   setPrice(e.target.value);
@@ -231,6 +295,16 @@ const AddProductForm = () => {
                 name="price"
               />
             </Grid>
+            <Grid item xs={12} sm={6}>
+            <TextField
+              id="mrp"              
+              fullWidth              
+              label="MRP per Quantity"
+              onChange={(e) => { setMrp(e.target.value)}}
+              variant="outlined"
+          />   
+          </Grid>
+      
           <Grid item xs={12} sm={6}>
             <TextField
               id="categoryId"
@@ -238,6 +312,9 @@ const AddProductForm = () => {
               required    
               fullWidth
               label="Category"
+              InputLabelProps={{
+                className: classes.floatingLabelFocusStyle,
+            }}          
               onChange={(e) => {setCategoryId(e.target.value)}}
               variant="outlined"
           >
@@ -293,29 +370,22 @@ const AddProductForm = () => {
             }
           </TextField>
           </Grid>
-          <Grid item xs={12} sm={6} className={classes.filebtn}>     
-          <Button
-            variant="contained"
-            color={images.length===0?"secondary":"inherit"}
-            component="label"
-            style={{marginRight: "20px"}}
-            onClick={() => {setImgLoad(true)}}
-            endIcon={imgLoad?<CircularProgress size={20}/>:""}
-          >
-          {images.length===0?"Select Images":"Images Selected"}
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              type="file"
-              onChange={onFileChange}  
-              hidden
-            />
-          </Button>
-          {images.length===1?"1 file":images.length>1?`${images.length }files`:"0 files"} 
-                  {fileError?<Alert style={{marginLeft: "20px"}} severity="error">Image is required!</Alert>:""}         
-            </Grid>
+          <Grid item xs={12} sm={6}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={status}
+                style ={{
+                  color: "green"
+                }}                onChange={statusHandler}
+                name="active"
+              />
+            }
+            label="Active"
+          /> 
           </Grid>
+      
+               </Grid>
           <Button
             type="submit"
             variant="contained"

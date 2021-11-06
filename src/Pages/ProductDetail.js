@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import LoadingOverlay from "react-loading-overlay";
 import { Helmet } from "react-helmet";
 import { getProductDetail, addToCartApi } from "../AppApi";
+import ErrorIcon from '@material-ui/icons/Error';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import {
   checkLogin,
   loginPopUp,
@@ -291,6 +294,13 @@ class ProductDetail extends Component {
               </Carousel>
             </div>
           ) : null}
+          {!this.state.data.return_policy ?<div class="container">
+          <div class="vertical-center">
+          <Tooltip title={this.state.data.return_policy ,"sdjdkh"}>
+          <ErrorIcon title="policy"/>
+          </Tooltip>
+              </div>
+          </div> :null}
           <div className="productDetailCardContainer">
             <div className="productDetailCardDetailContainer">
               <div className="productDetailCardName">
@@ -304,7 +314,6 @@ class ProductDetail extends Component {
                     ? this.state.data.price
                     : ""
                 }/Item`}
-                <Button color='inherit' variant="contained" style={{marginLeft:40,textTransform:"none"}} onClick={this.handleClickOpen}>Policy</Button>
               </div>
               <div className="productDetailCardMoq">
                 {`Minimum Order Quantity : ${
@@ -452,7 +461,7 @@ function SimpleDialog(props) {
 
 
   return (
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={data.return_policy && open}>
       <DialogTitle id="simple-dialog-title">Seller Policies</DialogTitle>
         <DialogContent dividers>
           <Typography gutterBottom>
