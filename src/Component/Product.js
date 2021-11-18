@@ -13,8 +13,8 @@ import NoDataFound from "../Component/NoDataFound";
 import "../AppAsset/CSS/Product.css";
 import { getCategory, getState } from "../AppApi";
 import ProductCard from "./ProductCard";
-import ReactPaginate from 'react-paginate';
-import axios from 'axios'
+import ReactPaginate from "react-paginate";
+import axios from "axios";
 
 class Product extends Component {
   constructor(props) {
@@ -31,18 +31,16 @@ class Product extends Component {
       offset: 0,
       data: [],
       perPage: 20,
-      currentPage: 0
+      currentPage: 0,
     };
-    this.handlePageClick = this
-            .handlePageClick
-            .bind(this);
+    this.handlePageClick = this.handlePageClick.bind(this);
   }
 
   componentDidMount = async () => {
     const categoryTempData = await getCategory();
     const tempState = await getState();
 
-    this.receivedData()
+    this.receivedData();
 
     this.setState({
       categorydata:
@@ -57,32 +55,42 @@ class Product extends Component {
     });
   };
 
-    receivedData() {
-                const data = this.props.productData;
-                const slice = data.slice(this.state.offset, this.state.offset + this.state.perPage)
-                const postData = slice.map(pd => <ProductCard data={pd}/>)
-                this.setState({
-                    pageCount: Math.ceil(data.length / this.state.perPage),                   
-                    postData
-          })
-    }
+  receivedData() {
+    const data = this.props.productData;
+    this.setState({
+      pageCount: data.last_page,
+      postData: data?.data?.map((pd) => <ProductCard data={pd} />),
+    });
+    // const slice = data.slice(
+    //   this.state.offset,
+    //   this.state.offset + this.state.perPage
+    // );
+    // const postData = slice.map((pd) => <ProductCard data={pd} />);
+    // this.setState({
+    //   pageCount: Math.ceil(data.length / this.state.perPage),
+    //   postData,
+    // });
+  }
 
-    handlePageClick = (e) => {
-        const selectedPage = e.selected;
-        const offset = selectedPage * this.state.perPage;
+  handlePageClick = (e) => {
+    const selectedPage = e.selected;
+    const offset = selectedPage * this.state.perPage;
 
-        this.setState({
-            currentPage: selectedPage,
-            offset: offset
-        }, () => {
-            this.receivedData()
-        });
-
-    };
+    this.setState(
+      {
+        currentPage: selectedPage,
+        offset: offset,
+      },
+      () => {
+        //this.receivedData();
+        this.props.pageChangeCallback(selectedPage);
+      }
+    );
+  };
 
   handlePageChange(pageNumber) {
     console.log(`active page is ${pageNumber}`);
-    this.setState({activePage: pageNumber});
+    this.setState({ activePage: pageNumber });
   }
 
   onDrawerClick = (p) => {
@@ -276,16 +284,13 @@ class Product extends Component {
             </div>
           </Drawer>
         </div>
-        
 
-        {this.props.productData && this.props.productData.length > 0 ? (
-          <div className="productListing">            
-
+        {this.props.productData && this.props.productData.total > 0 ? (
+          <div className="productListing">
             {this.props &&
             this.props.productData &&
-            this.props.productData.length > 0
-              ?this.state.postData 
-
+            this.props.productData.total > 0
+              ? this.state.postData
               : "no data found"}
 
             <ReactPaginate
@@ -300,8 +305,8 @@ class Product extends Component {
               containerClassName={"pagination"}
               subContainerClassName={"pages pagination"}
               activeClassName={"active"}
+              forcePage={this.props.productData.current_page - 1}
             />
-
           </div>
         ) : (
           <NoDataFound content="No Product Found" />

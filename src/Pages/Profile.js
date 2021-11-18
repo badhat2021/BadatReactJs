@@ -22,20 +22,20 @@ import {
   LinkedinIcon,
   EmailIcon,
 } from "react-share";
-import DialogContent from '@material-ui/core/DialogContent';
+import DialogContent from "@material-ui/core/DialogContent";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import ChatIcon from "@material-ui/icons/Chat";
 import ShareIcon from "@material-ui/icons/Share";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import PersonIcon from '@material-ui/icons/Person';
-import AddIcon from '@material-ui/icons/Add';
-import Typography from '@material-ui/core/Typography';
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
+import PersonIcon from "@material-ui/icons/Person";
+import AddIcon from "@material-ui/icons/Add";
+import Typography from "@material-ui/core/Typography";
 import {
   loginPopUp,
   checkSkip,
@@ -59,12 +59,12 @@ class UserDetail extends Component {
   }
 
   handleClickOpen = () => {
-      this.setState({ open: true });
-      window.location.href="/profile/edit"  
-    };
+    this.setState({ open: true });
+    window.location.href = "/profile/edit";
+  };
 
   handleClose = (value) => {
-        this.setState({ open: false });
+    this.setState({ open: false });
   };
 
   componentDidMount = async () => {
@@ -179,7 +179,15 @@ class UserDetail extends Component {
                 </span>
               </div>
               <div className="userDetailPolicy">
-                <Button color='primary' variant="contained" style={{padding:"5px"}} onClick={this.handleClickOpen}> EDIT</Button>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  style={{ padding: "5px" }}
+                  onClick={this.handleClickOpen}
+                >
+                  {" "}
+                  EDIT
+                </Button>
               </div>
             </div>
           </div>
@@ -202,7 +210,7 @@ class UserDetail extends Component {
               Share
             </div>
             <div
-              style={{ width: "33%",display:"none" }}
+              style={{ width: "33%", display: "none" }}
               onClick={() => this.onLikeChatClick()}
             >
               <ChatIcon />
