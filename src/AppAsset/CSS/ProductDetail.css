@@ -34,6 +34,16 @@
   padding-left: 2px;
 }
 
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 55%;
+  left: 60%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
 .productdetailCardImageContainer {
   width: 40%;
 }

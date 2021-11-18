@@ -189,7 +189,7 @@ export default function MyProductCard(props) {
         	<div className={classes.shareBtnAlign}>			
           <div className={classes.subitem}>
 	        	<Typography variant="body2" className={classes.catColor} component="div">
-            		<b>Category: {props.product.category.name}</b>
+            		<b>Category: {props.product.category?.name}</b>
           		</Typography>
           		<Typography variant="body2" component="div">
             		Rs. {props.product.price}
