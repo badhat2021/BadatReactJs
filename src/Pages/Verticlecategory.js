@@ -37,6 +37,7 @@ class VerticleCategory extends Component {
       drawer: false,
       sort: null,
       sortOrder: null,
+      params: { page: 1 },
     };
   }
 
@@ -48,12 +49,15 @@ class VerticleCategory extends Component {
     this.setState({ load: false, data: res.data.data });
     const params = {
       subcategory_id: id,
+      page: 1,
     };
+    this.setState({ load: true, params });
     const prod = await getProducts(params);
     this.setState({
       load: false,
       data: res.data.data,
-      productData: prod.data.data.data,
+      // productData: prod.data.data.data,
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
   };
 
@@ -64,6 +68,18 @@ class VerticleCategory extends Component {
 
   onClickCategoryHandle = async (id) => {
     this.props.history.push(`/${ROUTE_SUBCATEGORIES}/${id}`);
+  };
+
+  pageChangeCallback = async (id) => {
+    const params = this.state.params;
+    params.page = id + 1;
+    this.setState({ load: true, params });
+    const prod = await getProducts(params);
+    console.log(prod);
+    this.setState({
+      load: false,
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
+    });
   };
 
   onFilterChangeHandle = async (e) => {
@@ -101,14 +117,17 @@ class VerticleCategory extends Component {
     );
     const params = {
       subcategory_id: id,
+      page: 1,
     };
-    const res = await getProducts(params);
+    this.setState({ params, load: true });
+    const prod = await getProducts(params);
     this.setState({
       load: false,
-      productData:
-        res.data && res.data.data && res.data.data.data
-          ? res.data.data.data
-          : [],
+      // productData:
+      //   res.data && res.data.data && res.data.data.data
+      //     ? res.data.data.data
+      //     : [],
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
   };
 
@@ -123,14 +142,17 @@ class VerticleCategory extends Component {
       sortOrder: this.state.sortOrder,
       state: this.state.state,
       district: this.state.district,
+      page: 1,
     };
-    const res = await getProducts(params);
+    this.setState({ params, load: true });
+    const prod = await getProducts(params);
     this.setState({
       load: false,
-      productData:
-        res.data && res.data.data && res.data.data.data
-          ? res.data.data.data
-          : [],
+      // productData:
+      //   res.data && res.data.data && res.data.data.data
+      //     ? res.data.data.data
+      //     : [],
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
   };
 
@@ -158,7 +180,12 @@ class VerticleCategory extends Component {
             name="description"
             content="Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
           />
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"/>
+          <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+            integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+            crossorigin="anonymous"
+          />
           <link
             rel="apple-touch-icon"
             href={
@@ -248,28 +275,32 @@ class VerticleCategory extends Component {
               window.location.href.lastIndexOf("/") + 1
             )}
           />
-        {this.state.load?"":
-          <Product
-            showCategoryFilter={false}
-            showVerticleCategoriesFilter={true}
-            showSubCategoryFilter={false}
-            sortValue={this.state.sort}
-            categoryValue={this.state.categoryId}
-            verticleCategoriesValue={this.state.verticleCategories}
-            subCategoriesValue={true}
-            priceValue={this.state.price}
-            onFilterChangeHandle={this.onFilterChangeHandle}
-            onFilterReset={this.onFilterReset}
-            onFilterSubmit={this.onFilterSubmit}
-            productData={this.state.productData}
-            verticalCategoryList={this.state.data}
-            districtList={this.state.districtList}
-            stateValue={this.state.state}
-            districtValue={this.state.districtValue}
-            sortOrderValue={this.state.sortOrder}
-            drawer={this.state.drawer}
-            onDrawerClick={this.onDrawerClick}
-          />}
+          {this.state.load ? (
+            ""
+          ) : (
+            <Product
+              showCategoryFilter={false}
+              showVerticleCategoriesFilter={true}
+              showSubCategoryFilter={false}
+              sortValue={this.state.sort}
+              categoryValue={this.state.categoryId}
+              verticleCategoriesValue={this.state.verticleCategories}
+              subCategoriesValue={true}
+              priceValue={this.state.price}
+              onFilterChangeHandle={this.onFilterChangeHandle}
+              onFilterReset={this.onFilterReset}
+              onFilterSubmit={this.onFilterSubmit}
+              productData={this.state.productData}
+              pageChangeCallback={this.pageChangeCallback}
+              verticalCategoryList={this.state.data}
+              districtList={this.state.districtList}
+              stateValue={this.state.state}
+              districtValue={this.state.districtValue}
+              sortOrderValue={this.state.sortOrder}
+              drawer={this.state.drawer}
+              onDrawerClick={this.onDrawerClick}
+            />
+          )}
         </div>
         <Footer />
       </LoadingOverlay>

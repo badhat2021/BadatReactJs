@@ -15,11 +15,11 @@ import {
   ROUTE_SUBCATEGORIES,
   ENDPOINT_GET_VERTICALS_BANNER,
 } from "../Constant";
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import AddIcon from '@material-ui/icons/Add';
-import { Link } from 'react-router-dom';
+import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+import AddIcon from "@material-ui/icons/Add";
+import { Link } from "react-router-dom";
 import Product from "../Component/Product";
 import "../AppAsset/CSS/AllProductPage.css";
 import Banners from "../Component/Banners";
@@ -78,6 +78,7 @@ class AllProductPage extends Component {
       districtList: [],
       drawer: false,
       shareDrawer: false,
+      params: { page: 1 },
     };
   }
 
@@ -171,15 +172,17 @@ class AllProductPage extends Component {
       district: districtTemp,
       sortBy: sortByTemp,
       sortOrder: sortOrderTemp,
+      page: 1,
     };
     const prod = await getProducts(params);
 
     this.setState({
       load: false,
-      productData:
-        prod.data && prod.data.data && prod.data.data.data
-          ? prod.data.data.data
-          : [],
+      // productData:
+      //   prod.data && prod.data.data && prod.data.data.data
+      //     ? prod.data.data.data
+      //     : [],
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
       searchKey: searchkeyTemp,
       verticleCategories: verticalIdTemp ? parseInt(verticalIdTemp, 10) : null,
       category: categoryIdTemp ? parseInt(categoryIdTemp, 10) : null,
@@ -191,7 +194,6 @@ class AllProductPage extends Component {
     });
   };
   getProductList = async () => {
-    this.setState({ load: true });
     const params = {
       search_key: this.state.searchKey,
       category_id: this.state.category,
@@ -201,14 +203,29 @@ class AllProductPage extends Component {
       district: this.state.district,
       sortBy: this.state.sort,
       sortOrder: this.state.sortOrder,
+      page: 1,
     };
+    this.setState({ params, load: true });
     const prod = await getProducts(params);
     this.setState({
       load: false,
-      productData:
-        prod.data && prod.data.data && prod.data.data.data
-          ? prod.data.data.data
-          : [],
+      // productData:
+      //   prod.data && prod.data.data && prod.data.data.data
+      //     ? prod.data.data.data
+      //     : [],
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
+    });
+  };
+
+  pageChangeCallback = async (id) => {
+    const params = this.state.params;
+    params.page = id + 1;
+    this.setState({ load: true, params });
+    const prod = await getProducts(params);
+    console.log(prod);
+    this.setState({
+      load: false,
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
   };
 
@@ -255,14 +272,19 @@ class AllProductPage extends Component {
       verticalCategoryList: [],
       districtList: [],
     });
-    const params = {};
-    const res = await getProducts(params);
+    const params = {
+      page: 1,
+    };
+    this.setState({ params, load: true });
+    const prod = await getProducts(params);
     this.setState({
       load: false,
-      productData:
-        res.data && res.data.data && res.data.data.data
-          ? res.data.data.data
-          : [],
+      // productData:
+      //   res.data && res.data.data && res.data.data.data
+      //     ? res.data.data.data
+      //     : [],
+
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
   };
 
@@ -276,14 +298,18 @@ class AllProductPage extends Component {
       sortOrder: this.state.sortOrder,
       state: this.state.state,
       district: this.state.district,
+      page: 1,
     };
-    const res = await getProducts(params);
+    this.setState({ load: true, params });
+    const prod = await getProducts(params);
     this.setState({
       load: false,
-      productData:
-        res.data && res.data.data && res.data.data.data
-          ? res.data.data.data
-          : [],
+      // productData:
+      //   res.data && res.data.data && res.data.data.data
+      //     ? res.data.data.data
+      //     : [],
+
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
   };
 
@@ -350,16 +376,21 @@ class AllProductPage extends Component {
             name="description"
             content="Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
           />
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"/>
+          <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+            integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+            crossorigin="anonymous"
+          />
           <link
             rel="apple-touch-icon"
             href={
-            //   this.state.productData && this.state.productData.length > 0
-            //     ? this.state.productData[0].category.bg_image
-            //     : "https://drive.google.com/file/d/1hZFX14ynp6EuS-Sdtkt0fqbA6FsHl7NU/view"
-            // 
-            "https://drive.google.com/file/d/1hZFX14ynp6EuS-Sdtkt0fqbA6FsHl7NU/view"
-          }
+              //   this.state.productData && this.state.productData.length > 0
+              //     ? this.state.productData[0].category.bg_image
+              //     : "https://drive.google.com/file/d/1hZFX14ynp6EuS-Sdtkt0fqbA6FsHl7NU/view"
+              //
+              "https://drive.google.com/file/d/1hZFX14ynp6EuS-Sdtkt0fqbA6FsHl7NU/view"
+            }
           />
         </Helmet>
         <Fab
@@ -389,20 +420,27 @@ class AllProductPage extends Component {
         >
           Open App
         </Fab>
-        {checkLogin()?
-      <Snackbar
-        className="Snackbar-br"
-        anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-        open={true}
-        key={"bottom right"}
-      >
-        <Link to="/products/new" className="linkStyle">
-          <Button variant="contained" className="addprdBTN" color="primary" startIcon={<AddIcon />}>
-            Add Product
-          </Button>
-        </Link>
-      </Snackbar>
-      :""}
+        {checkLogin() ? (
+          <Snackbar
+            className="Snackbar-br"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            open={true}
+            key={"bottom right"}
+          >
+            <Link to="/products/new" className="linkStyle">
+              <Button
+                variant="contained"
+                className="addprdBTN"
+                color="primary"
+                startIcon={<AddIcon />}
+              >
+                Add Product
+              </Button>
+            </Link>
+          </Snackbar>
+        ) : (
+          ""
+        )}
 
         <div className="AllProductPageContainer">
           <div className="AllProductPageCategoryCardContainer">
@@ -507,34 +545,36 @@ class AllProductPage extends Component {
                 id={this.state.verticleCategories}
               />
             ) : null}
-            {this.state.load?
+            {this.state.load ? (
               ""
-              :
-            <Product
-              showCategoryFilter={true}
-              showVerticleCategoriesFilter={true}
-              showSubCategoryFilter={true}
-              sortValue={this.state.sort}
-              categoryValue={this.state.category}
-              verticleCategoriesValue={this.state.verticleCategories}
-              subCategoriesValue={this.state.subCategories}
-              priceValue={this.state.price}
-              onFilterChangeHandle={this.onFilterChangeHandle}
-              onFilterReset={this.onFilterReset}
-              onFilterSubmit={this.onFilterSubmit}
-              verticalCategoriesId={
-                this.state.subCategories ? this.state.subCategories : null
-              }
-              productData={this.state.productData}
-              subCategoryList={this.state.subCategoryList}
-              verticalCategoryList={this.state.verticalCategoryList}
-              districtList={this.state.districtList}
-              stateValue={this.state.state}
-              districtValue={this.state.district}
-              sortOrderValue={this.state.sortOrder}
-              drawer={this.state.drawer}
-              onDrawerClick={this.onDrawerClick}
-            />}
+            ) : (
+              <Product
+                showCategoryFilter={true}
+                showVerticleCategoriesFilter={true}
+                showSubCategoryFilter={true}
+                sortValue={this.state.sort}
+                categoryValue={this.state.category}
+                verticleCategoriesValue={this.state.verticleCategories}
+                subCategoriesValue={this.state.subCategories}
+                priceValue={this.state.price}
+                onFilterChangeHandle={this.onFilterChangeHandle}
+                onFilterReset={this.onFilterReset}
+                onFilterSubmit={this.onFilterSubmit}
+                verticalCategoriesId={
+                  this.state.subCategories ? this.state.subCategories : null
+                }
+                productData={this.state.productData}
+                pageChangeCallback={this.pageChangeCallback}
+                subCategoryList={this.state.subCategoryList}
+                verticalCategoryList={this.state.verticalCategoryList}
+                districtList={this.state.districtList}
+                stateValue={this.state.state}
+                districtValue={this.state.district}
+                sortOrderValue={this.state.sortOrder}
+                drawer={this.state.drawer}
+                onDrawerClick={this.onDrawerClick}
+              />
+            )}
           </div>
         </div>
         <Footer />

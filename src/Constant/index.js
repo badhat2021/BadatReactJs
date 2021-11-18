@@ -4,9 +4,10 @@ export const BROWSE_CATEGORY = "Select your category";
 export const BASE_URL = "https://badhat.club/api/";
 export const NEW_BASE_URL = "https://badhat.club/";
 export const ENDPOINT_CATEGORIES = "categories";
+export const ENDPOINT_QUANTITY = "getProductUnits";
 export const ENDPOINT_GET_SUBCATEGORIES = "getsubCategories";
 export const ENDPOINT_GET_VERTICAL_CATEGORIES = "getVerticals";
-export const ENDPOINT_GET_PRODUCTS = "getProductsWeb";
+export const ENDPOINT_GET_PRODUCTS = "get-paginated-products"; //TODO: changed this. => getProductsWeb to 'get-paginated-products'
 export const ENDPOINT_GET_PRODUCT_DETAIL = "product";
 export const ENDPOINT_SEND_OTP = "sendOtp";
 export const ENDPOINT_LOGIN = "login";

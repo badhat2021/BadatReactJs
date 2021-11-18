@@ -47,27 +47,56 @@ class SubCategory extends Component {
       verticalCategoryList: [],
       districtList: [],
       drawer: false,
+      params: { page: 1 },
     };
   }
 
+  componentDidUpdate = async (prevProps) => {
+    if (prevProps.location.pathname !== this.props.location.pathname) {
+      const id = window.location.href.slice(
+        window.location.href.lastIndexOf("/") + 1
+      );
+      const params = {
+        category_id: id,
+        page: 1,
+      };
+      this.setState({ params });
+      const res = await getSubCategory(id);
+      const prod = await getProducts(params);
+      console.log(prod);
+      this.setState({
+        load: false,
+        data: res.data.data,
+        subCategoryList: res.data.data,
+        // productData:
+        //   prod.data && prod.data.data && prod.data.data.data
+        //     ? prod.data.data.data
+        //     : [],
+        productData: (prod.data && prod.data.data) || prod.data.data || {},
+      });
+    }
+  };
   componentDidMount = async () => {
     const id = window.location.href.slice(
       window.location.href.lastIndexOf("/") + 1
     );
     const params = {
       category_id: id,
+      page: 1,
     };
+    this.setState({ params });
     const res = await getSubCategory(id);
     const prod = await getProducts(params);
-    console.log(prod)
+    console.log(prod);
     this.setState({
       load: false,
       data: res.data.data,
       subCategoryList: res.data.data,
-      productData:
-        prod.data && prod.data.data && prod.data.data.data
-          ? prod.data.data.data
-          : [],
+      // productData:
+      //   prod.data && prod.data.data && prod.data.data.data
+      //     ? prod.data.data.data
+      //     : [],
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
   };
 
@@ -111,6 +140,18 @@ class SubCategory extends Component {
     }
   };
 
+  pageChangeCallback = async (id) => {
+    const params = this.state.params;
+    params.page = id + 1;
+    this.setState({ load: true, params });
+    const prod = await getProducts(params);
+    console.log(prod);
+    this.setState({
+      load: false,
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
+    });
+  };
+
   onFilterReset = async () => {
     this.setState({
       drawer: false,
@@ -130,7 +171,10 @@ class SubCategory extends Component {
     );
     const params = {
       category_id: id,
+      page: 1,
     };
+
+    this.setState({ params });
     const res = await getProducts(params);
     this.setState({
       load: false,
@@ -151,7 +195,10 @@ class SubCategory extends Component {
       sortOrder: this.state.sortOrder,
       state: this.state.state,
       district: this.state.district,
+      page: 1,
     };
+
+    this.setState({ params });
     const res = await getProducts(params);
     this.setState({
       load: false,
@@ -186,7 +233,12 @@ class SubCategory extends Component {
             name="description"
             content="Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
           />
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"/>
+          <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+            integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+            crossorigin="anonymous"
+          />
           <link
             rel="apple-touch-icon"
             href={
@@ -253,7 +305,11 @@ class SubCategory extends Component {
                         key={res.id}
                         onClick={() => this.onClickHandle(res.id)}
                       >
-                        <Paper className="subCategoryPaper" style={{backgroundColor:"#fee3ce"}} elevation={5}>
+                        <Paper
+                          className="subCategoryPaper"
+                          style={{ backgroundColor: "#fee3ce" }}
+                          elevation={5}
+                        >
                           <div className="sliderCardSubCategoryName">
                             {res.name}
                           </div>
@@ -268,30 +324,36 @@ class SubCategory extends Component {
             endPoint={ENDPOINT_GET_CATEGORIES_BANNER}
             id={this.state.categoryId}
           />
-          {this.state.load?"":
-          <Product
-            showCategoryFilter={false}
-            showVerticleCategoriesFilter={true}
-            showSubCategoryFilter={true}
-            sortValue={this.state.sort}
-            categoryValue={this.state.categoryId}
-            verticleCategoriesValue={this.state.verticleCategories}
-            subCategoriesValue={this.state.subCategories}
-            priceValue={this.state.price}
-            onFilterChangeHandle={this.onFilterChangeHandle}
-            onFilterReset={this.onFilterReset}
-            onFilterSubmit={this.onFilterSubmit}
-            verticalCategoriesId={ this.state.subCategories ? this.state.subCategories : null}
-            productData={this.state.productData}
-            subCategoryList={this.state.subCategoryList}
-            verticalCategoryList={this.state.verticalCategoryList}
-            districtList={this.state.districtList}
-            stateValue={this.state.state}
-            districtValue={this.state.districtValue}
-            sortOrderValue={this.state.sortOrder}
-            drawer={this.state.drawer}
-            onDrawerClick={this.onDrawerClick}
-          />}
+          {this.state.load ? (
+            ""
+          ) : (
+            <Product
+              showCategoryFilter={false}
+              showVerticleCategoriesFilter={true}
+              showSubCategoryFilter={true}
+              sortValue={this.state.sort}
+              categoryValue={this.state.categoryId}
+              verticleCategoriesValue={this.state.verticleCategories}
+              subCategoriesValue={this.state.subCategories}
+              priceValue={this.state.price}
+              onFilterChangeHandle={this.onFilterChangeHandle}
+              onFilterReset={this.onFilterReset}
+              onFilterSubmit={this.onFilterSubmit}
+              verticalCategoriesId={
+                this.state.subCategories ? this.state.subCategories : null
+              }
+              productData={this.state.productData}
+              pageChangeCallback={this.pageChangeCallback}
+              subCategoryList={this.state.subCategoryList}
+              verticalCategoryList={this.state.verticalCategoryList}
+              districtList={this.state.districtList}
+              stateValue={this.state.state}
+              districtValue={this.state.districtValue}
+              sortOrderValue={this.state.sortOrder}
+              drawer={this.state.drawer}
+              onDrawerClick={this.onDrawerClick}
+            />
+          )}
         </div>
         <Footer />
       </LoadingOverlay>
