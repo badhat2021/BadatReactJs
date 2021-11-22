@@ -216,58 +216,8 @@ const AddProductForm = () => {
                 label="Produt Title Name"
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id="description"
-                // required
-                // InputLabelProps={{
-                //   className: classes.floatingLabelFocusStyle,
-                // }}
-                fullWidth
-                multiline
-                rows={3}
-                label="Product Details"
-                onChange={(e) => {
-                  setDiscription(e.target.value);
-                }}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                // required
-                // InputLabelProps={{
-                //   className: classes.floatingLabelFocusStyle,
-                // }}
-                fullWidth
-                type="number"
-                id="moq"
-                onChange={(e) => {
-                  setMoq(e.target.value);
-                }}
-                label="Minimum Order Quantity"
-                name="moq"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                id="price"
-                label="Selling Price per Quantity"
-                required
-                InputLabelProps={{
-                  className: classes.floatingLabelFocusStyle,
-                }}
-                type="number"
-                onChange={(e) => {
-                  setPrice(e.target.value);
-                }}
-                name="price"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+
+            <Grid item xs={6} sm={6}>
               <TextField
                 variant="outlined"
                 fullWidth
@@ -280,7 +230,7 @@ const AddProductForm = () => {
                 name="product quantity"
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={6} sm={6}>
               <TextField
                 id="Quantity's Unit"
                 select
@@ -299,7 +249,44 @@ const AddProductForm = () => {
                   ))}
               </TextField>
             </Grid>
+
             <Grid item xs={12} sm={6}>
+              <TextField
+                id="description"
+                // required
+                // InputLabelProps={{
+                //   className: classes.floatingLabelFocusStyle,
+                // }}
+                fullWidth
+                multiline
+                rows={3}
+                label="Product Details"
+                onChange={(e) => {
+                  setDiscription(e.target.value);
+                }}
+                variant="outlined"
+              />
+            </Grid>
+
+            <Grid item xs={6} sm={6}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                id="price"
+                label="Selling Price per Quantity"
+                required
+                InputLabelProps={{
+                  className: classes.floatingLabelFocusStyle,
+                }}
+                type="number"
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
+                name="price"
+              />
+            </Grid>
+
+            <Grid item xs={6} sm={6}>
               <TextField
                 id="mrp"
                 fullWidth
@@ -308,6 +295,24 @@ const AddProductForm = () => {
                   setMrp(e.target.value);
                 }}
                 variant="outlined"
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                // required
+                // InputLabelProps={{
+                //   className: classes.floatingLabelFocusStyle,
+                // }}
+                fullWidth
+                type="number"
+                id="moq"
+                onChange={(e) => {
+                  setMoq(e.target.value);
+                }}
+                label="Minimum Order Quantity"
+                name="moq"
               />
             </Grid>
 
