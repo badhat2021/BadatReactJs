@@ -616,6 +616,7 @@ const UserDetails = () => {
                       setMos(e.target.value);
                     }}
                     fullWidth
+                    type="number"
                     id="minimum_order_size"
                     label="Minimum Order Size (Rs.)"
                   />

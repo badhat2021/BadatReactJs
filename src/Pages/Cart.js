@@ -297,7 +297,7 @@ class Cart extends Component {
                           />
                         ))}
                       </div>
-                      {vendor.minimun_order_size && (
+                      {vendor.minimun_order_size ? (
                         <div
                           style={{
                             fontSize: 12,
@@ -310,25 +310,46 @@ class Cart extends Component {
                             <div>Minimum Order Size</div>
                             <div>Rs. {vendor.minimun_order_size || 0}</div>
                           </div>
-                          <div style={{ color: "red" }}>
-                            <div>Add More</div>
-                            <div>
-                              Rs.{" "}
-                              {(vendor.minimun_order_size || 0) -
-                                items.reduce((acc, obj) => {
-                                  return acc + obj.product.price * obj.quantity;
-                                }, 0) >
-                              0
-                                ? (vendor.minimun_order_size || 0) -
+                          {(vendor.minimun_order_size || 0) -
+                            items.reduce((acc, obj) => {
+                              return acc + obj.product.price * obj.quantity;
+                            }, 0) >
+                            0 && (
+                            <div
+                              style={{
+                                color: "red",
+                                padding: "5px 25px 5px 25px",
+                                background: "lightgray",
+                                borderRadius: 7,
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                this.props.history.push(`/user/${vendor.id}`);
+                              }}
+                            >
+                              <div>Add More</div>
+                              <div>
+                                Rs.{" "}
+                                {(vendor.minimun_order_size || 0) -
                                   items.reduce((acc, obj) => {
                                     return (
                                       acc + obj.product.price * obj.quantity
                                     );
-                                  }, 0)
-                                : 0}
+                                  }, 0) >
+                                0
+                                  ? (vendor.minimun_order_size || 0) -
+                                    items.reduce((acc, obj) => {
+                                      return (
+                                        acc + obj.product.price * obj.quantity
+                                      );
+                                    }, 0)
+                                  : 0}
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
+                      ) : (
+                        <></>
                       )}
                     </div>
                   );
