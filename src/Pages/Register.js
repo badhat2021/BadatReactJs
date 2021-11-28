@@ -87,11 +87,11 @@ class Register extends Component {
       business_category: this.state.bussinessDomain,
       pincode: this.state.pincode,
       about_us: this.state.about_us,
-      delivery_policy: this.state.delivery_policy, 
+      delivery_policy: this.state.delivery_policy,
       discount_upto: this.state.discount_upto,
       return_policy: this.state.return_policy,
       started_since: this.state.started_since,
-      payment_policy: this.state.payment_policy
+      payment_policy: this.state.payment_policy,
     };
     if (this.validation()) {
       const registerTemp = await registerUser(param);
@@ -197,8 +197,7 @@ class Register extends Component {
         errorMessage: "This field is required",
       });
       return false;
-    } 
-    else if (this.state.user === "") {
+    } else if (this.state.user === "") {
       this.setState({
         userError: true,
         errorMessage: "This field is required",
@@ -210,22 +209,22 @@ class Register extends Component {
         errorMessage: "This field is required",
       });
       return false;
-    } 
-      //else if (this.state.streetAddress === "") {
-      //this.setState({
-      //  streetAddressError: true,
-      //  errorMessage: "This field is required",
-      //});
-      //return false;
-      //} 
-      //else if (this.state.cityAddress === "") {
-      //this.setState({
-      //  cityAddressError: true,
-      //  errorMessage: "This field is required",
-      //});
-      //return false;
-      //} 
-      else if (
+    }
+    //else if (this.state.streetAddress === "") {
+    //this.setState({
+    //  streetAddressError: true,
+    //  errorMessage: "This field is required",
+    //});
+    //return false;
+    //}
+    //else if (this.state.cityAddress === "") {
+    //this.setState({
+    //  cityAddressError: true,
+    //  errorMessage: "This field is required",
+    //});
+    //return false;
+    //}
+    else if (
       this.state.pincode === "" ||
       this.state.pincode.length < 6 ||
       this.state.pincode.length > 6
@@ -254,12 +253,13 @@ class Register extends Component {
     return true;
   };
 
-
   render() {
     // if (checkLogin()) {
     //   console.log("-----------14141414")
     //   return <Redirect to="/" />;
     // }
+
+    console.log("this.state", this.state);
     return (
       <>
         <Helmet>
@@ -438,7 +438,7 @@ class Register extends Component {
             <div className="loginFormField">
               <TextField
                 fullWidth
-                style={{display:"none"}}
+                style={{ display: "none" }}
                 defaultValue={this.state.streetAddress}
                 name="streetAddress"
                 label="Shop/House No. & Street Name"
@@ -460,7 +460,7 @@ class Register extends Component {
             <div className="loginFormField">
               <TextField
                 fullWidth
-                style={{display:"none"}}
+                style={{ display: "none" }}
                 defaultValue={this.state.cityAddress}
                 name="cityAddress"
                 label="City/Town/Village Area"
@@ -487,9 +487,10 @@ class Register extends Component {
                 name="pincode"
                 label="Pincode"
                 InputProps={{
-                    inputProps: { 
-                        max: 999999, min: 100000 
-                    }
+                  inputProps: {
+                    max: 999999,
+                    min: 100000,
+                  },
                 }}
                 variant="outlined"
                 type="number"
@@ -572,7 +573,7 @@ class Register extends Component {
                 ) : null}
               </div>
             ) : null}
-                        <div className="loginFormField">            
+            <div className="loginFormField">
               <TextField
                 name="started_since"
                 variant="outlined"
@@ -584,16 +585,14 @@ class Register extends Component {
                 id="started_since"
                 label="Business started in"
               >
-                {
-                  yearsData.map((value) => (
-                    <MenuItem key={value} value={value}>
-                      {value}
-                    </MenuItem>
-                  ))
-                }
+                {yearsData.map((value) => (
+                  <MenuItem key={value} value={value}>
+                    {value}
+                  </MenuItem>
+                ))}
               </TextField>
-              </div>
-                        <div className="loginFormField">
+            </div>
+            <div className="loginFormField">
               <TextField
                 fullWidth
                 defaultValue={this.state.about_us}
@@ -606,58 +605,78 @@ class Register extends Component {
                 onChange={this.onChangeHandle}
               />
             </div>
-                        <div className="loginFormField">
+            <div className="loginFormField">
               <TextField
                 fullWidth
-                defaultValue={this.state.payment_policy}
-                multiline
-                rows={3}
-                name="payment_policy"
-                type="text"
-                label="Payment policy"
+                defaultValue={this.state.minimum_order_size}
+                name="minimum_order_size"
+                type="number"
+                label="Minimum Order Size (Rs.)"
                 variant="outlined"
                 onChange={this.onChangeHandle}
               />
             </div>
-                        <div className="loginFormField">
-              <TextField
-                fullWidth
-                defaultValue={this.state.return_policy}
-                multiline
-                rows={3}
-                name="return_policy"
-                type="text"
-                label="Return policy"
-                variant="outlined"
-                onChange={this.onChangeHandle}
-              />
-            </div>
-                        <div className="loginFormField">
-              <TextField
-                fullWidth
-                defaultValue={this.state.delivery_policy}
-                multiline
-                rows={3}
-                name="delivery_policy"
-                type="text"
-                label="Delivery policy"
-                variant="outlined"
-                onChange={this.onChangeHandle}
-              />
-            </div>
-                        <div className="loginFormField">
-              <TextField
-                fullWidth
-                defaultValue={this.state.discount_upto}
-                multiline
-                rows={3}
-                name="discount_upto"
-                type="text"
-                label="Discount policy"
-                variant="outlined"
-                onChange={this.onChangeHandle}
-              />
-            </div>
+
+            {!["Retail", "OnlineSeller", "Reseller"].includes(
+              this.state.user
+            ) &&
+              this.state.user && (
+                <>
+                  <div className="loginFormField">
+                    <TextField
+                      fullWidth
+                      defaultValue={this.state.payment_policy}
+                      multiline
+                      rows={3}
+                      name="payment_policy"
+                      type="text"
+                      label="Payment policy"
+                      variant="outlined"
+                      onChange={this.onChangeHandle}
+                    />
+                  </div>
+                  <div className="loginFormField">
+                    <TextField
+                      fullWidth
+                      defaultValue={this.state.return_policy}
+                      multiline
+                      rows={3}
+                      name="return_policy"
+                      type="text"
+                      label="Return policy"
+                      variant="outlined"
+                      onChange={this.onChangeHandle}
+                    />
+                  </div>
+                  <div className="loginFormField">
+                    <TextField
+                      fullWidth
+                      defaultValue={this.state.delivery_policy}
+                      multiline
+                      rows={3}
+                      name="delivery_policy"
+                      type="text"
+                      label="Delivery Time and Charges"
+                      variant="outlined"
+                      onChange={this.onChangeHandle}
+                    />
+                  </div>
+                  <div className="loginFormField">
+                    <TextField
+                      fullWidth
+                      defaultValue={this.state.discount_upto}
+                      multiline
+                      rows={3}
+                      name="discount_upto"
+                      type="text"
+                      label="Discount policy"
+                      variant="outlined"
+                      onChange={this.onChangeHandle}
+                    />
+                  </div>
+                </>
+              )}
+
             <div className="loginFormField">
               <Button
                 variant="contained"

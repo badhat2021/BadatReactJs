@@ -9,7 +9,7 @@ import {
   checkBadatExpiration,
 } from "../Util";
 import Divider from "@material-ui/core/Divider";
-import { Drawer, Button, Fab } from "@material-ui/core";
+import { Drawer, Button, Fab, DialogActions } from "@material-ui/core";
 import { ROUTE_CART, ROUTE_USER_DETAIL, ROUTE_LOGIN } from "../Constant";
 import Swal from "sweetalert2";
 import Carousel from "react-material-ui-carousel";
@@ -54,6 +54,8 @@ class ProductDetail extends Component {
       drawer: false,
       open: false,
       quantityType: [],
+      showButton: false,
+      button: "cart", // 'order'
     };
   }
 
@@ -98,11 +100,26 @@ class ProductDetail extends Component {
   };
 
   handleClickOpen = () => {
-    this.setState({ open: true });
+    this.setState({ open: true, showButton: false });
   };
 
-  handleClose = (value) => {
-    this.setState({ open: false });
+  handleClose = (value, data) => {
+    if (data) {
+      if (data === "cart") {
+        this.addToCartClickHandle(
+          this.state.data.id,
+          this.state.data.user_id,
+          this.state.data.moq
+        );
+      } else {
+        this.orderNowHandle(
+          this.state.data.id,
+          this.state.data.user_id,
+          this.state.data.moq
+        );
+      }
+    }
+    this.setState({ open: false, showButton: false });
   };
 
   goToCartClickHandle = async () => {
@@ -442,12 +459,28 @@ class ProductDetail extends Component {
                 }}
                 onClick={
                   this.state.showAddtoCart
-                    ? () =>
-                        this.addToCartClickHandle(
-                          this.state.data.id,
-                          this.state.data.user_id,
-                          this.state.data.moq
-                        )
+                    ? () => {
+                        if (
+                          this.state.data &&
+                          this.state.data.user &&
+                          (this.state.data.user.delivery_policy ||
+                            this.state.data.user.discount_upto ||
+                            this.state.data.user.payment_policy ||
+                            this.state.data.user.return_policy)
+                        ) {
+                          this.setState({
+                            open: true,
+                            showButton: true,
+                            button: "cart",
+                          });
+                        } else {
+                          this.addToCartClickHandle(
+                            this.state.data.id,
+                            this.state.data.user_id,
+                            this.state.data.moq
+                          );
+                        }
+                      }
                     : () =>
                         this.goToCartClickHandle(
                           this.state.data.id,
@@ -467,13 +500,28 @@ class ProductDetail extends Component {
                   height: "100%",
                   backgroundColor: "rgb(255 , 111 , 0)",
                 }}
-                onClick={() =>
-                  this.orderNowHandle(
-                    this.state.data.id,
-                    this.state.data.user_id,
-                    this.state.data.moq
-                  )
-                }
+                onClick={() => {
+                  if (
+                    this.state.data &&
+                    this.state.data.user &&
+                    (this.state.data.user.delivery_policy ||
+                      this.state.data.user.discount_upto ||
+                      this.state.data.user.payment_policy ||
+                      this.state.data.user.return_policy)
+                  ) {
+                    this.setState({
+                      open: true,
+                      showButton: true,
+                      button: "order",
+                    });
+                  } else {
+                    this.orderNowHandle(
+                      this.state.data.id,
+                      this.state.data.user_id,
+                      this.state.data.moq
+                    );
+                  }
+                }}
               >
                 Order Now
               </Button>
@@ -481,6 +529,8 @@ class ProductDetail extends Component {
           </div>
         </div>
         <SimpleDialog
+          showButton={this.state.showButton}
+          button={this.state.button}
           open={this.state.open}
           data={this.state.data.user ? this.state.data.user : false}
           onClose={this.handleClose}
@@ -493,13 +543,9 @@ class ProductDetail extends Component {
 export default ProductDetail;
 
 function SimpleDialog(props) {
-  const { onClose, open, data } = props;
+  const { onClose, open, data, showButton, button } = props;
 
   const handleClose = () => {
-    onClose();
-  };
-
-  const handleListItemClick = (value) => {
     onClose();
   };
 
@@ -564,6 +610,20 @@ function SimpleDialog(props) {
         </Typography>
         <br />
       </DialogContent>
+      {showButton && (
+        <DialogActions>
+          <Button onClick={handleClose} variant="outlined">
+            Cancel
+          </Button>
+          <Button
+            onClick={(e) => onClose(e, button)}
+            variant="contained"
+            color="primary"
+          >
+            Continue to Cart
+          </Button>
+        </DialogActions>
+      )}
     </Dialog>
   );
 }

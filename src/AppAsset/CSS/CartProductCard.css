@@ -27,6 +27,7 @@
   padding-bottom: 2%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .cartProductCardButton {
@@ -58,17 +59,20 @@
 .cartProductDetailName {
   color: black;
   font-weight: 500;
-  font-size: x-large;
+  font-size: 18px;
   text-transform: capitalize;
-  margin-top: 1%;
-  margin-bottom: 1%;
+  /* margin-top: 1%;
+  margin-bottom: 1%; */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .cartProductDetailPrice {
   color: rgb(37, 35, 35);
   font-weight: 550;
-  font-size: large;
+  font-size: 14px;
   text-transform: capitalize;
   margin-top: 1%;
   margin-bottom: 1%;
@@ -78,7 +82,7 @@
 .cartProductDetailQuantity {
   color: rgb(37, 35, 35);
   font-weight: 500;
-  font-size: large;
+  font-size: 14px;
   text-transform: capitalize;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
@@ -86,10 +90,10 @@
 .cartProductDetailTotal {
   color: rgb(37, 35, 35);
   font-weight: 550;
-  font-size: large;
+  font-size: 14px;
   text-transform: capitalize;
-  margin-top: 1%;
-  margin-bottom: 1%;
+  /* margin-top: 1%;
+  margin-bottom: 1%; */
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 

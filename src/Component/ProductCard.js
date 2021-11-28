@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Button } from "@material-ui/core";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Typography,
+} from "@material-ui/core";
 import { addToCartApi } from "../AppApi";
 import { checkLogin } from "../Util";
 import { ROUTE_CART, ROUTE_PRODUCT_DETAIL, ROUTE_LOGIN } from "../Constant";
@@ -16,6 +24,9 @@ class ProductCard extends Component {
     this.state = {
       load: true,
       showModal: false,
+      open: false,
+      showButton: false,
+      button: "cart", // 'order'
     };
   }
 
@@ -92,6 +103,25 @@ class ProductCard extends Component {
     this.props.history.push(`/${ROUTE_PRODUCT_DETAIL}/${id}`);
   };
 
+  handleClose = (value, data) => {
+    if (data) {
+      if (data === "cart") {
+        this.addToCartHandle(
+          this.props.data.user_id,
+          this.props.data.id,
+          this.props.data.moq
+        );
+      } else {
+        this.orderNowHandle(
+          this.props.data.user_id,
+          this.props.data.id,
+          this.props.data.moq
+        );
+      }
+    }
+    this.setState({ open: false, showButton: false });
+  };
+
   render() {
     return (
       <div className="productCardContainer" key={this.props.data.id}>
@@ -101,16 +131,17 @@ class ProductCard extends Component {
         >
           <img
             src={
-                this.props.data &&
-                this.props.data.images &&
-                this.props.data.images.length > 0 &&
-                this.props.data.images[0].thumbnail?this.props.data.images[0].thumbnail :
-              "../../default-img.png"
+              this.props.data &&
+              this.props.data.images &&
+              this.props.data.images.length > 0 &&
+              this.props.data.images[0].thumbnail
+                ? this.props.data.images[0].thumbnail
+                : "../../default-img.png"
             }
             alt={this.props.data.name}
             width="100%"
             height="100%"
-            style={{ borderRadius: "10px",objectFit:"cover" }}
+            style={{ borderRadius: "10px", objectFit: "cover" }}
           />
         </div>
 
@@ -119,8 +150,12 @@ class ProductCard extends Component {
           onClick={() => this.onProductClickHandle(this.props.data.id)}
         >
           <div className="productDetailName">{this.props.data.name}</div>
-          <div className="productDetailMoq1">Selling Price: Rs {this.props.data.price}</div>
-          <div className="productDetailPrice">MRP:Rs {this.props.data.price}</div>
+          <div className="productDetailMoq1">
+            Selling Price: Rs {this.props.data.price}
+          </div>
+          <div className="productDetailPrice">
+            MRP:Rs {this.props.data.price}
+          </div>
           <div className="productDetailPrice">MOQ : {this.props.data.moq}</div>
         </div>
         <div className="productCardButton">
@@ -129,13 +164,29 @@ class ProductCard extends Component {
               fullWidth
               variant="contained"
               color="secondary"
-              onClick={() =>
-                this.addToCartHandle(
-                  this.props.data.user_id,
-                  this.props.data.id,
-                  this.props.data.moq
-                )
-              }
+              onClick={() => {
+                if (
+                  this.props.data &&
+                  this.props.data.user &&
+                  (this.props.data.user.delivery_policy ||
+                    this.props.data.user.discount_upto ||
+                    this.props.data.user.payment_policy ||
+                    this.props.data.user.return_policy)
+                ) {
+                  this.setState({
+                    open: true,
+                    showButton: true,
+                    button: "cart",
+                  });
+                } else {
+                  this.setState({ open: false, showButton: false });
+                  this.addToCartHandle(
+                    this.props.data.user_id,
+                    this.props.data.id,
+                    this.props.data.moq
+                  );
+                }
+              }}
               style={{
                 height: "100%",
                 backgroundColor: "rgb(300, 250, 250)",
@@ -152,13 +203,32 @@ class ProductCard extends Component {
               fullWidth
               variant="contained"
               // color="secondary"
-              onClick={() =>
-                this.orderNowHandle(
-                  this.props.data.user_id,
-                  this.props.data.id,
-                  this.props.data.moq
-                )
-              }
+              onClick={() => {
+                if (
+                  this.props.data &&
+                  this.props.data.user &&
+                  (this.props.data.user.delivery_policy ||
+                    this.props.data.user.discount_upto ||
+                    this.props.data.user.payment_policy ||
+                    this.props.data.user.return_policy)
+                ) {
+                  this.setState({
+                    open: true,
+                    showButton: true,
+                    button: "order",
+                  });
+                } else {
+                  this.setState({
+                    open: false,
+                    showButton: false,
+                  });
+                  this.orderNowHandle(
+                    this.props.data.user_id,
+                    this.props.data.id,
+                    this.props.data.moq
+                  );
+                }
+              }}
               style={{ height: "100%", backgroundColor: "rgb(255 , 111 , 0)" }}
             >
               <span style={{ fontSize: "xx-small" }}>
@@ -167,6 +237,13 @@ class ProductCard extends Component {
             </Button>
           </div>
         </div>
+        <SimpleDialog
+          showButton={this.state.showButton}
+          button={this.state.button}
+          open={this.state.open}
+          data={this.props.data.user ? this.props.data.user : false}
+          onClose={this.handleClose}
+        />
       </div>
     );
   }
@@ -177,3 +254,91 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(null, mapDispatchToProps)(withRouter(ProductCard));
+
+function SimpleDialog(props) {
+  const { onClose, open, data, showButton, button } = props;
+
+  const handleClose = () => {
+    onClose();
+  };
+
+  return (
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="simple-dialog-title"
+      open={open}
+      maxWidth="sm"
+      style={{ width: 360 }}
+    >
+      <DialogTitle id="simple-dialog-title">Seller Policies</DialogTitle>
+      <DialogContent dividers>
+        <Typography gutterBottom>
+          {data.return_policy !== null ? (
+            data.return_policy != "" ? (
+              <>
+                <strong>Return policy</strong>
+                <Divider />
+                {data.return_policy}
+              </>
+            ) : (
+              ""
+            )
+          ) : (
+            ""
+          )}
+        </Typography>
+        <br />
+        <Typography gutterBottom>
+          {data.delivery_policy !== null ? (
+            <>
+              <strong>Delivery policy</strong>
+              <Divider />
+              {data.delivery_policy}
+            </>
+          ) : (
+            ""
+          )}
+        </Typography>
+        <br />
+        <Typography gutterBottom>
+          {data.payment_policy !== null ? (
+            <>
+              <strong>Payment policy</strong>
+              <Divider />
+              {data.payment_policy}
+            </>
+          ) : (
+            ""
+          )}
+        </Typography>
+        <br />
+        <Typography gutterBottom>
+          {data.discount_upto !== null ? (
+            <div>
+              <strong>Discount policy</strong>
+              <Divider />
+              {data.discount_upto}
+            </div>
+          ) : (
+            ""
+          )}
+        </Typography>
+        <br />
+      </DialogContent>
+      {showButton && (
+        <DialogActions>
+          <Button onClick={handleClose} variant="outlined">
+            Cancel
+          </Button>
+          <Button
+            onClick={(e) => onClose(e, button)}
+            variant="contained"
+            color="primary"
+          >
+            Continue to Cart
+          </Button>
+        </DialogActions>
+      )}
+    </Dialog>
+  );
+}

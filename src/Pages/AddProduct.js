@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
 const AddProductForm = () => {
   const [name, setName] = useState();
   const [price, setPrice] = useState();
-  const [moq, setMoq] = useState();
+  const [moq, setMoq] = useState(1);
   const [description, setDiscription] = useState();
   const [categoryId, setCategoryId] = useState(0);
   const [subCategoryId, setSubCategoryId] = useState(0);
@@ -174,7 +174,7 @@ const AddProductForm = () => {
     var dataset = {
       name: name,
       desc: description,
-      moq: moq,
+      moq: moq > 0 ? moq : 1,
       price: price,
       categoryId: categoryId,
       subCategoryId: subCategoryId,

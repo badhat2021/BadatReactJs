@@ -15,13 +15,13 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-import ListItemText from '@material-ui/core/ListItemText';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
+import ListItemText from "@material-ui/core/ListItemText";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+import ListItem from "@material-ui/core/ListItem";
+import List from "@material-ui/core/List";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import Popover from '@material-ui/core/Popover';
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import Popover from "@material-ui/core/Popover";
 import DehazeIcon from "@material-ui/icons/Dehaze";
 // import ClearIcon from "@material-ui/icons/Clear";
 import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
@@ -30,7 +30,7 @@ import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
 import Logo from "../AppAsset/Badhat App Icon.jpg";
 import { ROUTE_CART, ROUTE_ALL_PRODUCT, ROUTE_LOGIN } from "../Constant";
 import "../AppAsset/CSS/Header.css";
-import {getAppState, markAsRead} from '../AppApi'
+import { getAppState, getMyProducts, markAsRead } from "../AppApi";
 import { installOurApp, handleLogout, checkLogin } from "../Util";
 
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
   homeButton: {
     marginRight: theme.spacing(2),
-    flexDirection: "column"
+    flexDirection: "column",
   },
   title: {
     display: "none",
@@ -130,10 +130,10 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "2px",
     },
   },
-  homelabel:{
+  homelabel: {
     fontSize: "10px",
     paddingTop: "5px",
-    fontWeight: "500"
+    fontWeight: "500",
   },
   myOrderButton: {
     display: "flex",
@@ -157,17 +157,19 @@ const StyledBadge = withStyles((theme) => ({
 
 const Header = ({ history, cartCount, login, cartItemCount }) => {
   const [search, setSearch] = useState("");
-  const [notificationCount, setNotificationCount] = useState(0)
+  const [notificationCount, setNotificationCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   useEffect(() => {
-    async function fetchData(){
-      const login = await checkLogin()
-        if (login) {
-          getCartCount();
-          const data = await getAppState();
-          setNotificationCount(data.data.data.notification?data.data.data.notification:0)     
-        }
+    async function fetchData() {
+      const login = await checkLogin();
+      if (login) {
+        getCartCount();
+        const data = await getAppState();
+        setNotificationCount(
+          data.data.data.notification ? data.data.data.notification : 0
+        );
+      }
     }
     fetchData();
   }, []);
@@ -211,18 +213,18 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
     });
   };
 
-  const onMyProfileClickHandle = () =>{
+  const onMyProfileClickHandle = () => {
     handleClose();
     history.push("/profile");
-  }
+  };
 
   const onMyProductsClickHandle = () => {
     handleClose();
     history.push("/products");
-  }
+  };
 
   const onMyOrderClickHandle = () => {
-    history.push("/order"); 
+    history.push("/order");
     handleClose();
   };
 
@@ -236,31 +238,42 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
     history.push(`/`);
   };
 
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const innerFunction = async () => {
+      const { data } = await getMyProducts();
+      if (data && data.data) {
+        setProducts(data.data);
+      }
+    };
+    innerFunction();
+  }, []);
 
   return (
     <div className="HeaderContainer overflow-hidden">
       <Toolbar>
-            <IconButton
-            className="headerIconbtns"
-              aria-label="more"
-              aria-controls="long-menu"
-              aria-haspopup="true"
-              onClick={() => history.push("/")}    
-            >
-              <div
-                style={{
-                  display: "flex",
-                  marginRight: 7,
-                  flexDirection: "column",
-                  textAlign: "center",
-                }}
-              >
-                <Avatar alt="logo" src={Logo} />      
-                <div style={{ marginTop: "-12px" }}>
-                  <span style={{ fontSize: "x-small" }}>Home</span>
-                </div>
-              </div>
-            </IconButton>
+        <IconButton
+          className="headerIconbtns"
+          aria-label="more"
+          aria-controls="long-menu"
+          aria-haspopup="true"
+          onClick={() => history.push("/")}
+        >
+          <div
+            style={{
+              display: "flex",
+              marginRight: 7,
+              flexDirection: "column",
+              textAlign: "center",
+            }}
+          >
+            <Avatar alt="logo" src={Logo} />
+            <div style={{ marginTop: "-12px" }}>
+              <span style={{ fontSize: "x-small" }}>Home</span>
+            </div>
+          </div>
+        </IconButton>
         <Typography className={classes.title} variant="h5" noWrap>
           Badhat
         </Typography>
@@ -331,7 +344,11 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
         )}
         {!checkLogin() ? null : (
           <div className={classes.myOrderButton}>
-            <IconButton aria-label="show new notifications" className="headerIconbtns" onClick={handleClickNotify}>
+            <IconButton
+              aria-label="show new notifications"
+              className="headerIconbtns"
+              onClick={handleClickNotify}
+            >
               <Badge badgeContent={notificationCount} color="primary">
                 <NotificationsIcon />
               </Badge>
@@ -364,35 +381,43 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem key="myProfile" onClick={() => onMyProfileClickHandle()}>
+              <MenuItem
+                key="myProfile"
+                onClick={() => onMyProfileClickHandle()}
+              >
                 My Profile
               </MenuItem>
               <MenuItem key="myOrder" onClick={() => onMyOrderClickHandle()}>
                 Order Bookings
               </MenuItem>
-              <MenuItem key="myProducts" onClick={() => onMyProductsClickHandle()}>
-                My Products
-              </MenuItem>
+              {products.length > 0 && (
+                <MenuItem
+                  key="myProducts"
+                  onClick={() => onMyProductsClickHandle()}
+                >
+                  My Products
+                </MenuItem>
+              )}
               <MenuItem key="logOut" onClick={() => onLogoutClickHandle()}>
                 Logout
               </MenuItem>
             </Menu>
-          <div
-            className={classes.sectionDesktop}
-            onClick={() => onClickCartHandle()}
-          >
-            <IconButton aria-label="cart" className="headerIconbtns">
-              {cartCount ? (
-                <StyledBadge badgeContent={cartCount} color="primary">
+            <div
+              style={{ marginRight: 20 }}
+              className={classes.sectionDesktop}
+              onClick={() => onClickCartHandle()}
+            >
+              <IconButton aria-label="cart" className="headerIconbtns">
+                {cartCount ? (
+                  <StyledBadge badgeContent={cartCount} color="primary">
+                    <ShoppingCartIcon />
+                  </StyledBadge>
+                ) : (
                   <ShoppingCartIcon />
-                </StyledBadge>
-              ) : (
-                <ShoppingCartIcon />
-              )}
-            </IconButton>
+                )}
+              </IconButton>
             </div>
           </div>
-
         )}
       </Toolbar>
     </div>

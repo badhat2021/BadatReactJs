@@ -94,7 +94,7 @@ const EditProductForm = (props) => {
   const { id } = useParams();
   const [name, setName] = useState(props.proData.name);
   const [price, setPrice] = useState(props.proData.price);
-  const [moq, setMoq] = useState(props.proData.moq);
+  const [moq, setMoq] = useState(props.proData.moq || 1);
   const [description, setDiscription] = useState(props.proData.description);
   const [categoryId, setCategoryId] = useState(props.proData.category_id);
   const [subCategoryId, setSubCategoryId] = useState(
@@ -191,7 +191,7 @@ const EditProductForm = (props) => {
       id: id,
       name: name,
       desc: description,
-      moq: moq,
+      moq: moq > 0 ? moq : 1,
       price: price,
       categoryId: categoryId,
       subCategoryId: subCategoryId,
