@@ -92,6 +92,7 @@ class Register extends Component {
       return_policy: this.state.return_policy,
       started_since: this.state.started_since,
       payment_policy: this.state.payment_policy,
+      minimum_order_size: this.state.minimum_order_size,
     };
     if (this.validation()) {
       const registerTemp = await registerUser(param);
