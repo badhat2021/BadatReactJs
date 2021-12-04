@@ -279,12 +279,7 @@ class AllProductPage extends Component {
     const prod = await getProducts(params);
     this.setState({
       load: false,
-      // productData:
-      //   res.data && res.data.data && res.data.data.data
-      //     ? res.data.data.data
-      //     : [],
-
-      productData: (prod.data && prod.data.data) || prod.data.data || {},
+      productData: prod.data && prod.data.data ? prod.data.data : {},
     });
   };
 
@@ -302,6 +297,7 @@ class AllProductPage extends Component {
     };
     this.setState({ load: true, params });
     const prod = await getProducts(params);
+    console.log("PROD1=>", prod);
     this.setState({
       load: false,
       // productData:
@@ -309,7 +305,7 @@ class AllProductPage extends Component {
       //     ? res.data.data.data
       //     : [],
 
-      productData: (prod.data && prod.data.data) || prod.data.data || {},
+      productData: prod.data && prod.data.data ? prod.data.data : {},
     });
   };
 

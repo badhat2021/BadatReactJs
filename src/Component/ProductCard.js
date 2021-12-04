@@ -153,10 +153,22 @@ class ProductCard extends Component {
           <div className="productDetailMoq1">
             Selling Price: Rs {this.props.data.price}
           </div>
-          <div className="productDetailPrice">
-            MRP:Rs {this.props.data.price}
-          </div>
-          <div className="productDetailPrice">MOQ : {this.props.data.moq}</div>
+          {this.props.data &&
+          this.props.data.mrp_price &&
+          this.props.data.mrp_price > 0 ? (
+            <div className="productDetailPrice">
+              MRP:Rs {this.props.data.mrp_price}
+            </div>
+          ) : (
+            ""
+          )}
+          {this.props.data && this.props.data.moq && this.props.data.moq > 0 ? (
+            <div className="productDetailPrice">
+              MOQ : {this.props.data.moq}
+            </div>
+          ) : (
+            ""
+          )}
         </div>
         <div className="productCardButton">
           <div className="productCardButtons">

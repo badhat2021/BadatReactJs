@@ -178,10 +178,7 @@ class SubCategory extends Component {
     const res = await getProducts(params);
     this.setState({
       load: false,
-      productData:
-        res.data && res.data.data && res.data.data.data
-          ? res.data.data.data
-          : [],
+      productData: res.data && res.data.data ? res.data.data : {},
     });
   };
 
@@ -202,10 +199,7 @@ class SubCategory extends Component {
     const res = await getProducts(params);
     this.setState({
       load: false,
-      productData:
-        res.data && res.data.data && res.data.data.data
-          ? res.data.data.data
-          : [],
+      productData: res.data && res.data.data ? res.data.data : {},
     });
   };
 

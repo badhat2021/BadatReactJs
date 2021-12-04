@@ -123,11 +123,7 @@ class VerticleCategory extends Component {
     const prod = await getProducts(params);
     this.setState({
       load: false,
-      // productData:
-      //   res.data && res.data.data && res.data.data.data
-      //     ? res.data.data.data
-      //     : [],
-      productData: (prod.data && prod.data.data) || prod.data.data || {},
+      productData: prod.data && prod.data.data ? prod.data.data : {},
     });
   };
 
@@ -146,13 +142,10 @@ class VerticleCategory extends Component {
     };
     this.setState({ params, load: true });
     const prod = await getProducts(params);
+    console.log("PROD3=>", prod);
     this.setState({
       load: false,
-      // productData:
-      //   res.data && res.data.data && res.data.data.data
-      //     ? res.data.data.data
-      //     : [],
-      productData: (prod.data && prod.data.data) || prod.data.data || {},
+      productData: prod.data && prod.data.data ? prod.data.data : {},
     });
   };
 
