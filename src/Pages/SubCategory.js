@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import LoadingOverlay from "react-loading-overlay";
@@ -25,21 +27,21 @@ import {
   checkBadatExpiration,
 } from "../Util";
 import Footer from "../Component/Footer";
-
+let last_page;
 class SubCategory extends Component {
   constructor() {
     super();
     this.state = {
       load: true,
       data: [],
-      sort: null,
-      sortOrder: null,
+      sort: [],
+      sortOrder: [],
       categoryId: window.location.href.slice(
         window.location.href.lastIndexOf("/") + 1
       ),
-      verticleCategories: null,
-      subCategories: null,
-      state: null,
+      verticleCategories: [],
+      subCategories: [],
+      state: [],
       district: null,
       price: null,
       productData: [],
@@ -47,7 +49,11 @@ class SubCategory extends Component {
       verticalCategoryList: [],
       districtList: [],
       drawer: false,
+      listData: [],
+      type: 'category',
       params: { page: 1 },
+	  verticalDataItem: [],
+	  openProductList: true,
     };
   }
 
@@ -61,8 +67,11 @@ class SubCategory extends Component {
         page: 1,
       };
       this.setState({ params });
-      const res = await getSubCategory(id);
+      const res = await getSubCategory(id)
+
+;
       const prod = await getProducts(params);
+
       console.log(prod);
       this.setState({
         load: false,
@@ -80,15 +89,18 @@ class SubCategory extends Component {
     const id = window.location.href.slice(
       window.location.href.lastIndexOf("/") + 1
     );
+
     const params = {
       category_id: id,
       page: 1,
     };
     this.setState({ params });
-    const res = await getSubCategory(id);
+    const res = await getSubCategory(id)
+
+;
     const prod = await getProducts(params);
-    console.log(prod);
-    this.setState({
+
+this.setState({
       load: false,
       data: res.data.data,
       subCategoryList: res.data.data,
@@ -98,6 +110,10 @@ class SubCategory extends Component {
       //     : [],
       productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
+    this.state.listData.push(this.state.productData.data)
+    // this.state.productData.data && this.state.productData.data.length ? this.state.listData.push(this.state.productData.data): ''
+
+
   };
 
   onClickHandle = (id) => {
@@ -107,7 +123,9 @@ class SubCategory extends Component {
   onClickCategoryHandle = async (id) => {
     this.props.history.push(`/${ROUTE_SUBCATEGORIES}/${id}`);
     this.setState({ load: true, data: [] });
-    const res = await getSubCategory(id);
+    const res = await getSubCategory(id)
+
+;
     this.setState({
       load: false,
       data: res.data.data,
@@ -119,19 +137,45 @@ class SubCategory extends Component {
 
   onFilterChangeHandle = async (e) => {
     const name = e.target.name;
+	console.log('dataaaaaaaaaaaaaaaaaa', this.state.verticalCategoryList);
+
     this.setState({
       ...this.state,
-      [name]: e.target.value,
-    });
-
+      [name]: e.target.value,    });
+	console.log('namemmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm', e.target.name);
+    typeof value === 'string' ?  e.target.value.split(',') :  e.target.valuevalue;
     if (e.target.name === "category") {
       const tempSubCategoryList = await getSubCategory(e.target.value);
       this.setState({ subCategoryList: tempSubCategoryList.data.data });
     }
 
     if (e.target.name === "subCategories") {
-      const tempVerticalData = await getVerticalCategory(e.target.value);
-      this.setState({ verticalCategoryList: tempVerticalData.data.data });
+		console.log('inside the value', e.target.value)
+		let data = e.target.value;
+		for(let i= 0; i <= data.length ; i++){
+			const tempVerticalData = await getVerticalCategory(data[i]);
+			console.log('temp vvvvvvvvvvvvvvvvvvvvv', tempVerticalData)
+      let second=[];
+		second = tempVerticalData.data;
+    this.setState({
+      verticalDataItem: tempVerticalData.data && tempVerticalData.data
+    })
+    console.log('verticalDataItemverticalDataItem', this.state.verticalDataItem);
+
+    if(second.message === 'Verticals')   {
+      let list= [...this.state.verticalCategoryList , ...this.state.verticalDataItem.data]
+    console.log('list', list)
+    this.setState({verticalCategoryList : list})
+    console.log('techhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', this.state.verticalCategoryList);
+// console.log('secccccccccccccccccccc', second, this.state.verticalCategoryList)
+// 		second && second.message === 'Verticals'? this.state.verticalCategoryList.push(second.data): ''
+// 			console.log('temp values', 	this.state.verticalCategoryList);
+console.log('techhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', this.state.verticalCategoryList);
+
+}
+console.log('techhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', this.state.verticalCategoryList);
+
+		}
     }
 
     if (e.target.name === "state") {
@@ -142,14 +186,15 @@ class SubCategory extends Component {
 
   pageChangeCallback = async (id) => {
     const params = this.state.params;
-    params.page = id + 1;
+    params.page = id+1;
     this.setState({ load: true, params });
     const prod = await getProducts(params);
-    console.log(prod);
+
     this.setState({
       load: false,
       productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
+    // this.state.productData.data && this.state.productData.data.length ? this.state.listData.push(this.state.productData.data): ''
   };
 
   onFilterReset = async () => {
@@ -176,31 +221,16 @@ class SubCategory extends Component {
 
     this.setState({ params });
     const res = await getProducts(params);
+
     this.setState({
       load: false,
       productData: res.data && res.data.data ? res.data.data : {},
     });
   };
 
-  onFilterSubmit = async () => {
-    this.setState({ drawer: false, load: true, productData: [] });
-    const params = {
-      category_id: this.state.categoryId,
-      subcategory_id: this.state.subCategories,
-      vertical_id: this.state.verticleCategories,
-      sortBy: this.state.sort,
-      sortOrder: this.state.sortOrder,
-      state: this.state.state,
-      district: this.state.district,
-      page: 1,
-    };
+  onFilterSubmit = async (p) => {
+    this.setState({ drawer: p});
 
-    this.setState({ params });
-    const res = await getProducts(params);
-    this.setState({
-      load: false,
-      productData: res.data && res.data.data ? res.data.data : {},
-    });
   };
 
   onDrawerClick = (p) => {
@@ -337,6 +367,8 @@ class SubCategory extends Component {
                 this.state.subCategories ? this.state.subCategories : null
               }
               productData={this.state.productData}
+              listData= {this.state.listData}
+              type={this.state.type}
               pageChangeCallback={this.pageChangeCallback}
               subCategoryList={this.state.subCategoryList}
               verticalCategoryList={this.state.verticalCategoryList}
@@ -345,6 +377,7 @@ class SubCategory extends Component {
               districtValue={this.state.districtValue}
               sortOrderValue={this.state.sortOrder}
               drawer={this.state.drawer}
+			  openProductList={this.state.openProductList}
               onDrawerClick={this.onDrawerClick}
             />
           )}

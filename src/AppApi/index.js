@@ -44,6 +44,7 @@ export const getVerticalCategory = async (id) => {
   const res = await axios.get(
     BASE_URL + ENDPOINT_GET_VERTICAL_CATEGORIES + "/" + id
   );
+  console.log('ressssssssssssssssssssssssss', res);
   return res;
 };
 
@@ -73,13 +74,16 @@ export const sendMobileNumber = async (mobile) => {
   }
 };
 
-export const sendOtp = async (mobile, otp) => {
+export const sendOtp = async (mobile) => {
+  console.log('mobileeeeeeeeeeeeeeeeee', mobile)
   let body = {
     mobile: mobile,
-    otp: otp,
   };
   const res = await axios.post(BASE_URL + ENDPOINT_LOGIN, body);
+  console.log('ressssssssssssssssttttttttttttttttt  ', res)
+
   if (res.status === 200) {
+console.log('ressssssssssssssss', res)
     storeToken(res.data.data.access_token);
     storeId(res.data.data.user.id);
     return res;

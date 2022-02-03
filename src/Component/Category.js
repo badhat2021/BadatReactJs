@@ -6,19 +6,27 @@ import { fetchCategoryData } from "../AppRedux/Action/CategoryAction";
 import CategoryCard from "./CategoryCard";
 import "../AppAsset/CSS/Category.css";
 import Banners from "./Banners";
-
+let list;
 class Category extends Component {
   constructor() {
     super();
     this.state = {
       load: true,
       data: [],
+      reload: true,
     };
   }
 
   componentDidMount = async () => {
     await this.props.onCategoryFetch();
+    list =this.props.categoryData;
     this.setState({ load: false, data: this.props.categoryData });
+// if(this.state.reload  && this.state.data){
+//   window.location.reload();
+//   this.setState({
+//     reload:false,
+//   })
+// }
   };
 
   render() {
@@ -27,8 +35,8 @@ class Category extends Component {
         <div className="categoryContainer">
           <div className="categoryTitle">{BROWSE_CATEGORY}</div>
           <div className="categoryCardContainer">
-            {this.state.data && this.state.data.length > 0 ? (
-              <CategoryCard data={this.state.data} />
+            {this.props.categoryData && this.props.categoryData.length ? (
+              <CategoryCard data={this.props.categoryData} />
             ) : (
               "No data found"
             )}
