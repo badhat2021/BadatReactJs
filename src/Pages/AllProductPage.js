@@ -478,7 +478,7 @@ class AllProductPage extends Component {
 			(!checkLogin() && !checkSkip()) ||
 			(!checkLogin() && !checkBadatExpiration())
 		) {
-			loginPopUp(this.props.history);
+			//loginPopUp(this.props.history);
 		}
 		return (
 			<LoadingOverlay active={this.state.load} spinner text="Loading...">
