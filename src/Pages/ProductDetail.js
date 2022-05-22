@@ -359,7 +359,7 @@ class ProductDetail extends Component {
               </div>
               {this.state && this.state.data && this.state.data.price && (
                 <div className="productDetailCardPrice">
-                  Selling Price Rs: {this.state.data.price}
+                  Wholesale Rate Rs: {this.state.data.price}
                   {this.state.data &&
                     this.state.data.quantity &&
                     this.state.data.product_unit_id &&

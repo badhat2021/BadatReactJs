@@ -297,7 +297,7 @@ const EditProductForm = (props) => {
                   className: classes.floatingLabelFocusStyle,
                 }}
                 id="price"
-                label="Selling Price per Quantity"
+                label="Wholesale Rate per Quantity"
                 defaultValue={props.proData.price}
                 type="number"
                 onChange={(e) => {

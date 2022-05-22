@@ -151,7 +151,7 @@ class ProductCard extends Component {
         >
           <div className="productDetailName">{this.props.data.name}</div>
           <div className="productDetailMoq1">
-            Selling Price: Rs {this.props.data.price}
+          Wholesale Rate: Rs {this.props.data.price}
           </div>
           {this.props.data &&
           this.props.data.mrp_price &&

@@ -273,7 +273,7 @@ const AddProductForm = () => {
                 variant="outlined"
                 fullWidth
                 id="price"
-                label="Selling Price per Quantity"
+                label="Wholesale Rate per Quantity"
                 required
                 InputLabelProps={{
                   className: classes.floatingLabelFocusStyle,
