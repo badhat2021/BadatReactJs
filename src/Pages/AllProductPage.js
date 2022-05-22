@@ -557,7 +557,7 @@ class AllProductPage extends Component {
 								color="primary"
 								startIcon={<AddIcon />}
 							>
-								Add Product
+								Save Product
 							</Button>
 						</Link>
 					</Snackbar>

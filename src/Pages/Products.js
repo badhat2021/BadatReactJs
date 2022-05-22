@@ -80,7 +80,7 @@ export default function ProductsPage() {
       >
         <Link to="/products/new" className={classes.linkStyle}>
           <Button variant="contained" className="addprdBTN" color="primary" startIcon={<AddIcon />}>
-            Add Product
+            Save Product
           </Button>
         </Link>
       </Snackbar>

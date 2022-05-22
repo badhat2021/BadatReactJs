@@ -196,7 +196,7 @@ const AddProductForm = () => {
       </Backdrop>
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Add Product
+          Save Product
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -447,7 +447,7 @@ const AddProductForm = () => {
             color="primary"
             className={classes.submit}
           >
-            Add Product
+            Save Product
           </Button>
         </form>
       </div>

@@ -74,7 +74,7 @@ class Homepage extends Component {
       >
         <Link to="/products/new" className="linkStyle">
           <Button variant="contained" className="addprdBTN" color="primary" startIcon={<AddIcon />}>
-            Add Product
+            Save Product
           </Button>
         </Link>
       </Snackbar>
