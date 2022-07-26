@@ -1,8 +1,8 @@
 export const BROWSE_CATEGORY = "Select your category";
 
 // base url for apis
-export const BASE_URL = "https://badhat.club/api/";
-export const NEW_BASE_URL = "https://badhat.club/";
+export const BASE_URL = "https://badhat.in/api/";
+export const NEW_BASE_URL = "https://badhat.in/";
 export const ENDPOINT_CATEGORIES = "categories";
 export const ENDPOINT_QUANTITY = "getProductUnits";
 export const ENDPOINT_GET_SUBCATEGORIES = "getsubCategories";

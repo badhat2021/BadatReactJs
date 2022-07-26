@@ -59,6 +59,7 @@ class UserDetail extends Component {
       drawer: false,
       open: false,
       chatBox: false,
+      productGroup: {},
     };
   }
 
@@ -103,6 +104,43 @@ class UserDetail extends Component {
     ) {
       //loginPopUp(this.props.history);
     }
+
+
+
+    // let productCardLimit = () => {
+    //   this.state.data.products.map((item) => (
+    //     <ProductCard data={item} />
+    //   ));
+    // }
+    let sortedData = this.state.data && this.state.data.products && this.state.data.products.sort(function (a, b) {  return a.sub_category_id - b.sub_category_id;});
+    let subCategory = "";
+    let groupData = {};
+    let temp = []
+    this.state.data && this.state.data.products && sortedData.forEach((el) => {
+        // subCategory = el.sub_category_id;
+        if (subCategory !== el.sub_category_id) {
+          if (temp.length) {
+            // groupData = {
+            //   ...groupData,
+            //   [subCategory]: temp,
+            // } 
+
+            groupData[subCategory] = temp;
+          }
+          temp = [];
+          subCategory = el.sub_category_id;
+        }
+        if(subCategory === el.sub_category_id) {
+          temp.push(el)
+        }
+    });
+
+    console.log(groupData, "grupppppppppppppp");
+    let productCardLimit = [];
+    this.state.data && this.state.data.products && this.state.data.products.map((item) => (
+         productCardLimit.push(<ProductCard data={item} />)
+      ));
+
     return (
       <LoadingOverlay active={this.state.load} spinner text="Loading...">
         <Helmet>
@@ -320,12 +358,14 @@ class UserDetail extends Component {
           <div className="productListing">
             {this.state.data && this.state.data.products && (
               <>
-                {this.state.data.products.map((item) => (
+                {/* {this.state.data.products.map((item) => (
                   <ProductCard data={item} />
-                ))}
+                ))} */}
+                {productCardLimit}
               </>
             )}
           </div>
+          
         </div>
         <Footer />
         <SimpleDialog

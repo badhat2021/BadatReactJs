@@ -26,6 +26,12 @@
   overflow-x: auto;
    height: 100px; 
 }
+
+.subCategoryGridContainer_Less_item.h-fix {
+  flex-direction: column;
+  height: 84px;
+  margin-top: 5px;
+}
 .subCategoryGridContainer {
   width: 100%;
   display: flex;
@@ -33,6 +39,11 @@
   flex-wrap: wrap;
   height: 120px;
   overflow-x: auto;
+}
+
+.subCategoryGridContainer.h-fix {
+  height: 84px;
+  margin-top: 5px;
 }
 
 .subCategoryGridContainer .MuiGrid-spacing-xs-1 {
@@ -63,4 +74,23 @@
 
 .css-df17o1 {
   height: 600px;
+}
+
+
+.subCategoryPaperNew {
+  display: flex;
+  align-items: center;
+  min-height: 65px;
+}
+
+.subCategoryPaperNew .wrap {
+  white-space: wrap;
+}
+
+.subCategoryGridContainer {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.subCategoryGridContainer::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
 }

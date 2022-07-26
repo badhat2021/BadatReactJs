@@ -8,6 +8,7 @@ import {
   checkSkip,
   checkBadatExpiration,
 } from "../Util";
+import ShareIcon from '@mui/icons-material/Share';
 import Divider from "@material-ui/core/Divider";
 import { Drawer, Button, Fab, DialogActions } from "@material-ui/core";
 import { ROUTE_CART, ROUTE_USER_DETAIL, ROUTE_LOGIN } from "../Constant";
@@ -228,7 +229,7 @@ class ProductDetail extends Component {
               className="productDetailShareButtonContainer"
               onClick={() => this.onDrawerClick(true)}
             >
-              Share
+								<ShareIcon />
             </div>
           </div>
           <Divider />

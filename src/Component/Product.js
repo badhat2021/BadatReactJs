@@ -371,8 +371,7 @@ class Product extends Component {
 							onClick={this.handleOpen}
 							style={{ float: "right", color: "orange", fontWeight: "700" }}
 						>
-							<FilterListIcon />
-							Share Result
+							<ShareIcon />
 						</Button>}
 
 						<Button
