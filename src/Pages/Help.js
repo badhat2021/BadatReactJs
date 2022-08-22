@@ -152,7 +152,7 @@ export default function SimpleList() {
           }
           />
         </ListItem>
-      </List>
+      </List> 
       <Divider />
       <List component="nav" aria-label="secondary">
         <ListItem button>
