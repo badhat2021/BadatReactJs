@@ -19,7 +19,7 @@ const CategoryCard = ({ data = [], history }) => {
             <GridListTileBar
               title={                  
                 <div className="categoryIcon">
-                  <Avatar alt="icon" src={tile.icon} />
+                  {/* <Avatar alt="icon" src={tile.icon} /> */}
                 </div>
               }
               subtitle={

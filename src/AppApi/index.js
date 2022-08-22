@@ -162,7 +162,7 @@ export const getSellerDetail = async (id) => {
 
 export const getMyDetail = async () => {
   const TOKEN_live = JSON.parse(localStorage.getItem("badhat_token"));
-  const res = await axios.get("https://badhat.club/api/userProfile", {
+  const res = await axios.get("https://badhat.in/api/userProfile", {
     headers: {
       Authorization: "Bearer " + TOKEN_live,
     },
@@ -431,7 +431,7 @@ export const markAsRead = async () => {
 };
 
 export const getMyProducts = async () => {
-  const res = await axios.get("https://badhat.club/api/products", {
+  const res = await axios.get("https://badhat.in/api/products", {
     headers: {
       Authorization: "Bearer " + TOKEN,
     },

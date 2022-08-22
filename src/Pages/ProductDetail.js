@@ -524,7 +524,7 @@ class ProductDetail extends Component {
                   }
                 }}
               >
-                Order Now
+                Book Now
               </Button>
             </div>
           </div>

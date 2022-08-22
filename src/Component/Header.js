@@ -398,6 +398,9 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
                   My Products
                 </MenuItem>
               )}
+               <MenuItem key="sell" >
+                Sell Item
+              </MenuItem>
               <MenuItem key="logOut" onClick={() => onLogoutClickHandle()}>
                 Logout
               </MenuItem>

@@ -244,7 +244,7 @@ class ProductCard extends Component {
               style={{ height: "100%", backgroundColor: "rgb(255 , 111 , 0)" }}
             >
               <span style={{ fontSize: "xx-small" }}>
-                <b>Order Now</b>
+                <b>Book Now</b>
               </span>
             </Button>
           </div>
