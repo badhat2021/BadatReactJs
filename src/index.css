@@ -117,3 +117,6 @@ code {
 .overflow-hidden {
   overflow: hidden;
 }
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+  background-color: #29ac29 !important;
+}

@@ -349,8 +349,92 @@ class Register extends Component {
                 </span>
               ) : null}
             </div>
-            
-            
+            <div className="loginFormField">
+              <TextField
+                fullWidth
+                required
+                select
+                defaultValue={this.state.user}
+                name="user"
+                label="You are a"
+                variant="outlined"
+                onChange={this.onChangeHandle}
+              >
+                <MenuItem key={"Retail"} value={"Retail"}>
+                  {"Retail"}
+                </MenuItem>
+                <MenuItem key={"Distributer"} value={"Distributer"}>
+                  {"Distributer"}
+                </MenuItem>
+                <MenuItem key={"Stockist"} value={"Stockist"}>
+                  {"Stockist"}
+                </MenuItem>
+                <MenuItem key={"Manufacturer"} value={"Manufacturer"}>
+                  {"Manufacturer"}
+                </MenuItem>
+                <MenuItem key={"Wholeseller"} value={"Wholeseller"}>
+                  {"Wholeseller"}
+                </MenuItem>
+                <MenuItem key={"Agent"} value={"Agent"}>
+                  {"Agent"}
+                </MenuItem>
+                <MenuItem key={"Brand"} value={"Brand"}>
+                  {"Brand"}
+                </MenuItem>
+                <MenuItem key={"Supplier"} value={"Supplier"}>
+                  {"Supplier"}
+                </MenuItem>
+                <MenuItem key={"OnlineSeller"} value={"OnlineSeller"}>
+                  {"Online Seller"}
+                </MenuItem>
+                <MenuItem key={"Reseller"} value={"Reseller"}>
+                  {"Reseller"}
+                </MenuItem>
+              </TextField>
+              {this.state.userError ? (
+                <span
+                  style={{
+                    color: "red",
+                    fontSize: "x-small",
+                    fontWeight: "700",
+                  }}
+                >
+                  {this.state.errorMessage}
+                </span>
+              ) : null}
+            </div>
+            <div className="loginFormField">
+              <TextField
+                fullWidth
+                required
+                select
+                defaultValue={this.state.bussinessDomain}
+                name="bussinessDomain"
+                label="Bussiness Domain"
+                variant="outlined"
+                onChange={this.onChangeHandle}
+              >
+                {this.state.bussinessDomainData &&
+                this.state.bussinessDomainData.length > 0
+                  ? this.state.bussinessDomainData.map((res) => (
+                      <MenuItem key={res.id} value={res.id}>
+                        {res.name}
+                      </MenuItem>
+                    ))
+                  : null}
+              </TextField>
+              {this.state.bussinessDomainError ? (
+                <span
+                  style={{
+                    color: "red",
+                    fontSize: "x-small",
+                    fontWeight: "700",
+                  }}
+                >
+                  {this.state.errorMessage}
+                </span>
+              ) : null}
+            </div>
             <div className="loginFormField">
               <TextField
                 fullWidth
@@ -424,7 +508,38 @@ class Register extends Component {
                 </span>
               ) : null}
             </div>
-            
+            <div className="loginFormField">
+              <TextField
+                fullWidth
+                required
+                select
+                defaultValue={this.state.state}
+                name="state"
+                label="State"
+                variant="outlined"
+                onChange={this.onChangeHandle}
+              >
+                {this.state.stateData && this.state.stateData.length > 0
+                  ? this.state.stateData.map((res) => (
+                      <MenuItem key={res} value={res}>
+                        {res}
+                      </MenuItem>
+                    ))
+                  : null}
+              </TextField>
+
+              {this.state.stateError ? (
+                <span
+                  style={{
+                    color: "red",
+                    fontSize: "x-small",
+                    fontWeight: "700",
+                  }}
+                >
+                  {this.state.errorMessage}
+                </span>
+              ) : null}
+            </div>
             {this.state.showDistrict ? (
               <div className="loginFormField">
                 <TextField
@@ -458,7 +573,49 @@ class Register extends Component {
                 ) : null}
               </div>
             ) : null}
-            
+            <div className="loginFormField">
+              <TextField
+                name="started_since"
+                variant="outlined"
+                type="number"
+                select
+                defaultValue={this.state.started_since}
+                onChange={this.onChangeHandle}
+                fullWidth
+                id="started_since"
+                label="Business started in"
+              >
+                {yearsData.map((value) => (
+                  <MenuItem key={value} value={value}>
+                    {value}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+            <div className="loginFormField">
+              <TextField
+                fullWidth
+                defaultValue={this.state.about_us}
+                multiline
+                rows={3}
+                name="about_us"
+                type="text"
+                label="About us"
+                variant="outlined"
+                onChange={this.onChangeHandle}
+              />
+            </div>
+            <div className="loginFormField">
+              <TextField
+                fullWidth
+                defaultValue={this.state.minimum_order_size}
+                name="minimum_order_size"
+                type="number"
+                label="Minimum Order Size (Rs.)"
+                variant="outlined"
+                onChange={this.onChangeHandle}
+              />
+            </div>
 
             {!["Retail", "OnlineSeller", "Reseller"].includes(
               this.state.user

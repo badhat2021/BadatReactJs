@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import LoadingOverlay from "react-loading-overlay";
 import SliderCategory from "../Component/SliderCategory";
+import SliderCategoryNew from "../Component/SliderCategoryNew";
 import { getVerticalCategory, getProducts, getDistrict } from "../AppApi";
 import { Paper, Fab } from "@material-ui/core";
 import { Helmet } from "react-helmet";
@@ -14,6 +15,7 @@ import {
 	Drawer,
 	Button,
 } from "@material-ui/core";
+import ShareIcon from '@mui/icons-material/Share';
 import Modal from '@material-ui/core/Modal';
 
 import {
@@ -175,8 +177,8 @@ class VerticleCategory extends Component {
 		this.props.history.push(`/${ROUTE_ALL_PRODUCT}/${tempString}`);
 	};
 
-	onClickCategoryHandle = async (id) => {
-		this.props.history.push(`/${ROUTE_SUBCATEGORIES}/${id}`);
+	onClickCategoryHandle = async (id, query) => {
+		this.props.history.push(`/${ROUTE_SUBCATEGORIES}/${id}?cat=${query}`);
 	};
 
 	pageChangeCallback = async (id) => {
@@ -400,12 +402,12 @@ class VerticleCategory extends Component {
 					<title>
 						{this.state.productData && this.state.productData.length > 0
 							? this.state.productData[0].subcategory.name
-							: "Badhat"}
+							: "Zulk"}
 					</title>
 					<meta name="keywords" content="badhat,badat,badhat.app" />
 					<meta
 						name="description"
-						content="Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
+						content="Zulk is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
 					/>
 					<link
 						rel="stylesheet"
@@ -451,7 +453,10 @@ class VerticleCategory extends Component {
 				</Fab>
 				<div className="verticleCategoryContainer">
 					<div className="categoryCardContainer_VerticleCategory">
-						<SliderCategory
+						{/* <SliderCategory
+							onClickCategoryHandle={this.onClickCategoryHandle}
+						/> */}
+						<SliderCategoryNew
 							onClickCategoryHandle={this.onClickCategoryHandle}
 						/>
 					</div>
@@ -513,8 +518,8 @@ class VerticleCategory extends Component {
 							onClick={this.handleOpen}
 							style={{ float: "right", color: "orange", fontWeight: "700" }}
 						>
-							<FilterListIcon />
-							Share Result
+							<ShareIcon />
+							
 						</Button>}
 									<Button
 										onClick={() => this.onDrawerClick(true)}

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import LoadingOverlay from "react-loading-overlay";
 import SliderCategory from "../Component/SliderCategory";
+import SliderCategoryNew from "../Component/SliderCategoryNew";
 import {
 	getProducts,
 	getSubCategory,
@@ -12,6 +13,7 @@ import {
 
 import { Helmet } from "react-helmet";
 import { Drawer, Fab } from "@material-ui/core";
+import ShareIcon from '@mui/icons-material/Share';
 import {
 	ROUTE_SUBCATEGORIES,
 	ENDPOINT_GET_VERTICALS_BANNER,
@@ -357,8 +359,8 @@ class AllProductPage extends Component {
 		});
 
 	};
-	onClickCategoryHandle = async (id) => {
-		this.props.history.push(`/${ROUTE_SUBCATEGORIES}/${id}`);
+	onClickCategoryHandle = async (id, query) => {
+		this.props.history.push(`/${ROUTE_SUBCATEGORIES}/${id}?cat=${query}`);
 	};
 
 	onFilterChangeHandle = async (e) => {
@@ -491,13 +493,13 @@ class AllProductPage extends Component {
 								this.state.productData[0].subcategory.name) ||
 							(this.state.productData[0].category &&
 								this.state.productData[0].category.name) ||
-							"Badhat"
-							: "Badhat"}
+							"Zulk"
+							: "Zulk"}
 					</title>
 					<meta name="keywords" content="badhat,badat,badhat.app" />
 					<meta
 						name="description"
-						content="Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
+						content="Zulk is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
 					/>
 					<link
 						rel="stylesheet"
@@ -567,9 +569,13 @@ class AllProductPage extends Component {
 
 				<div className="AllProductPageContainer">
 					<div className="AllProductPageCategoryCardContainer">
-						<SliderCategory
+						{/* <SliderCategory
 							onClickCategoryHandle={this.onClickCategoryHandle}
-						/>
+						/> */}
+
+						<SliderCategoryNew
+              				onClickCategoryHandle={this.onClickCategoryHandle}
+            			/>
 					</div>
 					<div className="AllProductPageProductCardContainer">
 						<div className="BreadcrumAndShareButtonContainer">
@@ -598,7 +604,7 @@ class AllProductPage extends Component {
 								onClick={() => this.onShareDrawerClick(true)}
 								style={{ textAlign: "right" }}
 							>
-								Share Result
+								<ShareIcon />
 							</div>
 						</div>
 						<>

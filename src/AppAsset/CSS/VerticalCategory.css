@@ -36,6 +36,18 @@
     overflow-x: auto;
     height: 100px;
   }
+
+  .verticleCategoryGridContainer_Less_item.h-fix {
+    flex-direction: column;
+    height: 84px;
+    margin-top: 5px;
+  }
+  
+  .verticleCategoryGridContainer.h-fix {
+    height: 54px;
+    margin-top: 5px;
+  }
+  
   
   .verticleCategoryGridContainer .MuiGrid-spacing-xs-1 {
     width: 100% !important;
@@ -47,7 +59,12 @@
     left: 50%;
     transform: translate(-50%, -50%);*/
     white-space: nowrap;
-    padding: 10px;
+    padding: 10px 20px;
+    border: 1px solid rgb(220, 220, 220);
+    border-radius: 35px;
+    color: #212121;
+    font-size: 14px;
+    font-weight: 400;
   }
   
   @media screen and (max-width: 700px) {
@@ -55,10 +72,24 @@
       display: none;
     }
     .verticleCategorySliderCard {
-      width: 38%;
+      width: fit-content;
     }
   }
   
   .css-df17o1 {
     height: 600px;
+  }
+
+  .verticleCategoryPaperNew {
+      display: flex;
+      align-items: center;
+      /* min-height: 65px; */
+  }
+
+  .verticleCategoryGridContainer {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .verticleCategoryGridContainer::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
   }

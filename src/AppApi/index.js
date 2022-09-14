@@ -213,7 +213,7 @@ export const getBanner = async (endpoint, id) => {
 
 export const getTruecallerResponse = async (id) => {
   const res = await axios.get(
-    "https://badhat.club/api/truecaller-response/" + id
+    "https://badhat.in/api/truecaller-response/" + id
   );
   return res.data;
 };
@@ -289,7 +289,7 @@ export const updateProfile = async (dataset, file) => {
 
   var config = {
     method: "post",
-    url: "https://badhat.club/api/updateProfile",
+    url: "https://badhat.in/api/updateProfile",
     headers: {
       Authorization: "Bearer " + TOKEN,
       "content-type": "multipart/form-data",
@@ -342,7 +342,7 @@ export const addProduct = async (dataset, files) => {
 
   var config = {
     method: "post",
-    url: "https://badhat.club/api/addProduct",
+    url: "https://badhat.in/api/addProduct",
     headers: {
       Authorization: "Bearer " + TOKEN,
       "content-type": "multipart/form-data",
@@ -385,7 +385,7 @@ export const editProduct = async (dataset, files) => {
 
   var config = {
     method: "post",
-    url: "https://badhat.club/api/editProduct",
+    url: "https://badhat.in/api/editProduct",
     headers: {
       Authorization: "Bearer " + TOKEN,
       "content-type": "multipart/form-data",
@@ -405,7 +405,7 @@ export const editProduct = async (dataset, files) => {
 };
 
 export const getNotifications = async () => {
-  const res = await axios.get("https://badhat.club/api/notifications", {
+  const res = await axios.get("https://badhat.in/api/notifications", {
     headers: {
       Authorization: "Bearer " + TOKEN,
     },
@@ -414,7 +414,7 @@ export const getNotifications = async () => {
 };
 
 export const getAppState = async () => {
-  const res = await axios.get("https://badhat.club/api/appState", {
+  const res = await axios.get("https://badhat.in/api/appState", {
     headers: {
       Authorization: "Bearer " + TOKEN,
     },
@@ -423,7 +423,7 @@ export const getAppState = async () => {
 };
 
 export const markAsRead = async () => {
-  const res = await axios.get("https://badhat.club/api/markAllRead", {
+  const res = await axios.get("https://badhat.in/api/markAllRead", {
     headers: {
       Authorization: "Bearer " + TOKEN,
     },
@@ -440,7 +440,7 @@ export const getMyProducts = async () => {
 };
 
 export const delProduct = async (id) => {
-  const res = await axios.delete(`https://badhat.club/api/product/${id}`, {
+  const res = await axios.delete(`https://badhat.in/api/product/${id}`, {
     headers: {
       Authorization: "Bearer " + TOKEN,
     },
@@ -450,7 +450,7 @@ export const delProduct = async (id) => {
 
 export const delProductImg = async (prd_id, img_id) => {
   const res = await axios.delete(
-    `https://badhat.club/api/products/${prd_id}/images/${img_id}`,
+    `https://badhat.in/api/products/${prd_id}/images/${img_id}`,
     {
       headers: {
         Authorization: "Bearer " + TOKEN,
@@ -478,7 +478,7 @@ export const postMessage = async (dataset) => {
 
   var config = {
     method: "post",
-    url: "https://badhat.club/api/addChat",
+    url: "https://badhat.in/api/addChat",
     headers: {
       Authorization: "Bearer " + TOKEN,
       "content-type": "multipart/form-data",

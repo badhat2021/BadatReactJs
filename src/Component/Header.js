@@ -27,7 +27,7 @@ import DehazeIcon from "@material-ui/icons/Dehaze";
 import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
 // import SystemUpdateOutlinedIcon from "@material-ui/icons/SystemUpdateOutlined";
 // import { Button } from "@material-ui/core";
-import Logo from "../AppAsset/Badhat App Icon.jpg";
+import Logo from "../AppAsset/zulk.jpg";
 import { ROUTE_CART, ROUTE_ALL_PRODUCT, ROUTE_LOGIN } from "../Constant";
 import "../AppAsset/CSS/Header.css";
 import { getAppState, getMyProducts, markAsRead } from "../AppApi";
@@ -275,7 +275,7 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
           </div>
         </IconButton>
         <Typography className={classes.title} variant="h5" noWrap>
-          Badhat
+        Zulk
         </Typography>
         <div className={classes.search}>
           <Paper component="form" className={classes.root}>
@@ -398,7 +398,7 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
                   My Products
                 </MenuItem>
               )}
-               <MenuItem key="sell" >
+               <MenuItem key="sell" onClick={()=>{history.push("/products/new")}} >
                 Sell Item
               </MenuItem>
               <MenuItem key="logOut" onClick={() => onLogoutClickHandle()}>

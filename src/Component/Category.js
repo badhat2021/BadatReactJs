@@ -30,10 +30,11 @@ class Category extends Component {
   };
 
   render() {
+    console.log("fffff",this.props.categoryData)
     return (
       <LoadingOverlay active={this.state.load} spinner text="Loading...">
         <div className="categoryContainer">
-          <div className="categoryTitle">{BROWSE_CATEGORY}</div>
+          <div className="categoryTitle">{BROWSE_CATEGORY }</div>
           <div className="categoryCardContainer">
             {this.props.categoryData && this.props.categoryData.length ? (
               <CategoryCard data={this.props.categoryData} />
