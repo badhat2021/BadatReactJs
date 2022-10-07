@@ -537,7 +537,7 @@ class VerticleCategory extends Component {
 												style={{ backgroundColor: "#fff", cursor: "pointer", borderRadius: "6px" }}
 												variant="outlined"
 											>
-												<img src={"https://firebasestorage.googleapis.com/v0/b/badhat-storage.appspot.com/o/CateoryImages%2Fbags_banner.jpg?alt=media&token=b9c8b353-5cef-404d-aa6b-ad070a9897ea"} alt="" style={{ height: "50px", width: "50px", float: "left", marginTop: "10px", marginLeft: "4px", borderRadius: "8px" }} />
+												{/* <img src={"https://firebasestorage.googleapis.com/v0/b/badhat-storage.appspot.com/o/CateoryImages%2Fbags_banner.jpg?alt=media&token=b9c8b353-5cef-404d-aa6b-ad070a9897ea"} alt="" style={{ height: "50px", width: "50px", float: "left", marginTop: "10px", marginLeft: "4px", borderRadius: "8px" }} /> */}
 												<div className="sliderCardSubCategoryName wrap">
 													{res.name}
 												</div>
