@@ -163,3 +163,56 @@ export const checkBadatExpiration = () => {
 export const handleLogout = () => {
   localStorage.removeItem("badhat_token");
 };
+
+
+export const getSelectNameSub = (catId) => {
+  if (catId === 1) {
+    return "Grocery & Household"
+  } else if (catId === 2) {
+    return "Clothing"
+  } else if (catId === 3) {
+    return "Bags & Luggage"
+  } else if (catId === 4) {
+    return "Stationery, Office & Packaging"
+  } else if (catId === 6) {
+    return "Mobile & Accessory"
+  } else if (catId === 7) {
+    return "Kitchen & Appliance"
+  } else if (catId === 8) {
+    return "Footwear"
+  } else if (catId === 11) {
+    return "Electronics"
+  } else if (catId === 12) {
+    return "Computer & Peripherals"
+  } else if (catId === 14) {
+    return "Sports"
+  } else {
+    return "Please Select"
+  }  
+}
+
+export const getCatId = (slectName) => {
+  if (slectName === "Grocery & Household") {
+    return 1
+  } else if (slectName === "Clothing") {
+    return 2
+  } else if (slectName === "Bags & Luggage") {
+    return 3
+  } else if (slectName === "Stationery, Office & Packaging") {
+    return 4
+  } else if (slectName === "Mobile & Accessory") {
+    return 6
+  } else if (slectName === "Kitchen & Appliance") {
+    return 7
+  } else if (slectName === "Footwear") {
+    return 8
+  } else if (slectName === "Electronics") {
+    return 11
+  } else if (slectName === "Computer & Peripherals") {
+    return 12
+  } else if (slectName === "Sports") {
+    return 14
+  } else {
+    return 1
+  }  
+}

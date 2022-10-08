@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import policy from "../AppAsset/BadatPolicy.pdf";
+import policy from "../AppAsset/ZulkPolicy.pdf";
 import LoadingOverlay from "react-loading-overlay";
 
 export default class PrivacyPolicy extends Component {

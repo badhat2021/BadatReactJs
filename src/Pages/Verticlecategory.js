@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import LoadingOverlay from "react-loading-overlay";
 import SliderCategory from "../Component/SliderCategory";
-import { getVerticalCategory, getProducts, getDistrict } from "../AppApi";
+import SliderCategoryNew from "../Component/SliderCategoryNew";
+import { getVerticalCategory, getProducts, getDistrict, getSubCategory } from "../AppApi";
 import { Paper, Fab } from "@material-ui/core";
 import { Helmet } from "react-helmet";
 import ProductCard from "../Component/ProductCard";
@@ -14,6 +15,7 @@ import {
 	Drawer,
 	Button,
 } from "@material-ui/core";
+import ShareIcon from '@mui/icons-material/Share';
 import Modal from '@material-ui/core/Modal';
 
 import {
@@ -44,6 +46,7 @@ import {
 	ROUTE_SUBCATEGORIES,
 	ROUTE_ALL_PRODUCT,
 	ENDPOINT_GET_SUB_CATEGORIES_BANNER,
+	ROUTE_VERTICLE_CATEGORIES,
 } from "../Constant";
 import Product from "../Component/Product";
 import Banners from "../Component/Banners";
@@ -52,11 +55,14 @@ import {
 	checkSkip,
 	checkLogin,
 	checkBadatExpiration,
+	getCatId,
+	getSelectNameSub,
 } from "../Util";
 import "../AppAsset/CSS/VerticalCategory.css";
 import Footer from "../Component/Footer";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
+// const query = window.location.href?.split("cat=")[1]
 const MenuProps = {
 	PaperProps: {
 		style: {
@@ -91,27 +97,69 @@ class VerticleCategory extends Component {
 			dataList: '',
 			type: 'verticalCategory',
 			openProductList: false,
-
+			subcategoryList: [],
+			catId: window.location.href?.split("cat=")[1]?.split("%20")?.join(" ")
 		};
 		this.handlePageClick = this.handlePageClick.bind(this);
 
 	}
 
+	// componentDidUpdate = async (prevProps) => {
+	// 	const id = window.location.href.slice(
+	// 		window.location.href.lastIndexOf("/") + 1
+	// 	);
+	// 	// const response = await getSubCategory(1)
+	// 	const res = await getVerticalCategory(id);
+	// 	this.setState({ load: false, data: res.data.data });
+	// 	const params = {
+	// 		subcategory_id: id,
+	// 		page: 1,
+	// 	};
+
+	// 	// console.log(response);
+
+	// 	this.setState({ load: true, params });
+	// 	const prod = await getProducts(params);
+	// 	const tempState = await getState();
+	// 	this.setState({
+	// 		load: false,
+	// 		// subcategoryList: response.data.data,
+	// 		data: res.data.data,
+	// 		// productData: prod.data.data.data,
+	// 		stateData: (tempState && tempState) || [],
+	// 		productData: (prod.data && prod.data.data) || prod.data.data || {},
+	// 	});
+	// 	total_pages = this.state.productData && this.state.productData.last_page
+	// 	if (this.state.productData && this.state.productData.data.length) {
+	// 		let lists = [...this.state.dataList, ...this.state.productData.data]
+	// 		this.setState({ dataList: lists })
+
+	// 		this.receivedData();
+
+	// 	}
+	//   };
+
 	componentDidMount = async () => {
 		const id = window.location.href.slice(
 			window.location.href.lastIndexOf("/") + 1
 		);
+		const catId = getCatId(this.state.catId)
+		const response = await getSubCategory(catId)
 		const res = await getVerticalCategory(id);
 		this.setState({ load: false, data: res.data.data });
 		const params = {
 			subcategory_id: id,
 			page: 1,
 		};
+
+		console.log(response);
+
 		this.setState({ load: true, params });
 		const prod = await getProducts(params);
 		const tempState = await getState();
 		this.setState({
 			load: false,
+			subcategoryList: response.data.data,
 			data: res.data.data,
 			// productData: prod.data.data.data,
 			stateData: (tempState && tempState) || [],
@@ -170,13 +218,26 @@ class VerticleCategory extends Component {
 
 		})
 	}
-	onClickHandle = (id) => {
+	onClickHandle = (id, q) => {
+		const query = q?.split("cat=")[1];
+		console.log(query);
 		const tempString = `vertical=${id}&`;
-		this.props.history.push(`/${ROUTE_ALL_PRODUCT}/${tempString}`);
+		this.props.history.push(`/${ROUTE_ALL_PRODUCT}/${tempString}cat=${query}`);
 	};
 
-	onClickCategoryHandle = async (id) => {
-		this.props.history.push(`/${ROUTE_SUBCATEGORIES}/${id}`);
+
+	onClickSubCatHandle = (id, catId) => {
+		const query = getSelectNameSub(catId) 
+		// const catIdUrl = getCatId(this.state.catId)
+		// console.log(catId, "cccc");
+
+		// console.log(this.state.catId);
+		this.props.history.push(`/${ROUTE_VERTICLE_CATEGORIES}/${id}?cat=${query}`);
+		window.location.reload()
+	  };
+
+	onClickCategoryHandle = async (id, query) => {
+		this.props.history.push(`/${ROUTE_SUBCATEGORIES}/${id}?cat=${query}`);
 	};
 
 	pageChangeCallback = async (id) => {
@@ -385,6 +446,7 @@ class VerticleCategory extends Component {
 		) {
 			//loginPopUp(this.props.history);
 		}
+		console.log(window.location.href?.split("cat=")[1]?.split("%20")?.join(" "), "id cat");
 		return (
 			<LoadingOverlay active={this.state.load} spinner text="Loading...">
 				<Helmet>
@@ -440,12 +502,53 @@ class VerticleCategory extends Component {
 				>
 					Open App
 				</Fab>
+
+
+
 				<div className="verticleCategoryContainer">
 					<div className="categoryCardContainer_VerticleCategory">
-						<SliderCategory
+						{/* <SliderCategory
+							onClickCategoryHandle={this.onClickCategoryHandle}
+						/> */}
+						<SliderCategoryNew
 							onClickCategoryHandle={this.onClickCategoryHandle}
 						/>
 					</div>
+
+					{this.state.subcategoryList && this.state.subcategoryList.length > 0 ? (
+						<div className="selectedSubCategory">
+							<div
+								className={
+									this.state.subcategoryList && this.state.subcategoryList.length > 5
+										? "subCategoryGridContainer h-fix"
+										: "subCategoryGridContainer_Less_item h-fix"
+								}
+								style={{height: "77px"}}
+							>
+								{this.state.subcategoryList && this.state.subcategoryList.length > 0
+									? this.state.subcategoryList.map((res) => (
+										<div
+											className="subCategorySliderCard"
+											key={res.id}
+											onClick={() => this.onClickSubCatHandle(res.id, res.category_id)}
+										>
+											<Paper
+												className="subCategoryPaperNew"
+												style={{ backgroundColor: "#fff", cursor: "pointer", borderRadius: "6px" }}
+												variant="outlined"
+											>
+												{/* <img src={"https://firebasestorage.googleapis.com/v0/b/badhat-storage.appspot.com/o/CateoryImages%2Fbags_banner.jpg?alt=media&token=b9c8b353-5cef-404d-aa6b-ad070a9897ea"} alt="" style={{ height: "50px", width: "50px", float: "left", marginTop: "10px", marginLeft: "4px", borderRadius: "8px" }} /> */}
+												<div className="sliderCardSubCategoryName wrap">
+													{res.name}
+												</div>
+											</Paper>
+										</div>
+									))
+									: "no data found"}
+							</div>
+						</div>
+					) : null}
+
 					<div className="selectedVerticleCategory">
 						<div>
 							{this.state.productData &&
@@ -465,8 +568,8 @@ class VerticleCategory extends Component {
 							<div
 								className={
 									this.state.data && this.state.data.length < 5
-										? "verticleCategoryGridContainer_Less_item"
-										: "verticleCategoryGridContainer"
+										? "verticleCategoryGridContainer_Less_item h-fix"
+										: "verticleCategoryGridContainer h-fix"
 								}
 							>
 								{this.state.data && this.state.data.length > 0
@@ -474,13 +577,19 @@ class VerticleCategory extends Component {
 										<div
 											className="verticleCategorySliderCard"
 											key={res.id}
-											onClick={() => this.onClickHandle(res.id)}
+											onClick={() => this.onClickHandle(res.id, this.props.history.location.search)}
 										>
-											<Paper className="verticleCategoryPaper" elevation={5}>
+											<div className="verticleCategoryPaperNew" style={{ backgroundColor: "#fff", cursor: "pointer" }}>
 												<div className="sliderCardVerticleCategoryName">
 													{res.name}
 												</div>
-											</Paper>
+											</div>
+											{/* <Paper className="verticleCategoryPaperNew" style={{ backgroundColor: "#fff", cursor: "pointer" }} elevation={5}>
+											<img src={"https://firebasestorage.googleapis.com/v0/b/badhat-storage.appspot.com/o/CateoryImages%2Fbags_banner.jpg?alt=media&token=b9c8b353-5cef-404d-aa6b-ad070a9897ea"} alt="" style={{height:"50px", width: "50px", float:"left", marginTop:"10px", marginLeft:"4px", borderRadius: "8px"}} />
+												<div className="sliderCardVerticleCategoryName">
+													{res.name}
+												</div>
+											</Paper> */}
 										</div>
 									))
 									: null}
@@ -504,8 +613,7 @@ class VerticleCategory extends Component {
 										onClick={this.handleOpen}
 										y style={{ float: "right", color: "orange", fontWeight: "700" }}
 									>
-										<FilterListIcon />
-										Share Result
+										<ShareIcon />
 									</Button>}
 									<Button
 										onClick={() => this.onDrawerClick(true)}

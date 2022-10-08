@@ -10,6 +10,7 @@ import {
   Divider,
   Typography,
 } from "@material-ui/core";
+import AddIcon from '@mui/icons-material/Add';
 import { addToCartApi } from "../AppApi";
 import { checkLogin } from "../Util";
 import { ROUTE_CART, ROUTE_PRODUCT_DETAIL, ROUTE_LOGIN } from "../Constant";
@@ -27,6 +28,7 @@ class ProductCard extends Component {
       open: false,
       showButton: false,
       button: "cart", // 'order'
+      baseUrl: window.location.origin
     };
   }
 
@@ -122,6 +124,10 @@ class ProductCard extends Component {
     this.setState({ open: false, showButton: false });
   };
 
+  urlOpenHandler = (url) => {
+    window.open(`https://api.whatsapp.com/send?phone=918750317898&text=What%20is%20Wholesale%20Rate%20for%20${url}%20%20for%20a%20Quantity:%20`, '_blank').focus();
+  }
+
   render() {
     return (
       <div className="productCardContainer" key={this.props.data.id}>
@@ -132,85 +138,148 @@ class ProductCard extends Component {
           <img
             src={
               this.props.data &&
-              this.props.data.images &&
-              this.props.data.images.length > 0 &&
-              this.props.data.images[0].thumbnail
+                this.props.data.images &&
+                this.props.data.images.length > 0 &&
+                this.props.data.images[0].thumbnail
                 ? this.props.data.images[0].thumbnail
                 : "../../default-img.png"
             }
             alt={this.props.data.name}
             width="100%"
             height="100%"
-            style={{ borderRadius: "10px", objectFit: "cover" }}
+            style={{ borderRadius: "10px", objectFit: "contain" }}
           />
         </div>
 
-        <div
-          className="productCardDetail"
-          onClick={() => this.onProductClickHandle(this.props.data.id)}
-        >
-          <div className="productDetailName">{this.props.data.name}</div>
-          <div className="productDetailMoq1">
-          Wholesale Rate: Rs {this.props.data.price}
+        <div className="right-section">
+          <div className="productDetailName"
+          onClick={() => this.onProductClickHandle(this.props.data.id)}>{this.props.data.name}</div>
+
+          <div className="second-row" 
+          onClick={() => this.onProductClickHandle(this.props.data.id)}>
+
+            {
+              this.props.data.price ?
+                <div className="productDetailMoq1">
+                  Wholesale Rate: {this.props.data.price}
+                </div> : <div className="productDetailMoq1 visible-hide">Wholesale Rate: 0</div>
+            }
+
+
+            {
+              this.props.data.price ? this.props.data.mrp_price ?
+                <p className="margin-wrapper"> Margin: <span className="margin-text">{(((this.props.data.mrp_price * 100) / this.props.data.price) - 100).toFixed(0)}%</span></p>
+                : "" : ""
+            }
           </div>
-          {this.props.data &&
-          this.props.data.mrp_price &&
-          this.props.data.mrp_price > 0 ? (
-            <div className="productDetailPrice">
-              MRP:Rs {this.props.data.mrp_price}
-            </div>
-          ) : (
-            ""
-          )}
-          {this.props.data && this.props.data.moq && this.props.data.moq > 0 ? (
-            <div className="productDetailPrice">
-              MOQ : {this.props.data.moq}
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
-        <div className="productCardButton">
-          <div className="productCardButtons">
-            <Button
-              fullWidth
-              variant="contained"
-              color="secondary"
-              onClick={() => {
-                if (
-                  this.props.data &&
-                  this.props.data.user &&
-                  (this.props.data.user.delivery_policy ||
-                    this.props.data.user.discount_upto ||
-                    this.props.data.user.payment_policy ||
-                    this.props.data.user.return_policy)
-                ) {
-                  this.setState({
-                    open: true,
-                    showButton: true,
-                    button: "cart",
-                  });
-                } else {
-                  this.setState({ open: false, showButton: false });
-                  this.addToCartHandle(
-                    this.props.data.user_id,
-                    this.props.data.id,
-                    this.props.data.moq
-                  );
-                }
-              }}
-              style={{
-                height: "100%",
-                backgroundColor: "rgb(300, 250, 250)",
-                color: "black",
-              }}
-            >
-              <span style={{ fontSize: "xx-small" }}>
-                <b>Add to cart</b>
-              </span>
-            </Button>
-          </div>
-          <div className="productCardButtons">
+
+          <div className="third-row">
+            {this.props.data &&
+              this.props.data.mrp_price &&
+              this.props.data.mrp_price > 0 ? (
+              <div className="productDetailPrice"
+              onClick={() => this.onProductClickHandle(this.props.data.id)}>
+                MRP: {this.props.data.mrp_price}
+                {/* Rs {this.props.data.mrp_price} */}
+              </div>
+            ) : (
+              <div className="dummy-moq"
+              onClick={() => this.onProductClickHandle(this.props.data.id)}>NANANANANANANA</div>
+            )}
+            {/* {this.props.data && this.props.data.moq && this.props.data.moq > 0 ? (
+              <div className="productDetailPrice">
+                MOQ : {this.props.data.moq}
+              </div>
+            ) : (
+              ""
+            )} */}
+
+            <div>
+              {this.props.data && this.props.data.moq && this.props.data.moq > 0 ? (
+                <div className="productDetailPrice small">
+                  MOQ : {this.props.data.moq}
+                </div>
+              ) : (
+                <div className="productDetailPrice small">
+                  MOQ : 1
+                </div>
+              )}
+
+              {
+                this.props.data.price ?
+                  <div className="productCardButtons">
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => {
+                        if (
+                          this.props.data &&
+                          this.props.data.user &&
+                          (this.props.data.user.delivery_policy ||
+                            this.props.data.user.discount_upto ||
+                            this.props.data.user.payment_policy ||
+                            this.props.data.user.return_policy)
+                        ) {
+                          this.setState({
+                            open: true,
+                            showButton: true,
+                            button: "cart",
+                          });
+                        } else {
+                          this.setState({ open: false, showButton: false });
+                          this.addToCartHandle(
+                            this.props.data.user_id,
+                            this.props.data.id,
+                            this.props.data.moq
+                          );
+                        }
+                      }}
+                      style={{
+                        height: "100%",
+                        backgroundColor: "rgb(255, 255, 255)",
+                        borderColor: "rgb(204, 204, 204)",
+                        color: "black",
+                        paddingLeft: "12px",
+                        paddingRight: "7px",
+                        textTransform: "capitalize"
+                      }}
+                    >
+                      <span style={{ fontSize: "10px", marginTop: "3px", marginRight: "6px", color: "#212121" }}>
+                        <b> Add to cart </b>
+                      </span>
+                      {
+                        this.props.data.price ? <AddIcon fontSize="small" style={{ color: "#212121" }} /> : ""
+                      }
+                    </Button>
+                  </div>
+                  :
+
+                  <div className="productCardButtons">
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => this.urlOpenHandler(`${this.state.baseUrl}/product/${this.props.data.id}`)}
+                      style={{
+                        height: "100%",
+                        backgroundColor: "rgb(255, 255, 255)",
+                        borderColor: "green",
+                        color: "green",
+                        paddingLeft: "12px",
+                        paddingRight: "12px",
+                        textTransform: "capitalize"
+                      }}
+                    >
+                      <span style={{ fontSize: "10px", marginTop: "3px", marginRight: "6px", color: "green" }}>
+                        <b>Price Quote</b>
+                      </span>
+                    </Button>
+                  </div>
+
+              }
+
+              {/* <div className="productCardButtons">
             <Button
               fullWidth
               variant="contained"
@@ -244,11 +313,14 @@ class ProductCard extends Component {
               style={{ height: "100%", backgroundColor: "rgb(255 , 111 , 0)" }}
             >
               <span style={{ fontSize: "xx-small" }}>
-                <b>Order Now</b>
+                <b>Book Now</b>
               </span>
             </Button>
+          </div> */}
+            </div>
           </div>
         </div>
+
         <SimpleDialog
           showButton={this.state.showButton}
           button={this.state.button}

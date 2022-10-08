@@ -70,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
   floatingLabelFocusStyle: {
     color: "Red",
   },
+  
 }));
 
 const AddProductForm = () => {
@@ -406,6 +407,14 @@ const AddProductForm = () => {
                 }
                 label="Active"
               />
+              <Button
+            type="submit"
+            variant="contained"
+            // color="btn btn-success"
+            className={"btn btn-primary"}
+          >
+            Save Product
+          </Button>
             </Grid>
             <Grid item xs={12} sm={6} className={classes.filebtn}>
               <Button
@@ -440,15 +449,9 @@ const AddProductForm = () => {
                 ""
               )}
             </Grid>
+            
           </Grid>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Save Product
-          </Button>
+        
         </form>
       </div>
       <Box mt={5}></Box>

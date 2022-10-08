@@ -190,9 +190,9 @@ export const SimpleDialog = (props) => {
           1. All payment & Delivery terms will be discussed between buyers and
           sellers
         </ListItem>
-        <ListItem>2. Badhat helps in connecting & booking orders only</ListItem>
+        <ListItem>2. Zulk helps in connecting & booking orders only</ListItem>
         <ListItem>
-          3. Badhat does not offer any kind of assurance on products
+          3. Zulk does not offer any kind of assurance on products
         </ListItem>
       </List>
     </Dialog>

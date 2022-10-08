@@ -8,6 +8,7 @@ import {
 	Drawer,
 	Button,
 } from "@material-ui/core";
+import ShareIcon from '@mui/icons-material/Share';
 // import { getCategory, getSubCategory, getVerticalCategory } from "../AppApi";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import NoDataFound from "../Component/NoDataFound";
@@ -383,8 +384,7 @@ this.setState({routPath: true})
 							onClick={this.handleOpen}
 							style={{ float: "right", color: "orange", fontWeight: "700" }}
 						>
-							<FilterListIcon />
-							Share Result
+							<ShareIcon />
 						</Button>}
 
 						<Button
