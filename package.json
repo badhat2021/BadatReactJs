@@ -35,6 +35,7 @@
     "react-toast-notifications": "^2.5.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "serve": "^14.0.1",
     "sweetalert2": "^10.15.5",
     "web-vitals": "^1.1.0"
   },
