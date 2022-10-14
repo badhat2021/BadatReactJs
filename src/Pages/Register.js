@@ -311,8 +311,8 @@ class Register extends Component {
                 label="Mobile Number"
                 variant="outlined"
                 type="number"
-                disabled
-                // onChange={this.onChangeHandle}
+                // disabled
+                onChange={this.onChangeHandle}
               />
               {/* {this.state.mobileerror ? (
                 <span
