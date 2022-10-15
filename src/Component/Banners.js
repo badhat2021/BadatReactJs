@@ -37,7 +37,7 @@ class Banners extends Component {
                   key={index + 1}
                   onClick={() =>
                     window.open(
-                      res.banner_url.replace("badhat.in", "badhat.app")
+                      `https://${res.banner_url}`
                     )
                   }
                 >
