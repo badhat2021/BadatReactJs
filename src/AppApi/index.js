@@ -108,18 +108,22 @@ export const login = async () => {
 };
 
 export const addToCartApi = async (body) => {
+  const TOKEN1 = JSON.parse(localStorage.getItem("badhat_token"));
+
   const res = await axios.post(BASE_URL + ENDPOINT_ADD_TO_CART, body, {
     headers: {
-      Authorization: "Bearer " + TOKEN,
+      Authorization: "Bearer " + TOKEN1,
     },
   });
   return res;
 };
 
 export const getCartData = async () => {
+  const TOKEN1 = JSON.parse(localStorage.getItem("badhat_token"));
+
   const res = await axios.get(BASE_URL + ENDPOINT_GET_CART_DATA, {
     headers: {
-      Authorization: "Bearer " + TOKEN,
+      Authorization: "Bearer " + TOKEN1,
     },
   });
   return res.data.data;
@@ -143,9 +147,11 @@ export const registerUser = async (body) => {
 };
 
 export const placeOrder = async (body) => {
+  const TOKEN1 = JSON.parse(localStorage.getItem("badhat_token"));
+
   const res = await axios.get(BASE_URL + ENDPOINT_PLACE_ORDER, {
     headers: {
-      Authorization: "Bearer " + TOKEN,
+      Authorization: "Bearer " + TOKEN1,
     },
   });
   if (res.status === 200) {
