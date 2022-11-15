@@ -39,3 +39,7 @@ export const ROUTE_REGISTER = "register";
 export const CATEGORY_DATA_REQUEST = "CATEGORY_DATA_REQUEST";
 export const CATEGORY_DATA_SUCCESS = "CATEGORY_DATA_SUCCESS";
 export const CATEGORY_DATA_FAIL = "CATEGORY_DATA_FAIL";
+
+//Hot jar constants
+export const hjid = "3179537";
+export const hjsv = 6;

@@ -8,10 +8,16 @@ import {
   checkSkip,
   checkBadatExpiration,
 } from "../Util";
-import ShareIcon from '@mui/icons-material/Share';
+import ShareIcon from "@mui/icons-material/Share";
 import Divider from "@material-ui/core/Divider";
 import { Drawer, Button, Fab, DialogActions } from "@material-ui/core";
-import { ROUTE_CART, ROUTE_USER_DETAIL, ROUTE_LOGIN } from "../Constant";
+import {
+  ROUTE_CART,
+  ROUTE_USER_DETAIL,
+  ROUTE_LOGIN,
+  hjid,
+  hjsv,
+} from "../Constant";
 import Swal from "sweetalert2";
 import Carousel from "react-material-ui-carousel";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -44,6 +50,7 @@ import {
 } from "react-share";
 
 import "../AppAsset/CSS/ProductDetail.css";
+import { hotjar } from "react-hotjar";
 
 class ProductDetail extends Component {
   constructor() {
@@ -61,6 +68,9 @@ class ProductDetail extends Component {
   }
 
   componentDidMount = async () => {
+    //Code For the hotjar
+    hotjar.initialize(hjid, hjsv);
+    hotjar.event("Product details page Loaded");
     const id = window.location.href.slice(
       window.location.href.lastIndexOf("/") + 1
     );
@@ -229,7 +239,7 @@ class ProductDetail extends Component {
               className="productDetailShareButtonContainer"
               onClick={() => this.onDrawerClick(true)}
             >
-								<ShareIcon />
+              <ShareIcon />
             </div>
           </div>
           <Divider />

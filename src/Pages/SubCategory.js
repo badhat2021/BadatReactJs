@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import LoadingOverlay from "react-loading-overlay";
 import SliderCategory from "../Component/SliderCategory";
 import SliderCategoryNew from "../Component/SliderCategoryNew";
-import { getSelectNameSub } from "../Util/index"
+import { getSelectNameSub } from "../Util/index";
 
 import {
   getSubCategory,
@@ -20,6 +20,8 @@ import {
   ROUTE_VERTICLE_CATEGORIES,
   ENDPOINT_GET_CATEGORIES_BANNER,
   ROUTE_SUBCATEGORIES,
+  hjid,
+  hjsv,
 } from "../Constant";
 import Product from "../Component/Product";
 import Banners from "../Component/Banners";
@@ -30,6 +32,7 @@ import {
   checkBadatExpiration,
 } from "../Util";
 import Footer from "../Component/Footer";
+import { hotjar } from "react-hotjar";
 let last_page;
 class SubCategory extends Component {
   constructor() {
@@ -53,7 +56,7 @@ class SubCategory extends Component {
       districtList: [],
       drawer: false,
       listData: [],
-      type: 'category',
+      type: "category",
       params: { page: 1 },
       verticalDataItem: [],
       openProductList: true,
@@ -70,9 +73,8 @@ class SubCategory extends Component {
         page: 1,
       };
       this.setState({ params });
-      const res = await getSubCategory(id)
+      const res = await getSubCategory(id);
 
-        ;
       const prod = await getProducts(params);
 
       // console.log(prod, res);
@@ -89,6 +91,9 @@ class SubCategory extends Component {
     }
   };
   componentDidMount = async () => {
+    //Code For the hotjar
+    hotjar.initialize(hjid, hjsv);
+    hotjar.event("Home-page Loaded");
     const id = window.location.href.slice(
       window.location.href.lastIndexOf("/") + 1
     );
@@ -98,9 +103,8 @@ class SubCategory extends Component {
       page: 1,
     };
     this.setState({ params });
-    const res = await getSubCategory(id)
+    const res = await getSubCategory(id);
 
-      ;
     const prod = await getProducts(params);
 
     this.setState({
@@ -113,23 +117,20 @@ class SubCategory extends Component {
       //     : [],
       productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
-    this.state.listData.push(this.state.productData.data)
+    this.state.listData.push(this.state.productData.data);
     // this.state.productData.data && this.state.productData.data.length ? this.state.listData.push(this.state.productData.data): ''
-
-
   };
 
   onClickHandle = (id, catId) => {
-    const query = getSelectNameSub(catId)
+    const query = getSelectNameSub(catId);
     this.props.history.push(`/${ROUTE_VERTICLE_CATEGORIES}/${id}?cat=${query}`);
   };
 
   onClickCategoryHandle = async (id, query) => {
     this.props.history.push(`/${ROUTE_SUBCATEGORIES}/${id}?cat=${query}`);
     this.setState({ load: true, data: [] });
-    const res = await getSubCategory(id)
+    const res = await getSubCategory(id);
 
-      ;
     this.setState({
       load: false,
       data: res.data.data,
@@ -141,45 +142,61 @@ class SubCategory extends Component {
 
   onFilterChangeHandle = async (e) => {
     const name = e.target.name;
-    console.log('dataaaaaaaaaaaaaaaaaa', this.state.verticalCategoryList);
+    console.log("dataaaaaaaaaaaaaaaaaa", this.state.verticalCategoryList);
 
     this.setState({
       ...this.state,
       [name]: e.target.value,
     });
-    console.log('namemmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm', e.target.name);
-    typeof value === 'string' ? e.target.value.split(',') : e.target.valuevalue;
+    console.log(
+      "namemmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+      e.target.name
+    );
+    typeof value === "string" ? e.target.value.split(",") : e.target.valuevalue;
     if (e.target.name === "category") {
       const tempSubCategoryList = await getSubCategory(e.target.value);
       this.setState({ subCategoryList: tempSubCategoryList.data.data });
     }
 
     if (e.target.name === "subCategories") {
-      console.log('inside the value', e.target.value)
+      console.log("inside the value", e.target.value);
       let data = e.target.value;
       for (let i = 0; i <= data.length; i++) {
         const tempVerticalData = await getVerticalCategory(data[i]);
-        console.log('temp vvvvvvvvvvvvvvvvvvvvv', tempVerticalData)
+        console.log("temp vvvvvvvvvvvvvvvvvvvvv", tempVerticalData);
         let second = [];
         second = tempVerticalData.data;
         this.setState({
-          verticalDataItem: tempVerticalData.data && tempVerticalData.data
-        })
-        console.log('verticalDataItemverticalDataItem', this.state.verticalDataItem);
+          verticalDataItem: tempVerticalData.data && tempVerticalData.data,
+        });
+        console.log(
+          "verticalDataItemverticalDataItem",
+          this.state.verticalDataItem
+        );
 
-        if (second.message === 'Verticals') {
-          let list = [...this.state.verticalCategoryList, ...this.state.verticalDataItem.data]
-          console.log('list', list)
-          this.setState({ verticalCategoryList: list })
-          console.log('techhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', this.state.verticalCategoryList);
+        if (second.message === "Verticals") {
+          let list = [
+            ...this.state.verticalCategoryList,
+            ...this.state.verticalDataItem.data,
+          ];
+          console.log("list", list);
+          this.setState({ verticalCategoryList: list });
+          console.log(
+            "techhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+            this.state.verticalCategoryList
+          );
           // console.log('secccccccccccccccccccc', second, this.state.verticalCategoryList)
           // 		second && second.message === 'Verticals'? this.state.verticalCategoryList.push(second.data): ''
           // 			console.log('temp values', 	this.state.verticalCategoryList);
-          console.log('techhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', this.state.verticalCategoryList);
-
+          console.log(
+            "techhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+            this.state.verticalCategoryList
+          );
         }
-        console.log('techhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', this.state.verticalCategoryList);
-
+        console.log(
+          "techhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+          this.state.verticalCategoryList
+        );
       }
     }
 
@@ -235,7 +252,6 @@ class SubCategory extends Component {
 
   onFilterSubmit = async (p) => {
     this.setState({ drawer: p });
-
   };
 
   onDrawerClick = (p) => {
@@ -315,9 +331,9 @@ class SubCategory extends Component {
           </div>
           <div>
             {this.state.productData &&
-              this.state.productData.length > 0 &&
-              this.state.productData[0].category &&
-              this.state.productData[0].category.name ? (
+            this.state.productData.length > 0 &&
+            this.state.productData[0].category &&
+            this.state.productData[0].category.name ? (
               <span>{`${this.state.productData[0].category.name}`}</span>
             ) : null}
           </div>
@@ -332,23 +348,29 @@ class SubCategory extends Component {
               >
                 {this.state.data && this.state.data.length > 0
                   ? this.state.data.map((res) => (
-                    <div
-                      className="subCategorySliderCard"
-                      key={res.id}
-                      onClick={() => this.onClickHandle(res.id, res.category_id)}
-                    >
-                      <Paper
-                        className="subCategoryPaperNew"
-                        style={{ backgroundColor: "#fff", cursor: "pointer", borderRadius: "6px" }}
-                        elevation={5}
+                      <div
+                        className="subCategorySliderCard"
+                        key={res.id}
+                        onClick={() =>
+                          this.onClickHandle(res.id, res.category_id)
+                        }
                       >
-                        {/* <img src={"https://firebasestorage.googleapis.com/v0/b/badhat-storage.appspot.com/o/CateoryImages%2Fbags_banner.jpg?alt=media&token=b9c8b353-5cef-404d-aa6b-ad070a9897ea"} alt="" style={{ height: "50px", width: "50px", float: "left", marginTop: "10px", marginLeft: "4px", borderRadius: "8px" }} /> */}
-                        <div className="sliderCardSubCategoryName wrap">
-                          {res.name}
-                        </div>
-                      </Paper>
-                    </div>
-                  ))
+                        <Paper
+                          className="subCategoryPaperNew"
+                          style={{
+                            backgroundColor: "#fff",
+                            cursor: "pointer",
+                            borderRadius: "6px",
+                          }}
+                          elevation={5}
+                        >
+                          {/* <img src={"https://firebasestorage.googleapis.com/v0/b/badhat-storage.appspot.com/o/CateoryImages%2Fbags_banner.jpg?alt=media&token=b9c8b353-5cef-404d-aa6b-ad070a9897ea"} alt="" style={{ height: "50px", width: "50px", float: "left", marginTop: "10px", marginLeft: "4px", borderRadius: "8px" }} /> */}
+                          <div className="sliderCardSubCategoryName wrap">
+                            {res.name}
+                          </div>
+                        </Paper>
+                      </div>
+                    ))
                   : "no data found"}
               </div>
             </div>
