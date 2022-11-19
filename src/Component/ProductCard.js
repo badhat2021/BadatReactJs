@@ -1,23 +1,21 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Divider,
   Typography,
-} from '@material-ui/core';
-import AddIcon from '@mui/icons-material/Add';
-import { addToCartApi } from '../AppApi';
-import { checkLogin } from '../Util';
-import { ROUTE_CART, ROUTE_PRODUCT_DETAIL, ROUTE_LOGIN } from '../Constant';
-import { cartItemCountHandle } from '../AppRedux/Action/CartItemCount';
-import Swal from 'sweetalert2';
-import '../AppAsset/CSS/ProductCard.css';
-// import Login from "./Login";
+} from "@material-ui/core";
+import { addToCartApi } from "../AppApi";
+import { checkLogin } from "../Util";
+import { ROUTE_CART, ROUTE_PRODUCT_DETAIL, ROUTE_LOGIN } from "../Constant";
+import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
+import Swal from "sweetalert2";
+import "../AppAsset/CSS/ProductCard.css";
+import { Button } from "@mui/material";
 
 class ProductCard extends Component {
   constructor(props) {
@@ -27,7 +25,7 @@ class ProductCard extends Component {
       showModal: false,
       open: false,
       showButton: false,
-      button: 'cart', // 'order'
+      button: "cart", // 'order'
       baseUrl: window.location.origin,
     };
   }
@@ -40,9 +38,13 @@ class ProductCard extends Component {
   //   this.setState({ showModal: false });
   // };
 
-  addToCartHandle = async (userId, id, quantity) => {
+  addToCartHandle = async (userId, id, quantity, price) => {
     const res = checkLogin();
     if (res === true) {
+      if (price === 0) {
+        this.urlOpenHandler(`${this.state.baseUrl}/product/${id}`);
+        return;
+      }
       const body = {
         product_id: id,
         vendor_id: userId,
@@ -50,11 +52,11 @@ class ProductCard extends Component {
       };
       await addToCartApi(body);
       Swal.fire({
-        title: 'Item Added to cart',
+        title: "Item Added to cart",
         showConfirmButton: false,
         timer: 1500,
         toast: true,
-        position: 'top',
+        position: "top",
       });
       this.props.cartItemCount();
     } else {
@@ -70,9 +72,13 @@ class ProductCard extends Component {
     }
   };
 
-  orderNowHandle = async (userId, id, quantity) => {
+  orderNowHandle = async (userId, id, quantity, price) => {
     const res = checkLogin();
     if (res === true) {
+      if (price === 0) {
+        this.urlOpenHandler(`${this.state.baseUrl}/product/${id}`);
+        return;
+      }
       const body = {
         product_id: id,
         vendor_id: userId,
@@ -80,11 +86,11 @@ class ProductCard extends Component {
       };
       await addToCartApi(body);
       Swal.fire({
-        title: 'Item Added to cart',
+        title: "Item Added to cart",
         showConfirmButton: false,
         timer: 1500,
         toast: true,
-        position: 'top',
+        position: "top",
       });
       this.props.cartItemCount();
       this.props.history.push(`/${ROUTE_CART}`);
@@ -107,17 +113,19 @@ class ProductCard extends Component {
 
   handleClose = (value, data) => {
     if (data) {
-      if (data === 'cart') {
+      if (data === "cart") {
         this.addToCartHandle(
           this.props.data.user_id,
           this.props.data.id,
-          this.props.data.moq
+          this.props.data.moq,
+          this.props.data.price
         );
       } else {
         this.orderNowHandle(
           this.props.data.user_id,
           this.props.data.id,
-          this.props.data.moq
+          this.props.data.moq,
+          this.props.data.price
         );
       }
     }
@@ -128,7 +136,7 @@ class ProductCard extends Component {
     window
       .open(
         `https://api.whatsapp.com/send?phone=918750317898&text=What%20is%20Wholesale%20Rate%20for%20${url}%20%20for%20a%20Quantity:%20`,
-        '_blank'
+        "_blank"
       )
       .focus();
   };
@@ -147,14 +155,38 @@ class ProductCard extends Component {
               this.props.data.images.length > 0 &&
               this.props.data.images[0].thumbnail
                 ? this.props.data.images[0].thumbnail
-                : '../../default-img.png'
+                : "../../default-img.png"
             }
             alt={this.props.data.name}
-            width="100%"
-            height="100%"
-            style={{ borderRadius: '10px', objectFit: 'contain' }}
+            // style={{ borderRadius: "10px", objectFit: "contain" }}
           />
+          {this.props.data.price ? (
+            <div className="mrp productDetailPrice">
+              Rs {this.props.data.price}
+            </div>
+          ) : (
+            <div className="mrp productDetailPrice hide">Wholesale Rate: 0</div>
+          )}
         </div>
+
+        {/* {this.props.data &&
+          this.props.data.mrp_price &&
+          this.props.data.mrp_price > 0 ? (
+            <div
+              className=" productDetailPrice small"
+              onClick={() => this.onProductClickHandle(this.props.data.id)}
+            >
+              MRP: {this.props.data.mrp_price}
+              {/* Rs {this.props.data.mrp_price} */}
+        {/* </div>
+          ) : (
+            <div
+              className="dummy-moq"
+              onClick={() => this.onProductClickHandle(this.props.data.id)}
+            >
+              NANANANANANANA
+            </div>
+          )} */}
 
         <div className="right-section">
           <div
@@ -167,22 +199,24 @@ class ProductCard extends Component {
           <div
             className="second-row"
             onClick={() => this.onProductClickHandle(this.props.data.id)}
-          >
-            {this.props.data.price ? (
-              <div className="productDetailMoq1">
-                Wholesale Rate: {this.props.data.price}
+          ></div>
+
+          <div className="third-row">
+            {this.props.data &&
+            this.props.data.moq &&
+            this.props.data.moq > 0 ? (
+              <div className="productDetailPrice moq">
+                MOQ : {this.props.data.moq}
               </div>
             ) : (
-              <div className="productDetailMoq1 visible-hide">
-                Wholesale Rate: 0
-              </div>
+              <div className="productDetailPrice moq">MOQ : 1</div>
             )}
 
-            {this.props.data.price ? (
-              this.props.data.mrp_price ? (
+            <div className="action-area">
+              {this.props.data.mrp_price ? (
                 <p className="margin-wrapper">
-                  {' '}
-                  Margin:{' '}
+                  {" "}
+                  Margin:{" "}
                   <span className="margin-text">
                     {(
                       (this.props.data.mrp_price * 100) /
@@ -193,57 +227,28 @@ class ProductCard extends Component {
                   </span>
                 </p>
               ) : (
-                ''
-              )
-            ) : (
-              ''
-            )}
-          </div>
-
-          <div className="third-row">
-            {this.props.data &&
-            this.props.data.mrp_price &&
-            this.props.data.mrp_price > 0 ? (
-              <div
-                className="productDetailPrice"
-                onClick={() => this.onProductClickHandle(this.props.data.id)}
-              >
-                MRP: {this.props.data.mrp_price}
-                {/* Rs {this.props.data.mrp_price} */}
-              </div>
-            ) : (
-              <div
-                className="dummy-moq"
-                onClick={() => this.onProductClickHandle(this.props.data.id)}
-              >
-                NANANANANANANA
-              </div>
-            )}
-            {/* {this.props.data && this.props.data.moq && this.props.data.moq > 0 ? (
-              <div className="productDetailPrice">
-                MOQ : {this.props.data.moq}
-              </div>
-            ) : (
-              ""
-            )} */}
-
-            <div>
-              {this.props.data &&
-              this.props.data.moq &&
-              this.props.data.moq > 0 ? (
-                <div className="productDetailPrice small">
-                  MOQ : {this.props.data.moq}
-                </div>
-              ) : (
-                <div className="productDetailPrice small">MOQ : 1</div>
+                <p className="margin-wrapper ">
+                  <span className="margin-text hide"></span>
+                </p>
               )}
-
               {this.props.data.price ? (
                 <div className="productCardButtons">
                   <Button
                     fullWidth
                     variant="outlined"
                     color="primary"
+                    sx={{
+                      border: "2px solid #8cdf63",
+                      borderRadius: 3,
+                      p: {
+                        xs: 0.5,
+                        lg: 1,
+                        xl: 1,
+                      },
+                      ".&:hover": {
+                        border: "2px solid #8cdf63",
+                      },
+                    }}
                     onClick={() => {
                       if (
                         this.props.data &&
@@ -256,42 +261,23 @@ class ProductCard extends Component {
                         this.setState({
                           open: true,
                           showButton: true,
-                          button: 'cart',
+                          button: "cart",
                         });
                       } else {
                         this.setState({ open: false, showButton: false });
                         this.addToCartHandle(
                           this.props.data.user_id,
                           this.props.data.id,
-                          this.props.data.moq
+                          this.props.data.moq,
+                          this.props.data.price
                         );
                       }
                     }}
-                    style={{
-                      height: '100%',
-                      backgroundColor: 'rgb(255, 255, 255)',
-                      borderColor: 'rgb(204, 204, 204)',
-                      color: 'black',
-                      paddingLeft: '12px',
-                      paddingRight: '7px',
-                      textTransform: 'capitalize',
-                    }}
+                    className="cart-btn"
                   >
-                    <span
-                      style={{
-                        fontSize: '10px',
-                        marginTop: '3px',
-                        marginRight: '6px',
-                        color: '#212121',
-                      }}
-                    >
-                      <b> Add to cart </b>
+                    <span className="cart-btn-span">
+                      <b>Add to cart</b>
                     </span>
-                    {this.props.data.price ? (
-                      <AddIcon fontSize="small" style={{ color: '#212121' }} />
-                    ) : (
-                      ''
-                    )}
                   </Button>
                 </div>
               ) : (
@@ -300,73 +286,31 @@ class ProductCard extends Component {
                     fullWidth
                     variant="outlined"
                     color="primary"
+                    sx={{
+                      border: "2px solid #8cdf63",
+                      borderRadius: 3,
+                      p: {
+                        xs: 0.5,
+                        lg: 1,
+                        xl: 1,
+                      },
+                      ".&:hover": {
+                        border: "2px solid #8cdf63",
+                      },
+                    }}
+                    className="cart-btn"
                     onClick={() =>
                       this.urlOpenHandler(
                         `${this.state.baseUrl}/product/${this.props.data.id}`
                       )
                     }
-                    style={{
-                      height: '100%',
-                      backgroundColor: 'rgb(255, 255, 255)',
-                      borderColor: 'green',
-                      color: 'green',
-                      paddingLeft: '12px',
-                      paddingRight: '12px',
-                      textTransform: 'capitalize',
-                    }}
                   >
-                    <span
-                      style={{
-                        fontSize: '10px',
-                        marginTop: '3px',
-                        marginRight: '6px',
-                        color: 'green',
-                      }}
-                    >
-                      <b>Price Quote</b>
+                    <span className="cart-btn-span">
+                      <b>Get Price</b>
                     </span>
                   </Button>
                 </div>
               )}
-
-              {/* <div className="productCardButtons">
-            <Button
-              fullWidth
-              variant="contained"
-              // color="secondary"
-              onClick={() => {
-                if (
-                  this.props.data &&
-                  this.props.data.user &&
-                  (this.props.data.user.delivery_policy ||
-                    this.props.data.user.discount_upto ||
-                    this.props.data.user.payment_policy ||
-                    this.props.data.user.return_policy)
-                ) {
-                  this.setState({
-                    open: true,
-                    showButton: true,
-                    button: "order",
-                  });
-                } else {
-                  this.setState({
-                    open: false,
-                    showButton: false,
-                  });
-                  this.orderNowHandle(
-                    this.props.data.user_id,
-                    this.props.data.id,
-                    this.props.data.moq
-                  );
-                }
-              }}
-              style={{ height: "100%", backgroundColor: "rgb(255 , 111 , 0)" }}
-            >
-              <span style={{ fontSize: "xx-small" }}>
-                <b>Book Now</b>
-              </span>
-            </Button>
-          </div> */}
             </div>
           </div>
         </div>
@@ -408,17 +352,17 @@ function SimpleDialog(props) {
       <DialogContent dividers>
         <Typography gutterBottom>
           {data.return_policy !== null ? (
-            data.return_policy != '' ? (
+            data.return_policy != "" ? (
               <>
                 <strong>Return policy</strong>
                 <Divider />
                 {data.return_policy}
               </>
             ) : (
-              ''
+              ""
             )
           ) : (
-            ''
+            ""
           )}
         </Typography>
         <br />
@@ -430,7 +374,7 @@ function SimpleDialog(props) {
               {data.delivery_policy}
             </>
           ) : (
-            ''
+            ""
           )}
         </Typography>
         <br />
@@ -442,7 +386,7 @@ function SimpleDialog(props) {
               {data.payment_policy}
             </>
           ) : (
-            ''
+            ""
           )}
         </Typography>
         <br />
@@ -454,7 +398,7 @@ function SimpleDialog(props) {
               {data.discount_upto}
             </div>
           ) : (
-            ''
+            ""
           )}
         </Typography>
         <br />

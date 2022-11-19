@@ -64,6 +64,7 @@ import {
   checkBadatExpiration,
   getCatId,
   getSelectNameSub,
+  swapToTop,
 } from "../Util";
 import "../AppAsset/CSS/VerticalCategory.css";
 import Footer from "../Component/Footer";
@@ -100,13 +101,17 @@ class VerticleCategory extends Component {
       sortValue: [],
       sortOrder: [],
       sortOrderValue: [],
-      params: { page: 1 },
+      params: {
+        page: 1,
+        subcategory_id: this?.props?.match?.params?.id,
+      },
       districtValue: [],
       dataList: "",
       type: "verticalCategory",
       openProductList: false,
       subcategoryList: [],
       catId: window.location.href?.split("cat=")[1]?.split("%20")?.join(" "),
+      selectedSubCategory: this?.props?.match?.params?.id,
     };
     this.handlePageClick = this.handlePageClick.bind(this);
   }
@@ -156,31 +161,77 @@ class VerticleCategory extends Component {
     const catId = getCatId(this.state.catId);
     const response = await getSubCategory(catId);
     const res = await getVerticalCategory(id);
-    this.setState({ load: false, data: res.data.data });
+    this.setState({
+      load: false,
+      data:
+        res.data.data && res.data.data.length > 0
+          ? [
+              {
+                id: "",
+                name: "All",
+                subcategory_id: "",
+                updated_at: "",
+                created_at: "",
+              },
+              ...res.data.data,
+            ]
+          : res.data.data,
+    });
     const params = {
-      subcategory_id: id,
+      subcategory_id:
+        this.state.selectedSubCategory || this?.props?.match?.params?.id,
       page: 1,
     };
-
-    console.log(response);
 
     this.setState({ load: true, params });
     const prod = await getProducts(params);
     const tempState = await getState();
     this.setState({
       load: false,
-      subcategoryList: response.data.data,
-      data: res.data.data,
+      subcategoryList:
+        response.data.data && response.data.data.length
+          ? [
+              {
+                id: "",
+                name: "All",
+                category_id: "",
+                updated_at: "",
+                created_at: "",
+                verticals: [],
+              },
+              ...response.data.data,
+            ]
+          : response.data.data,
+      data:
+        res.data.data && res.data.data.length > 0
+          ? [
+              {
+                id: "",
+                name: "All",
+                subcategory_id: "",
+                updated_at: "",
+                created_at: "",
+              },
+              ...res.data.data,
+            ]
+          : res.data.data,
       // productData: prod.data.data.data,
       stateData: (tempState && tempState) || [],
       productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
     total_pages = this.state.productData && this.state.productData.last_page;
-    if (this.state.productData && this.state.productData.data.length) {
+    if (
+      this.state.productData &&
+      this.state.productData.data &&
+      this.state.productData.data.length
+    ) {
       let lists = [...this.state.dataList, ...this.state.productData.data];
       this.setState({ dataList: lists });
 
       this.receivedData();
+    }
+    if (this?.props?.match?.params?.id) {
+      this.setState({ selectedSubCategory: this.props.match?.params?.id });
     }
   };
   // componentDidMount = async () => {
@@ -226,18 +277,26 @@ class VerticleCategory extends Component {
     });
   }
   onClickHandle = (id, q) => {
+    if (id === "") {
+      window.location.reload();
+      return;
+    }
     const query = q?.split("cat=")[1];
-    console.log(query);
     const tempString = `vertical=${id}&`;
-    this.props.history.push(`/${ROUTE_ALL_PRODUCT}/${tempString}cat=${query}`);
+    this.props.history.push(
+      `/${ROUTE_ALL_PRODUCT}/${id}?cat=${query}?subCat=${this.state.selectedSubCategory}`
+    );
   };
 
   onClickSubCatHandle = (id, catId) => {
+    if (id === "") {
+      const cId = getCatId(catId);
+      this.onClickCategoryHandle(cId, catId);
+      return;
+    }
     const query = getSelectNameSub(catId);
-    // const catIdUrl = getCatId(this.state.catId)
-    // console.log(catId, "cccc");
+    this.setState({ selectedSubCategory: id });
 
-    // console.log(this.state.catId);
     this.props.history.push(`/${ROUTE_VERTICLE_CATEGORIES}/${id}?cat=${query}`);
     window.location.reload();
   };
@@ -249,6 +308,7 @@ class VerticleCategory extends Component {
   pageChangeCallback = async (id) => {
     const params = this.state.params;
     params.page = id + 1;
+
     this.setState({ load: true, params });
 
     const prod = await getProducts(params);
@@ -263,11 +323,8 @@ class VerticleCategory extends Component {
     }
   };
   handlePageClick = async (e) => {
-    const id = window.location.href.slice(
-      window.location.href.lastIndexOf("/") + 1
-    );
     const params = {
-      subcategory_id: id,
+      subcategory_id: this.state.selectedSubCategory,
       page: this.state.productData.current_page + 1,
     };
 
@@ -283,13 +340,8 @@ class VerticleCategory extends Component {
     }
   };
   handlePageClickFilter = async (e) => {
-    const id = window.location.href.slice(
-      window.location.href.lastIndexOf("/") + 1
-    );
     const params = {
-      subcategory_id: window.location.href.slice(
-        window.location.href.lastIndexOf("/") + 1
-      ),
+      subcategory_id: this.state.selectedSubCategory,
       vertical_id: this.state.verticleCategories,
       sortOrder: this.state.sortOrderValue,
       sortBy: String(this.state.sort),
@@ -358,11 +410,10 @@ class VerticleCategory extends Component {
       dataList: "",
       type: "verticalCategory",
     });
-    const id = window.location.href.slice(
-      window.location.href.lastIndexOf("/") + 1
-    );
+
     const params = {
-      subcategory_id: id,
+      subcategory_id:
+        this.state.selectedSubCategory || this?.props?.match?.params?.id,
       page: 1,
     };
     this.setState({ params, load: true });
@@ -379,9 +430,7 @@ class VerticleCategory extends Component {
   onFilterSubmit = async () => {
     this.setState({ drawer: false, load: true, productData: [] });
     const params = {
-      subcategory_id: window.location.href.slice(
-        window.location.href.lastIndexOf("/") + 1
-      ),
+      subcategory_id: this.state.selectedSubCategory,
       vertical_id: this.state.verticleCategories,
       sortOrder: this.state.sortOrderValue,
       sortBy: String(this.state.sort),
@@ -454,10 +503,6 @@ class VerticleCategory extends Component {
     ) {
       //loginPopUp(this.props.history);
     }
-    console.log(
-      window.location.href?.split("cat=")[1]?.split("%20")?.join(" "),
-      "id cat"
-    );
     return (
       <LoadingOverlay active={this.state.load} spinner text="Loading...">
         <Helmet>
@@ -516,46 +561,51 @@ class VerticleCategory extends Component {
 
         <div className="verticleCategoryContainer">
           <div className="categoryCardContainer_VerticleCategory">
-            {/* <SliderCategory
-							onClickCategoryHandle={this.onClickCategoryHandle}
-						/> */}
             <SliderCategoryNew
               onClickCategoryHandle={this.onClickCategoryHandle}
+              categoryId={getCatId(
+                this.state.catId ||
+                  window.location.href
+                    ?.split("cat=")[1]
+                    ?.split("%20")
+                    ?.join(" ")
+              )}
             />
           </div>
 
           {this.state.subcategoryList &&
           this.state.subcategoryList.length > 0 ? (
             <div className="selectedSubCategory">
-              <div
-                className={
-                  this.state.subcategoryList &&
-                  this.state.subcategoryList.length > 5
-                    ? "subCategoryGridContainer h-fix"
-                    : "subCategoryGridContainer_Less_item h-fix"
-                }
-                style={{ height: "77px" }}
-              >
+              <div className="subCategoryGridContainer h-fix">
                 {this.state.subcategoryList &&
                 this.state.subcategoryList.length > 0
-                  ? this.state.subcategoryList.map((res) => (
+                  ? swapToTop(
+                      this.state.subcategoryList,
+                      1,
+                      this.state.selectedSubCategory
+                    )?.map((res) => (
                       <div
                         className="subCategorySliderCard"
                         key={res.id}
                         onClick={() =>
-                          this.onClickSubCatHandle(res.id, res.category_id)
+                          this.onClickSubCatHandle(
+                            res.id,
+                            res.category_id || this.state.catId
+                          )
                         }
                       >
                         <Paper
                           className="subCategoryPaperNew"
                           style={{
-                            backgroundColor: "#fff",
+                            backgroundColor:
+                              this.state.selectedSubCategory == res.id
+                                ? "#0d6efd"
+                                : "#fff",
                             cursor: "pointer",
-                            borderRadius: "6px",
+                            borderRadius: "2px",
                           }}
-                          variant="outlined"
+                          elevation={2}
                         >
-                          {/* <img src={"https://firebasestorage.googleapis.com/v0/b/badhat-storage.appspot.com/o/CateoryImages%2Fbags_banner.jpg?alt=media&token=b9c8b353-5cef-404d-aa6b-ad070a9897ea"} alt="" style={{ height: "50px", width: "50px", float: "left", marginTop: "10px", marginLeft: "4px", borderRadius: "8px" }} /> */}
                           <div className="sliderCardSubCategoryName wrap">
                             {res.name}
                           </div>
@@ -583,13 +633,7 @@ class VerticleCategory extends Component {
               ) : null}
             </div>
             {this.state.data && this.state.data.length > 0 ? (
-              <div
-                className={
-                  this.state.data && this.state.data.length < 5
-                    ? "verticleCategoryGridContainer_Less_item h-fix"
-                    : "verticleCategoryGridContainer h-fix"
-                }
-              >
+              <div className="verticleCategoryGridContainer h-fix">
                 {this.state.data && this.state.data.length > 0
                   ? this.state.data.map((res) => (
                       <div
@@ -604,18 +648,20 @@ class VerticleCategory extends Component {
                       >
                         <div
                           className="verticleCategoryPaperNew"
-                          style={{ backgroundColor: "#fff", cursor: "pointer" }}
+                          style={{
+                            cursor: "pointer",
+                          }}
                         >
-                          <div className="sliderCardVerticleCategoryName">
+                          <div
+                            className="sliderCardVerticleCategoryName"
+                            style={{
+                              backgroundColor:
+                                res.id === "" ? "#0d6efd" : "#fff",
+                            }}
+                          >
                             {res.name}
                           </div>
                         </div>
-                        {/* <Paper className="verticleCategoryPaperNew" style={{ backgroundColor: "#fff", cursor: "pointer" }} elevation={5}>
-											<img src={"https://firebasestorage.googleapis.com/v0/b/badhat-storage.appspot.com/o/CateoryImages%2Fbags_banner.jpg?alt=media&token=b9c8b353-5cef-404d-aa6b-ad070a9897ea"} alt="" style={{height:"50px", width: "50px", float:"left", marginTop:"10px", marginLeft:"4px", borderRadius: "8px"}} />
-												<div className="sliderCardVerticleCategoryName">
-													{res.name}
-												</div>
-											</Paper> */}
                       </div>
                     ))
                   : null}

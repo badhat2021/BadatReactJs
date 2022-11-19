@@ -19,22 +19,21 @@ class Category extends Component {
 
   componentDidMount = async () => {
     await this.props.onCategoryFetch();
-    list =this.props.categoryData;
+    list = this.props.categoryData;
     this.setState({ load: false, data: this.props.categoryData });
-// if(this.state.reload  && this.state.data){
-//   window.location.reload();
-//   this.setState({
-//     reload:false,
-//   })
-// }
+    // if(this.state.reload  && this.state.data){
+    //   window.location.reload();
+    //   this.setState({
+    //     reload:false,
+    //   })
+    // }
   };
 
   render() {
-    console.log("fffff",this.props.categoryData)
     return (
       <LoadingOverlay active={this.state.load} spinner text="Loading...">
         <div className="categoryContainer">
-          <div className="categoryTitle">{BROWSE_CATEGORY }</div>
+          <div className="categoryTitle">{BROWSE_CATEGORY}</div>
           <div className="categoryCardContainer">
             {this.props.categoryData && this.props.categoryData.length ? (
               <CategoryCard data={this.props.categoryData} />

@@ -64,6 +64,7 @@ class ProductDetail extends Component {
       quantityType: [],
       showButton: false,
       button: "cart", // 'order'
+      baseUrl: window.location.origin,
     };
   }
 
@@ -81,9 +82,13 @@ class ProductDetail extends Component {
     this.setState({ quantityType: result1.data.data });
   };
 
-  addToCartClickHandle = async (id, userId, quantity) => {
+  addToCartClickHandle = async (id, userId, quantity, price) => {
     const res = checkLogin();
     if (res === true) {
+      if (price === 0) {
+        this.urlOpenHandler(`${this.state.baseUrl}/product/${id}`);
+        return;
+      }
       const body = {
         product_id: id,
         vendor_id: userId,
@@ -121,13 +126,15 @@ class ProductDetail extends Component {
         this.addToCartClickHandle(
           this.state.data.id,
           this.state.data.user_id,
-          this.state.data.moq
+          this.state.data.moq,
+          this.state.data.price
         );
       } else {
         this.orderNowHandle(
           this.state.data.id,
           this.state.data.user_id,
-          this.state.data.moq
+          this.state.data.moq,
+          this.state.data.price
         );
       }
     }
@@ -138,14 +145,28 @@ class ProductDetail extends Component {
     this.props.history.push(`/${ROUTE_CART}`);
   };
 
-  orderNowHandle = async (userId, id, quantity) => {
+  urlOpenHandler = (url) => {
+    window
+      .open(
+        `https://api.whatsapp.com/send?phone=918750317898&text=What%20is%20Wholesale%20Rate%20for%20${url}%20%20for%20a%20Quantity:%20`,
+        "_blank"
+      )
+      .focus();
+  };
+
+  orderNowHandle = async (userId, id, quantity, price) => {
     const res = checkLogin();
     if (res === true) {
+      if (price === 0) {
+        this.urlOpenHandler(`${this.state.baseUrl}/product/${id}`);
+        return;
+      }
       const body = {
         product_id: id,
         vendor_id: userId,
         quantity: quantity,
       };
+
       await addToCartApi(body);
       Swal.fire({
         title: "Item Added to cart",
@@ -489,7 +510,8 @@ class ProductDetail extends Component {
                           this.addToCartClickHandle(
                             this.state.data.id,
                             this.state.data.user_id,
-                            this.state.data.moq
+                            this.state.data.moq,
+                            this.state.data.price
                           );
                         }
                       }
@@ -530,7 +552,8 @@ class ProductDetail extends Component {
                     this.orderNowHandle(
                       this.state.data.id,
                       this.state.data.user_id,
-                      this.state.data.moq
+                      this.state.data.moq,
+                      this.state.data.price
                     );
                   }
                 }}

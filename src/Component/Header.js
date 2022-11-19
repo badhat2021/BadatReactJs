@@ -15,22 +15,14 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-import ListItemText from "@material-ui/core/ListItemText";
-import AddBoxIcon from "@material-ui/icons/AddBox";
-import ListItem from "@material-ui/core/ListItem";
-import List from "@material-ui/core/List";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import Popover from "@material-ui/core/Popover";
 import DehazeIcon from "@material-ui/icons/Dehaze";
-// import ClearIcon from "@material-ui/icons/Clear";
 import { cartItemCountHandle } from "../AppRedux/Action/CartItemCount";
-// import SystemUpdateOutlinedIcon from "@material-ui/icons/SystemUpdateOutlined";
-// import { Button } from "@material-ui/core";
-import Logo from "../AppAsset/zulk.jpg";
+import Logo from "../AppAsset/newLogo.png";
 import { ROUTE_CART, ROUTE_ALL_PRODUCT, ROUTE_LOGIN } from "../Constant";
 import "../AppAsset/CSS/Header.css";
-import { getAppState, getMyProducts, markAsRead } from "../AppApi";
+import { getAppState, getMyProducts } from "../AppApi";
 import { installOurApp, handleLogout, checkLogin } from "../Util";
 
 const useStyles = makeStyles((theme) => ({
@@ -268,14 +260,15 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
               textAlign: "center",
             }}
           >
-            <Avatar alt="logo" src={Logo} />
+            <img alt="logo" src={Logo} className="app-logo" />
+            {/* <Avatar alt="logo" src={Logo} /> */}
             <div style={{ marginTop: "-12px" }}>
               <span style={{ fontSize: "x-small" }}>Home</span>
             </div>
           </div>
         </IconButton>
         <Typography className={classes.title} variant="h5" noWrap>
-        Zulk
+          Zulk
         </Typography>
         <div className={classes.search}>
           <Paper component="form" className={classes.root}>
@@ -398,7 +391,12 @@ const Header = ({ history, cartCount, login, cartItemCount }) => {
                   My Products
                 </MenuItem>
               )}
-               <MenuItem key="sell" onClick={()=>{history.push("/products/new")}} >
+              <MenuItem
+                key="sell"
+                onClick={() => {
+                  history.push("/products/new");
+                }}
+              >
                 Sell Item
               </MenuItem>
               <MenuItem key="logOut" onClick={() => onLogoutClickHandle()}>

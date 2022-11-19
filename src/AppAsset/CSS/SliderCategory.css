@@ -29,7 +29,7 @@
 }
 
 .sliderCardCategoryName {
-/*  position: absolute;
+  /*  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);*/
@@ -65,13 +65,12 @@
 
 .sliderContainerNew {
   align-items: center;
-  background-color: #66be4b;
 }
 
-
-.sliderContainer .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+.sliderContainer
+  .ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
   border: none;
-  background-color: #66be4b;
   color: #fff;
 }
 
@@ -92,7 +91,28 @@
 }
 
 .select-wrapper {
-  
+  padding: 10px 20px;
+}
+
+.custom-radio-active {
+  background-color: #0d6efd;
+}
+
+.custom-radio-not-active {
+  background-color: #d3d3d3;
+}
+
+.custom-radio {
+  position: relative;
+  border-radius: 24px 5px 5px 24px;
+  padding: 4px 9px 4px 2px;
+  padding-left: 0;
+}
+.custom-radio .MuiFormControlLabel-label {
+  font-size: 18px;
+  font-weight: 500;
+  margin-left: 18px;
+  color: black;
 }
 
 .select-box {
@@ -116,10 +136,10 @@
   font-weight: 400;
   font-size: 16px;
   text-transform: capitalize;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
 }
-
-
 
 .option-wrapper {
   display: none;
@@ -131,7 +151,7 @@
   overflow-y: auto;
   background-color: white;
   z-index: 2;
-  padding: 0px 8px ;
+  padding: 0px 8px;
   box-shadow: 0px 0px 10px #ccc;
 }
 
@@ -142,7 +162,6 @@
   justify-content: space-between;
   cursor: pointer;
   border-bottom: 1px solid #f0f0f0;
-
 }
 
 .option img {
@@ -153,13 +172,19 @@
   border-radius: 50%;
 }
 
-.option div { 
+.option div {
   font-size: 16px;
   color: #212121;
   font-weight: 400;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
 }
 
 /* .ant-select-open {
   height: 1000px;
 } */
+
+@media only screen and (max-width: 600px) {
+}

@@ -2,8 +2,8 @@
 /* eslint-disable no-undef */
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import { hotjar } from "react-hotjar";
 import LoadingOverlay from "react-loading-overlay";
-import SliderCategory from "../Component/SliderCategory";
 import SliderCategoryNew from "../Component/SliderCategoryNew";
 import { getSelectNameSub } from "../Util/index";
 
@@ -25,15 +25,9 @@ import {
 } from "../Constant";
 import Product from "../Component/Product";
 import Banners from "../Component/Banners";
-import {
-  loginPopUp,
-  checkSkip,
-  checkLogin,
-  checkBadatExpiration,
-} from "../Util";
+import { checkSkip, checkLogin, checkBadatExpiration } from "../Util";
 import Footer from "../Component/Footer";
-import { hotjar } from "react-hotjar";
-let last_page;
+
 class SubCategory extends Component {
   constructor() {
     super();
@@ -42,9 +36,8 @@ class SubCategory extends Component {
       data: [],
       sort: [],
       sortOrder: [],
-      categoryId: window.location.href.slice(
-        window.location.href.lastIndexOf("/") + 1
-      ),
+      categoryId: this?.props?.match?.params?.id,
+      selectedSubCategory: "",
       verticleCategories: [],
       subCategories: [],
       state: [],
@@ -55,94 +48,207 @@ class SubCategory extends Component {
       verticalCategoryList: [],
       districtList: [],
       drawer: false,
-      listData: [],
+      dataList: [],
       type: "category",
-      params: { page: 1 },
+      params: { page: 1, category_id: this?.props?.match?.params?.id },
       verticalDataItem: [],
       openProductList: true,
     };
   }
 
-  componentDidUpdate = async (prevProps) => {
-    if (prevProps.location.pathname !== this.props.location.pathname) {
-      const id = window.location.href.slice(
-        window.location.href.lastIndexOf("/") + 1
-      );
-      const params = {
-        category_id: id,
-        page: 1,
-      };
-      this.setState({ params });
-      const res = await getSubCategory(id);
-
-      const prod = await getProducts(params);
-
-      // console.log(prod, res);
-      this.setState({
-        load: false,
-        data: res.data.data,
-        subCategoryList: res.data.data,
-        // productData:
-        //   prod.data && prod.data.data && prod.data.data.data
-        //     ? prod.data.data.data
-        //     : [],
-        productData: (prod.data && prod.data.data) || prod.data.data || {},
-      });
-    }
-  };
   componentDidMount = async () => {
     //Code For the hotjar
     hotjar.initialize(hjid, hjsv);
     hotjar.event("Home-page Loaded");
-    const id = window.location.href.slice(
-      window.location.href.lastIndexOf("/") + 1
-    );
-
+    const id = this.state.categoryId || this?.props?.match?.params?.id;
     const params = {
       category_id: id,
       page: 1,
     };
+
     this.setState({ params });
     const res = await getSubCategory(id);
-
     const prod = await getProducts(params);
+
+    if (
+      this.state.prod &&
+      this.state.prod.data &&
+      this.state.prod.data.length
+    ) {
+      let lists = [...this.state.dataList, ...this.state.prod.data];
+      this.setState({ dataList: lists });
+    }
 
     this.setState({
       load: false,
-      data: res.data.data,
-      subCategoryList: res.data.data,
-      // productData:
-      //   prod.data && prod.data.data && prod.data.data.data
-      //     ? prod.data.data.data
-      //     : [],
+      data:
+        res.data.data && res.data.data.length
+          ? [
+              {
+                id: "",
+                name: "All",
+                category_id: "",
+                updated_at: "",
+                created_at: "",
+                verticals: [],
+              },
+              ...res.data.data,
+            ]
+          : res.data.data,
+      subCategoryList:
+        res.data.data && res.data.data.length
+          ? [
+              {
+                id: "",
+                name: "All",
+                category_id: "",
+                updated_at: "",
+                created_at: "",
+                verticals: [],
+              },
+              ...res.data.data,
+            ]
+          : res.data.data,
       productData: (prod.data && prod.data.data) || prod.data.data || {},
+      categoryId: id,
     });
-    this.state.listData.push(this.state.productData.data);
-    // this.state.productData.data && this.state.productData.data.length ? this.state.listData.push(this.state.productData.data): ''
   };
+
+  // componentDidUpdate = async (prevProps) => {
+  //   if (prevProps.location.pathname !== this.props.location.pathname) {
+  //     const id = this.state.categoryId || this?.props?.match?.params?.id;
+
+  //     console.log("id did update :>> ", id, this.state);
+  //     const params = {
+  //       category_id: id,
+  //       page: 1,
+  //     };
+  //     this.setState({ params });
+  //     const res = await getSubCategory(id);
+  //     const prod = await getProducts(params);
+
+  //     console.log("res in click", params, res);
+
+  //     this.setState({
+  //       load: false,
+  //       data:
+  //         res.data.data && res.data.data.length
+  //           ? [
+  //               {
+  //                 id: "",
+  //                 name: "All",
+  //                 category_id: "",
+  //                 updated_at: "",
+  //                 created_at: "",
+  //                 verticals: [],
+  //               },
+  //               ...res.data.data,
+  //             ]
+  //           : res.data.data,
+  //       subCategoryList:
+  //         res.data.data && res.data.data.length
+  //           ? [
+  //               {
+  //                 id: "",
+  //                 name: "All",
+  //                 category_id: "",
+  //                 updated_at: "",
+  //                 created_at: "",
+  //                 verticals: [],
+  //               },
+  //               ...res.data.data,
+  //             ]
+  //           : res.data.data,
+  //       productData: (prod.data && prod.data.data) || prod.data.data || {},
+  //       category_id: id,
+  //     });
+  //   }
+  // };
 
   onClickHandle = (id, catId) => {
     const query = getSelectNameSub(catId);
+    this.setState({
+      selectedSubCategory: id,
+    });
+
+    if (id === "") {
+      this.props.history.push(
+        `/${ROUTE_SUBCATEGORIES}/${
+          this.state.categoryId
+        }?cat=${getSelectNameSub(+this.state.categoryId)}`
+      );
+      return;
+    }
+
     this.props.history.push(`/${ROUTE_VERTICLE_CATEGORIES}/${id}?cat=${query}`);
   };
 
   onClickCategoryHandle = async (id, query) => {
     this.props.history.push(`/${ROUTE_SUBCATEGORIES}/${id}?cat=${query}`);
-    this.setState({ load: true, data: [] });
+    this.setState({
+      load: true,
+      data: [],
+      params: { ...this.state.params, category_id: id },
+    });
+    const params = {
+      category_id: id,
+      page: 1,
+    };
     const res = await getSubCategory(id);
+    const prod = await getProducts(params);
+
+    this.setState({ params });
 
     this.setState({
       load: false,
-      data: res.data.data,
-      subCategoryList: res.data.data,
+      data:
+        res.data.data && res.data.data.length
+          ? [
+              {
+                id: "",
+                name: "All",
+                category_id: "",
+                updated_at: "",
+                created_at: "",
+                verticals: [],
+              },
+              ...res.data.data,
+            ]
+          : res.data.data,
+      subCategoryList:
+        res.data.data && res.data.data.length
+          ? [
+              {
+                id: "",
+                name: "All",
+                category_id: "",
+                updated_at: "",
+                created_at: "",
+                verticals: [],
+              },
+              ...res.data.data,
+            ]
+          : res.data.data,
+      productData: (prod.data && prod.data.data) || prod.data.data || {},
       categoryId: id,
+      params,
     });
+
+    if (
+      this.state.prod &&
+      this.state.prod.data &&
+      this.state.prod.data.length
+    ) {
+      let lists = [...this.state.dataList, ...this.state.prod.data];
+      this.setState({ dataList: lists });
+    }
+
     await this.onFilterSubmit();
+    window.location.reload();
   };
 
   onFilterChangeHandle = async (e) => {
     const name = e.target.name;
-    console.log("dataaaaaaaaaaaaaaaaaa", this.state.verticalCategoryList);
 
     this.setState({
       ...this.state,
@@ -208,7 +314,7 @@ class SubCategory extends Component {
 
   pageChangeCallback = async (id) => {
     const params = this.state.params;
-    params.page = id + 1;
+    params.page = params.page + 1;
     this.setState({ load: true, params });
     const prod = await getProducts(params);
 
@@ -216,7 +322,15 @@ class SubCategory extends Component {
       load: false,
       productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
-    // this.state.productData.data && this.state.productData.data.length ? this.state.listData.push(this.state.productData.data): ''
+
+    if (
+      this.state.prod &&
+      this.state.prod.data &&
+      this.state.prod.data.length
+    ) {
+      let lists = [...this.state.dataList, ...this.state.prod.data];
+      this.setState({ dataList: lists });
+    }
   };
 
   onFilterReset = async () => {
@@ -233,16 +347,15 @@ class SubCategory extends Component {
       verticalCategoryList: [],
       districtList: [],
     });
-    const id = window.location.href.slice(
-      window.location.href.lastIndexOf("/") + 1
-    );
+
     const params = {
-      category_id: id,
+      category_id: this.state.categoryId,
       page: 1,
     };
 
     this.setState({ params });
     const res = await getProducts(params);
+    console.log("filter reset");
 
     this.setState({
       load: false,
@@ -265,6 +378,7 @@ class SubCategory extends Component {
     ) {
       //loginPopUp(this.props.history);
     }
+
     return (
       <LoadingOverlay active={this.state.load} spinner text="Loading...">
         <Helmet>
@@ -322,11 +436,11 @@ class SubCategory extends Component {
         </Fab>
         <div className="SubCategoryContainer">
           <div className="categoryCardContainer_subCategory">
-            {/* <SliderCategory
-              onClickCategoryHandle={this.onClickCategoryHandle}
-            /> */}
             <SliderCategoryNew
               onClickCategoryHandle={this.onClickCategoryHandle}
+              categoryId={
+                this.state.categoryId || this?.props?.match?.params?.id
+              }
             />
           </div>
           <div>
@@ -339,13 +453,7 @@ class SubCategory extends Component {
           </div>
           {this.state.data && this.state.data.length > 0 ? (
             <div className="selectedSubCategory">
-              <div
-                className={
-                  this.state.data && this.state.data.length > 5
-                    ? "subCategoryGridContainer h-fix"
-                    : "subCategoryGridContainer_Less_item h-fix"
-                }
-              >
+              <div className={"subCategoryGridContainer h-fix"}>
                 {this.state.data && this.state.data.length > 0
                   ? this.state.data.map((res) => (
                       <div
@@ -358,13 +466,15 @@ class SubCategory extends Component {
                         <Paper
                           className="subCategoryPaperNew"
                           style={{
-                            backgroundColor: "#fff",
+                            backgroundColor:
+                              this.state.selectedSubCategory == res.id
+                                ? "#0d6efd"
+                                : "#fff",
                             cursor: "pointer",
-                            borderRadius: "6px",
+                            borderRadius: "2px",
                           }}
-                          elevation={5}
+                          elevation={2}
                         >
-                          {/* <img src={"https://firebasestorage.googleapis.com/v0/b/badhat-storage.appspot.com/o/CateoryImages%2Fbags_banner.jpg?alt=media&token=b9c8b353-5cef-404d-aa6b-ad070a9897ea"} alt="" style={{ height: "50px", width: "50px", float: "left", marginTop: "10px", marginLeft: "4px", borderRadius: "8px" }} /> */}
                           <div className="sliderCardSubCategoryName wrap">
                             {res.name}
                           </div>
@@ -399,7 +509,6 @@ class SubCategory extends Component {
                 this.state.subCategories ? this.state.subCategories : null
               }
               productData={this.state.productData}
-              listData={this.state.listData}
               type={this.state.type}
               pageChangeCallback={this.pageChangeCallback}
               subCategoryList={this.state.subCategoryList}
@@ -411,6 +520,7 @@ class SubCategory extends Component {
               drawer={this.state.drawer}
               openProductList={this.state.openProductList}
               onDrawerClick={this.onDrawerClick}
+              dataList={this.state.dataList}
             />
           )}
         </div>

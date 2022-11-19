@@ -44,7 +44,6 @@ export const getVerticalCategory = async (id) => {
   const res = await axios.get(
     BASE_URL + ENDPOINT_GET_VERTICAL_CATEGORIES + "/" + id
   );
-  console.log('ressssssssssssssssssssssssss', res);
   return res;
 };
 

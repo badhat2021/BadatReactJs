@@ -16,7 +16,9 @@ import { Drawer, Fab } from "@material-ui/core";
 import ShareIcon from "@mui/icons-material/Share";
 import {
   ROUTE_SUBCATEGORIES,
+  ROUTE_ALL_PRODUCT,
   ENDPOINT_GET_VERTICALS_BANNER,
+  ROUTE_VERTICLE_CATEGORIES,
   hjid,
   hjsv,
 } from "../Constant";
@@ -51,9 +53,12 @@ import {
   checkSkip,
   checkLogin,
   checkBadatExpiration,
+  getCatId,
+  swapToTop,
 } from "../Util";
 import Footer from "../Component/Footer";
 import { hotjar } from "react-hotjar";
+import { Paper } from "@mui/material";
 
 const vertical = "vertical=";
 const categoryId = "categoryId=";
@@ -174,25 +179,35 @@ class AllProductPage extends Component {
         tempString.indexOf("&", tempString.indexOf(search) + search.length)
       );
     }
+
+    const catId = getCatId(
+      decodeURIComponent(this.props.location.search)
+        .split("?")[1]
+        ?.split("=")[1]
+    );
+
+    const subCatId = decodeURIComponent(this.props.location.search)
+      .split("?")[2]
+      ?.split("=")[1];
+
+    const verticalId = this.props.match.params.key;
+
     const params = {
       search_key: searchkeyTemp,
-      category_id: categoryIdTemp,
-      vertical_id: verticalIdTemp,
-      subcategory_id: subCategoryIdTemp,
+      category_id: catId,
+      vertical_id: verticalId,
+      subcategory_id: subCatId,
       state: stateTemp,
       district: districtTemp,
       sortBy: sortByTemp,
       sortOrder: sortOrderTemp,
       page: 1,
     };
+
     const prod = await getProducts(params);
 
     this.setState({
       load: false,
-      // productData:
-      //   prod.data && prod.data.data && prod.data.data.data
-      //     ? prod.data.data.data
-      //     : [],
       productData: (prod.data && prod.data.data) || prod.data.data || {},
       searchKey: searchkeyTemp,
       verticleCategories: verticalIdTemp ? parseInt(verticalIdTemp, 10) : null,
@@ -202,15 +217,72 @@ class AllProductPage extends Component {
       district: districtTemp ? districtTemp.replace(/%20/g, " ") : null,
       sort: sortByTemp,
       sortOrder: sortOrderTemp,
+      catId,
+      subCatId,
+      verticalId,
     });
-    this.state.dataList.push(this.state.productData);
+
+    if (
+      this.state.productData &&
+      this.state.productData.data &&
+      this.state.productData.data.length
+    ) {
+      let lists = [...this.state.dataList, ...this.state.productData.data];
+      this.setState({ dataList: lists });
+    }
+
+    const response = await getSubCategory(catId);
+    const res = await getVerticalCategory(subCatId);
+
+    if (res.data.data && res.data.data.length > 0) {
+      this.setState({
+        sections:
+          res.data.data && res.data.data.length > 0
+            ? [
+                {
+                  id: "",
+                  name: "All",
+                  subcategory_id: "",
+                  updated_at: "",
+                  created_at: "",
+                },
+                ...res.data.data,
+              ]
+            : res.data.data,
+      });
+    }
+    if (response.data.data && response.data.data.length > 0) {
+      this.setState({
+        subCats:
+          response.data.data && response.data.data.length
+            ? [
+                {
+                  id: "",
+                  name: "All",
+                  category_id: "",
+                  updated_at: "",
+                  created_at: "",
+                  verticals: [],
+                },
+                ...response.data.data,
+              ]
+            : response.data.data,
+        selectedSubCategory: +decodeURIComponent(this.props.location.search)
+          .split("?")[2]
+          ?.split("=")[1],
+        selectedCat: decodeURIComponent(this.props.location.search)
+          .split("?")[1]
+          ?.split("=")[1],
+      });
+    }
   };
+
   getProductList = async () => {
     const params = {
       search_key: this.state.searchKey,
-      category_id: this.state.category,
-      vertical_id: this.state.verticleCategories,
-      subcategory_id: this.state.subCategories,
+      category_id: this.state.catId,
+      vertical_id: this.state.verticalId,
+      subcategory_id: this.state.subCatId,
       state: this.state.state,
       district: this.state.district,
       sortBy: this.state.sort,
@@ -227,27 +299,23 @@ class AllProductPage extends Component {
       //     : [],
       productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
+
+    if (
+      this.state.productData &&
+      this.state.productData.data &&
+      this.state.productData.data.length
+    ) {
+      let lists = [...this.state.dataList, ...this.state.productData.data];
+      this.setState({ dataList: lists });
+    }
   };
 
   pageChangeCallback = async (id) => {
     if (id === "all") {
-      const tempString = window.location.href.slice(
-        window.location.href.lastIndexOf("/") + 1
-      );
-      let verticalIdTemp = null;
-
-      if (tempString.indexOf(vertical) !== -1) {
-        verticalIdTemp = tempString.slice(
-          tempString.indexOf(vertical) + vertical.length,
-          tempString.indexOf(
-            "&",
-            tempString.indexOf(vertical) + vertical.length
-          )
-        );
-      }
-
       const params = {
-        vertical_id: verticalIdTemp,
+        category_id: this.state.catId,
+        vertical_id: this.state.verticalId,
+        subcategory_id: this.state.subCatId,
         page: this.state.productData.current_page + 1,
       };
       const prod = await getProducts(params);
@@ -255,17 +323,45 @@ class AllProductPage extends Component {
         load: false,
         productData: (prod.data && prod.data.data) || prod.data.data || {},
       });
+
+      if (
+        this.state.productData &&
+        this.state.productData.data &&
+        this.state.productData.data.length
+      ) {
+        let lists = [...this.state.dataList, ...this.state.productData.data];
+        this.setState({ dataList: lists });
+      }
     }
     if (id !== "all") {
-      const params = this.state.params;
+      const params = {
+        category_id: this.state.catId,
+        vertical_id: this.state.verticalId,
+        subcategory_id: this.state.subCatId,
+        sortBy: this.state.sort,
+        sortOrder: this.state.sortOrder,
+        state: this.state.state,
+        district: this.state.district,
+        page: 1,
+      };
       params.page = id + 1;
       const prod = await getProducts(params);
       this.setState({
         load: false,
         productData: (prod.data && prod.data.data) || prod.data.data || {},
       });
+
+      if (
+        this.state.productData &&
+        this.state.productData.data &&
+        this.state.productData.data.length
+      ) {
+        let lists = [...this.state.dataList, ...this.state.productData.data];
+        this.setState({ dataList: lists });
+      }
     }
   };
+
   verticalCall = async (page) => {
     const tempString = window.location.href.slice(
       window.location.href.lastIndexOf("/") + 1
@@ -349,9 +445,9 @@ class AllProductPage extends Component {
     }
     const params = {
       search_key: searchkeyTemp,
-      category_id: categoryIdTemp,
-      vertical_id: verticalIdTemp,
-      subcategory_id: subCategoryIdTemp,
+      category_id: this.state.catId,
+      vertical_id: this.state.verticalId,
+      subcategory_id: this.state.subCatId,
       state: stateTemp,
       district: districtTemp,
       sortBy: sortByTemp,
@@ -363,7 +459,17 @@ class AllProductPage extends Component {
       load: false,
       productData: (prod.data && prod.data.data) || prod.data.data || {},
     });
+
+    if (
+      this.state.productData &&
+      this.state.productData.data &&
+      this.state.productData.data.length
+    ) {
+      let lists = [...this.state.dataList, ...this.state.productData.data];
+      this.setState({ dataList: lists });
+    }
   };
+
   onClickCategoryHandle = async (id, query) => {
     this.props.history.push(`/${ROUTE_SUBCATEGORIES}/${id}?cat=${query}`);
   };
@@ -421,9 +527,9 @@ class AllProductPage extends Component {
   onFilterSubmit = async () => {
     this.setState({ drawer: false, load: true, productData: [] });
     const params = {
-      category_id: this.state.category,
-      subcategory_id: this.state.subCategories,
-      vertical_id: this.state.verticleCategories,
+      category_id: this.state.catId,
+      vertical_id: this.state.verticalId,
+      subcategory_id: this.state.subCatId,
       sortBy: this.state.sort,
       sortOrder: this.state.sortOrder,
       state: this.state.state,
@@ -434,13 +540,17 @@ class AllProductPage extends Component {
     const prod = await getProducts(params);
     this.setState({
       load: false,
-      // productData:
-      //   res.data && res.data.data && res.data.data.data
-      //     ? res.data.data.data
-      //     : [],
-
       productData: prod.data && prod.data.data ? prod.data.data : {},
     });
+
+    if (
+      this.state.productData &&
+      this.state.productData.data &&
+      this.state.productData.data.length
+    ) {
+      let lists = [...this.state.dataList, ...this.state.productData.data];
+      this.setState({ dataList: lists });
+    }
   };
 
   onDrawerClick = (p) => {
@@ -480,6 +590,26 @@ class AllProductPage extends Component {
     return tempUrl;
   };
 
+  onClickHandle = (secId) => {
+    if (secId === "") {
+      this.props.history.push(
+        `/${ROUTE_VERTICLE_CATEGORIES}/${this.state.selectedSubCategory}?cat=${this.state.selectedCat}`
+      );
+      return;
+    }
+    this.props.history.push(
+      `/${ROUTE_ALL_PRODUCT}/${secId}?cat=${this.state.selectedCat}?subCat=${this.state.selectedSubCategory}`
+    );
+    window.location.reload();
+  };
+
+  onClickSubCatHandle = (id) => {
+    this.props.history.push(
+      `/${ROUTE_VERTICLE_CATEGORIES}/${this.state.selectedSubCategory}?cat=${this.state.selectedCat}`
+    );
+    window.location.reload();
+  };
+
   render() {
     if (
       (!checkLogin() && !checkSkip()) ||
@@ -487,6 +617,7 @@ class AllProductPage extends Component {
     ) {
       //loginPopUp(this.props.history);
     }
+
     return (
       <LoadingOverlay active={this.state.load} spinner text="Loading...">
         <Helmet>
@@ -574,13 +705,113 @@ class AllProductPage extends Component {
 
         <div className="AllProductPageContainer">
           <div className="AllProductPageCategoryCardContainer">
-            {/* <SliderCategory
-							onClickCategoryHandle={this.onClickCategoryHandle}
-						/> */}
-
             <SliderCategoryNew
               onClickCategoryHandle={this.onClickCategoryHandle}
+              categoryId={getCatId(
+                decodeURIComponent(this.props.location.search)
+                  .split("?")[1]
+                  ?.split("=")[1]
+              )}
             />
+          </div>
+          {this.state.subCats && this.state.subCats.length > 0 ? (
+            <div className="selectedSubCategory">
+              <div className="subCategoryGridContainer h-fix">
+                {this.state.subCats && this.state.subCats.length > 0
+                  ? swapToTop(
+                      this.state.subCats,
+                      1,
+                      this.state.selectedSubCategory
+                    )?.map((res) => (
+                      <div
+                        className="subCategorySliderCard"
+                        key={res.id}
+                        onClick={() =>
+                          this.onClickSubCatHandle(
+                            res.id,
+                            res.category_id || this.state.catId
+                          )
+                        }
+                      >
+                        <Paper
+                          className="subCategoryPaperNew"
+                          style={{
+                            backgroundColor:
+                              this.state.selectedSubCategory == res.id
+                                ? "#0d6efd"
+                                : "#fff",
+                            cursor: "pointer",
+                            borderRadius: "2px",
+                          }}
+                          elevation={2}
+                        >
+                          <div className="sliderCardSubCategoryName wrap">
+                            {res.name}
+                          </div>
+                        </Paper>
+                      </div>
+                    ))
+                  : "no data found"}
+              </div>
+            </div>
+          ) : null}
+
+          <div className="selectedVerticleCategory">
+            <div>
+              {this.state.productData &&
+              this.state.productData.length > 0 &&
+              this.state.productData[0].category &&
+              this.state.productData[0].category.name ? (
+                <span>{`${this.state.productData[0].category.name}`}</span>
+              ) : null}
+              {this.state.productData &&
+              this.state.productData.length > 0 &&
+              this.state.productData[0].subcategory &&
+              this.state.productData[0].subcategory.name ? (
+                <span>{`>${this.state.productData[0].subcategory.name}`}</span>
+              ) : null}
+            </div>
+            {this.state.sections && this.state.sections.length > 0 ? (
+              <div className="verticleCategoryGridContainer h-fix">
+                {this.state.sections && this.state.sections.length > 0
+                  ? swapToTop(
+                      this.state.sections,
+                      1,
+                      this.props.match.params.key
+                    )?.map((res) => (
+                      <div
+                        className="verticleCategorySliderCard"
+                        key={res.id}
+                        onClick={() =>
+                          this.onClickHandle(
+                            res.id,
+                            this.props.history.location.search
+                          )
+                        }
+                      >
+                        <div
+                          className="verticleCategoryPaperNew"
+                          style={{
+                            cursor: "pointer",
+                          }}
+                        >
+                          <div
+                            className="sliderCardVerticleCategoryName"
+                            style={{
+                              backgroundColor:
+                                this.props.match.params.key == res.id
+                                  ? "#0d6efd"
+                                  : "#fff",
+                            }}
+                          >
+                            {res.name}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  : null}
+              </div>
+            ) : null}
           </div>
           <div className="AllProductPageProductCardContainer">
             <div className="BreadcrumAndShareButtonContainer">
@@ -709,6 +940,7 @@ class AllProductPage extends Component {
                 onDrawerClick={this.onDrawerClick}
                 type={this.state.type}
                 verticalCall={this.verticalCall}
+                dataList={this.state.dataList}
               />
             )}
           </div>

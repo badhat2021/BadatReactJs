@@ -1,93 +1,108 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import "../AppAsset/CSS/SliderCategory.css";
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import { getCategory } from "../AppApi";
+import {
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Avatar,
+} from "@mui/material";
+import { styled } from "@material-ui/styles";
+import { swapToTop } from "../Util";
 
-const SliderCategoryNew = ({ onClickCategoryHandle }) => {
+const SliderCategoryNew = ({ onClickCategoryHandle, categoryId = "" }) => {
+  // States
+  const [isLoading, setIsLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(categoryId);
 
-    const [load, setLoad] = useState(true);
-    const [data, setData] = useState([]);
-    const [select, setSelect] = useState(window.location.href?.split("cat=")[1]?.split("%20")?.join(" "));
-    const [showOption, setShowOption] = useState(false);
-
-
-    // let selectValue = window.location.href?.split("cat=")[1]?.split("%20")?.join(" ");
-
-    const handleChange = (value, query) => {
-        setShowOption(false);
-        setSelect(query)
-        onClickCategoryHandle(value, query)
+  // Effects
+  useEffect(() => {
+    async function fetchData() {
+      const res = await getCategory();
+      setCategories(res.data.data);
+      setIsLoading(false);
     }
+    fetchData();
+  }, []);
 
-    const selectHandler = () => {
-        setShowOption(!showOption)
-    }
+  // Handler Methods
+  const handleChange = ({ target }) => {
+    setSelectedCategory(target.value);
+    onClickCategoryHandle(target.value, target.name);
+  };
 
-    useEffect(() => {
-        async function fetchData() {
-            const res = await getCategory();
-            setData(res.data.data);
-            setLoad(false)
-        }
+  // Render Methods
+  const renderCategoryIcon = (iconUrl) => (
+    <Avatar
+      src={iconUrl}
+      alt="category-logo"
+      sizes="small"
+      sx={{
+        position: "absolute",
+        left: 0,
+        width: 32,
+        height: 32,
+      }}
+    />
+  );
 
-        fetchData()
-    }, []);
+  // Loader
+  if (isLoading) return "Loading...";
 
+  // Return Methods
+  return (
+    <div
+      className="sliderContainer sliderContainerNew"
+      style={{ width: "100%" }}
+    >
+      {categories && categories.length > 0 ? (
+        <div className="select-wrapper">
+          <FormControl className="select-wrapper">
+            <RadioGroup
+              onChange={handleChange}
+              value={selectedCategory}
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              sx={{ flexWrap: "nowrap", width: "110%" }}
+            >
+              {swapToTop(categories, 0, selectedCategory).map((el) => (
+                <FormControlLabel
+                  control={
+                    <Radio
+                      checkedIcon={renderCategoryIcon(el?.icon || el?.bg_image)}
+                      icon={renderCategoryIcon(el?.icon || el?.bg_image)}
+                      sx={{
+                        "& .MuiSvgIcon-root": {
+                          fontSize: 28,
+                          display: "none",
+                        },
+                      }}
+                    />
+                  }
+                  key={el.id}
+                  value={el.id}
+                  label={el.name}
+                  name={el.name}
+                  className={
+                    el.id == selectedCategory
+                      ? `custom-radio-active custom-radio`
+                      : "custom-radio-not-active custom-radio"
+                  }
+                  sx={{ flex: "0 0 auto" }}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+        </div>
+      ) : (
+        <p>No categories found</p>
+      )}
+    </div>
+  );
+};
 
-    if (load) return "Loading...";
-
-    return (
-
-        <div className="sliderContainer sliderContainerNew" style={{ width: "100%", height: "50px" }}>
-            {
-                data.length > 0 ?
-                    <div className='select-wrapper'>
-                        <div className='select-box' onClick={selectHandler}>
-                            <div className='select-text'>{select || "Please Select"}</div>
-                            <ArrowDropDownIcon />
-                        </div>
-
-                        <div className='option-wrapper' style={{ display: showOption ? "block" : "none" }}>
-                            {
-                                data.map(el => {
-                                    return (
-                                        <div className='option' onClick={() => handleChange(el.id, el.name)}>
-                                            <div>{el.name}</div>
-                                            <img src={el?.icon} alt="" />
-                                        </div>
-                                    )
-                                })
-                            }
-
-                        </div>
-                    </div> : "no data found"
-
-                // </div>
-                // <Select
-                //     defaultValue={selectValue ? selectValue : "Select Value"}
-                //     style={{
-                //         width: 150,
-                //     }}
-                //     onChange={handleChange}
-                //     dropdownClassName={"select-dropdown"}
-                // >
-                //     {
-                //         data.map(el => {
-                //             return (
-                //                 <Option value={el.id} key={el.id}>
-                //                     <div className="option-wrapper">
-                //                         <div>{el.name}</div>
-                //                         <img src={el?.bg_image} alt=""/>
-                //                         </div>
-                //                 </Option>
-                //             );
-                //         })
-                //     }
-                // </Select>
-            }
-        </div >
-    )
-}
-
-export default SliderCategoryNew
+export default SliderCategoryNew;

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   FormControl,
   InputLabel,
@@ -7,16 +7,14 @@ import {
   MenuItem,
   Drawer,
   Button,
-} from '@material-ui/core';
+} from "@material-ui/core";
 // import { getCategory, getSubCategory, getVerticalCategory } from "../AppApi";
-import FilterListIcon from '@material-ui/icons/FilterList';
-import NoDataFound from '../Component/NoDataFound';
-import { Route } from 'react-router-dom';
-import '../AppAsset/CSS/Product.css';
-import { getCategory, getState } from '../AppApi';
-import ProductCard from './ProductCard';
-import ShareIcon from '@material-ui/icons/Share';
-import Modal from '@material-ui/core/Modal';
+import FilterListIcon from "@material-ui/icons/FilterList";
+import NoDataFound from "../Component/NoDataFound";
+import "../AppAsset/CSS/Product.css";
+import { getCategory, getState } from "../AppApi";
+import ProductCard from "./ProductCard";
+import ShareIcon from "@material-ui/icons/Share";
 import {
   FacebookShareButton,
   PinterestShareButton,
@@ -34,14 +32,14 @@ import {
   EmailShareButton,
   LinkedinIcon,
   EmailIcon,
-} from 'react-share';
-import InfiniteScroll from 'react-infinite-scroll-component';
+} from "react-share";
+import InfiniteScroll from "react-infinite-scroll-component";
 import {
   getSubCategory,
   getProducts,
   getDistrict,
   getVerticalCategory,
-} from '../AppApi';
+} from "../AppApi";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
@@ -53,7 +51,7 @@ const MenuProps = {
     },
   },
 };
-let body = '';
+let body = "";
 
 class Product extends Component {
   constructor(props) {
@@ -71,7 +69,7 @@ class Product extends Component {
       data: 0,
       perPage: 20,
       currentPage: 0,
-      loader: '',
+      loader: "",
       productData: [],
       dataList: [],
       open: false,
@@ -92,7 +90,7 @@ class Product extends Component {
     this.handlePageClick = this.handlePageClick.bind(this);
   }
   onClickGenerateShareLink = () => {
-    let tempUrl = 'https://' + window.location.hostname + '/all-product/';
+    let tempUrl = "https://" + window.location.hostname + "/all-product/";
     if (this.props.categoryValue !== null) {
       tempUrl = `${tempUrl}categoryId=${this.props.categoryValue}&`;
     }
@@ -163,13 +161,13 @@ class Product extends Component {
       ...this.state,
       [name]: e.target.value,
     });
-    typeof value === 'string' ? e.target.value.split(',') : e.target.valuevalue;
-    if (e.target.name === 'category') {
+    typeof value === "string" ? e.target.value.split(",") : e.target.valuevalue;
+    if (e.target.name === "category") {
       const tempSubCategoryList = await getSubCategory(e.target.value);
       this.setState({ subCategoryList: tempSubCategoryList.data.data });
     }
 
-    if (e.target.name === 'subCategories') {
+    if (e.target.name === "subCategories") {
       let data = e.target.value;
       for (let i = 0; i <= data.length; i++) {
         const tempVerticalData = await getVerticalCategory(data[i]);
@@ -179,7 +177,7 @@ class Product extends Component {
           verticalDataItem: tempVerticalData.data && tempVerticalData.data,
         });
 
-        if (second.message === 'Verticals') {
+        if (second.message === "Verticals") {
           let list = [
             ...this.state.verticalCategoryList,
             ...this.state.verticalDataItem.data,
@@ -189,7 +187,7 @@ class Product extends Component {
       }
     }
 
-    if (e.target.name === 'state') {
+    if (e.target.name === "state") {
       const tempDistrictData = await getDistrict(e.target.value);
       this.setState({ districtList: tempDistrictData });
     }
@@ -200,7 +198,7 @@ class Product extends Component {
     const categoryTempData = await getCategory();
     const tempState = await getState();
     const id = window.location.href.slice(
-      window.location.href.lastIndexOf('/') + 1
+      window.location.href.lastIndexOf("/") + 1
     );
     const params = {
       category_id: id,
@@ -238,7 +236,6 @@ class Product extends Component {
         ? this.props.dataList
         : this.state.dataList;
     const data = this.props.productData;
-    console.log('list', list);
     list && list.length
       ? this.setState({
           pageCount: data.last_page,
@@ -259,7 +256,7 @@ class Product extends Component {
   };
   handlePageClick = async (e) => {
     const id = window.location.href.slice(
-      window.location.href.lastIndexOf('/') + 1
+      window.location.href.lastIndexOf("/") + 1
     );
 
     const params = {
@@ -277,19 +274,19 @@ class Product extends Component {
       this.receivedData();
     }
     if (
-      this.props.type === 'all' &&
+      this.props.type === "all" &&
       this.state.productData.current_page !== this.state.productData.last_page
     ) {
       let verticalIdTemp = null;
-      const vertical = 'vertical=';
+      const vertical = "vertical=";
       const tempString = window.location.href.slice(
-        window.location.href.lastIndexOf('/') + 1
+        window.location.href.lastIndexOf("/") + 1
       );
       if (tempString.indexOf(vertical) !== -1) {
         verticalIdTemp = tempString.slice(
           tempString.indexOf(vertical) + vertical.length,
           tempString.indexOf(
-            '&',
+            "&",
             tempString.indexOf(vertical) + vertical.length
           )
         );
@@ -309,7 +306,7 @@ class Product extends Component {
   };
   handlePageClickFilter = async (e) => {
     const id = window.location.href.slice(
-      window.location.href.lastIndexOf('/') + 1
+      window.location.href.lastIndexOf("/") + 1
     );
 
     const params = {
@@ -333,19 +330,19 @@ class Product extends Component {
       this.receivedData();
     }
     if (
-      this.props.type === 'all' &&
+      this.props.type === "all" &&
       this.state.productData.current_page !== this.state.productData.last_page
     ) {
       let verticalIdTemp = null;
-      const vertical = 'vertical=';
+      const vertical = "vertical=";
       const tempString = window.location.href.slice(
-        window.location.href.lastIndexOf('/') + 1
+        window.location.href.lastIndexOf("/") + 1
       );
       if (tempString.indexOf(vertical) !== -1) {
         verticalIdTemp = tempString.slice(
           tempString.indexOf(vertical) + vertical.length,
           tempString.indexOf(
-            '&',
+            "&",
             tempString.indexOf(vertical) + vertical.length
           )
         );
@@ -383,11 +380,11 @@ class Product extends Component {
       <div className="productContainer">
         <div className="productContainerHeading">Products</div>
         {this.props && !this.props.showFilter ? (
-          <div style={{ marginBottom: '5px', marginTop: '5px' }}>
+          <div style={{ marginBottom: "5px", marginTop: "5px" }}>
             {this.state.openProductScroll && (
               <Button
                 onClick={this.handleOpen}
-                style={{ float: 'right', color: 'orange', fontWeight: '700' }}
+                style={{ float: "right", color: "orange", fontWeight: "700" }}
               >
                 <ShareIcon />
               </Button>
@@ -395,7 +392,7 @@ class Product extends Component {
 
             <Button
               onClick={() => this.props.onDrawerClick(true)}
-              style={{ float: 'right', color: 'orange', fontWeight: '700' }}
+              style={{ float: "right", color: "orange", fontWeight: "700" }}
             >
               <FilterListIcon />
               Sort & Filters
@@ -408,12 +405,12 @@ class Product extends Component {
               >
                 <div
                   style={{
-                    width: '100%',
-                    height: '150px',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    padding: '5px',
+                    width: "100%",
+                    height: "150px",
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    padding: "5px",
                   }}
                 >
                   <div className="ProductDetailShareButton">
@@ -652,7 +649,7 @@ class Product extends Component {
           <div className="productListing">
             {this.props && this.state.productData && this.state.productData
               ? this.state.prodData
-              : 'no data found'}
+              : "no data found"}
 
             <InfiniteScroll
               dataLength={this.state.dataList.length}

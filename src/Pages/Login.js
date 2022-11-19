@@ -231,7 +231,6 @@ class Login extends Component {
   };
 
   handleTrueCallerResponse = async () => {
-    console.log("231");
     const res = await getTruecallerResponse(this.state.uniqueId);
     this.setState({ stopTimer: this.state.stopTimer + 1 });
     if (res && res.data && res.truecallerStatus) {
