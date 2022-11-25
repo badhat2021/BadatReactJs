@@ -70,12 +70,13 @@ const useStyles = makeStyles((theme) => ({
   floatingLabelFocusStyle: {
     color: "Red",
   },
+  
 }));
 
 const AddProductForm = () => {
   const [name, setName] = useState();
   const [price, setPrice] = useState();
-  const [moq, setMoq] = useState();
+  const [moq, setMoq] = useState(1);
   const [description, setDiscription] = useState();
   const [categoryId, setCategoryId] = useState(0);
   const [subCategoryId, setSubCategoryId] = useState(0);
@@ -174,7 +175,7 @@ const AddProductForm = () => {
     var dataset = {
       name: name,
       desc: description,
-      moq: moq,
+      moq: moq > 0 ? moq : 1,
       price: price,
       categoryId: categoryId,
       subCategoryId: subCategoryId,
@@ -196,7 +197,7 @@ const AddProductForm = () => {
       </Backdrop>
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Add Product
+          Save Product
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -216,58 +217,8 @@ const AddProductForm = () => {
                 label="Produt Title Name"
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id="description"
-                // required
-                // InputLabelProps={{
-                //   className: classes.floatingLabelFocusStyle,
-                // }}
-                fullWidth
-                multiline
-                rows={3}
-                label="Product Details"
-                onChange={(e) => {
-                  setDiscription(e.target.value);
-                }}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                // required
-                // InputLabelProps={{
-                //   className: classes.floatingLabelFocusStyle,
-                // }}
-                fullWidth
-                type="number"
-                id="moq"
-                onChange={(e) => {
-                  setMoq(e.target.value);
-                }}
-                label="Minimum Order Quantity"
-                name="moq"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                id="price"
-                label="Selling Price per Quantity"
-                required
-                InputLabelProps={{
-                  className: classes.floatingLabelFocusStyle,
-                }}
-                type="number"
-                onChange={(e) => {
-                  setPrice(e.target.value);
-                }}
-                name="price"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+
+            <Grid item xs={6} sm={6}>
               <TextField
                 variant="outlined"
                 fullWidth
@@ -280,7 +231,7 @@ const AddProductForm = () => {
                 name="product quantity"
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={6} sm={6}>
               <TextField
                 id="Quantity's Unit"
                 select
@@ -299,7 +250,44 @@ const AddProductForm = () => {
                   ))}
               </TextField>
             </Grid>
+
             <Grid item xs={12} sm={6}>
+              <TextField
+                id="description"
+                // required
+                // InputLabelProps={{
+                //   className: classes.floatingLabelFocusStyle,
+                // }}
+                fullWidth
+                multiline
+                rows={3}
+                label="Product Details"
+                onChange={(e) => {
+                  setDiscription(e.target.value);
+                }}
+                variant="outlined"
+              />
+            </Grid>
+
+            <Grid item xs={6} sm={6}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                id="price"
+                label="Wholesale Rate per Quantity"
+                required
+                InputLabelProps={{
+                  className: classes.floatingLabelFocusStyle,
+                }}
+                type="number"
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
+                name="price"
+              />
+            </Grid>
+
+            <Grid item xs={6} sm={6}>
               <TextField
                 id="mrp"
                 fullWidth
@@ -308,6 +296,24 @@ const AddProductForm = () => {
                   setMrp(e.target.value);
                 }}
                 variant="outlined"
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                // required
+                // InputLabelProps={{
+                //   className: classes.floatingLabelFocusStyle,
+                // }}
+                fullWidth
+                type="number"
+                id="moq"
+                onChange={(e) => {
+                  setMoq(e.target.value);
+                }}
+                label="Minimum Order Quantity"
+                name="moq"
               />
             </Grid>
 
@@ -401,6 +407,14 @@ const AddProductForm = () => {
                 }
                 label="Active"
               />
+              <Button
+            type="submit"
+            variant="contained"
+            // color="btn btn-success"
+            className={"btn btn-primary"}
+          >
+            Save Product
+          </Button>
             </Grid>
             <Grid item xs={12} sm={6} className={classes.filebtn}>
               <Button
@@ -435,15 +449,9 @@ const AddProductForm = () => {
                 ""
               )}
             </Grid>
+            
           </Grid>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Add Product
-          </Button>
+        
         </form>
       </div>
       <Box mt={5}></Box>

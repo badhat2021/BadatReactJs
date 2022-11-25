@@ -38,7 +38,7 @@ class Cart extends Component {
       temp: true,
       open: false,
       verify: false,
-      value: ""
+      value: "",
     };
   }
 
@@ -96,7 +96,7 @@ class Cart extends Component {
 
   placeOrderHandle = () => {
     this.setState({ open: true });
-  }
+  };
 
   verifiedClick = async () => {
     const res = await placeOrder();
@@ -116,7 +116,7 @@ class Cart extends Component {
 
   handleClose = (value) => {
     this.setState({ open: false, value: value });
-    if(this.state.value === 1){
+    if (this.state.value === 1) {
       this.verifiedClick();
     }
   };
@@ -129,6 +129,21 @@ class Cart extends Component {
     if (!checkLogin()) {
       return <Redirect to="/" />;
     }
+
+    const cartBasedOnSeller = {};
+    if (this.state.data && this.state.data.length > 0) {
+      this.state.data.forEach((item) => {
+        if (!cartBasedOnSeller[item.vendor.id]) {
+          cartBasedOnSeller[item.vendor.id] = {
+            items: [item],
+            vendor: item.vendor,
+          };
+        } else {
+          cartBasedOnSeller[item.vendor_id].items.push(item);
+        }
+      });
+    }
+
     return (
       <LoadingOverlay active={this.state.load} spinner text="Loading...">
         <Helmet>
@@ -136,7 +151,7 @@ class Cart extends Component {
           <meta name="keywords" content="badhat,badat,badhat.app" />
           <meta
             name="description"
-            content="Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers. Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
+            content="Zulk is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers. Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
           />
           <link
             rel="apple-touch-icon"
@@ -154,7 +169,7 @@ class Cart extends Component {
           >
             Your Cart
           </div>
-          {this.state.data && this.state.data.length > 0 ? (
+          {/* {this.state.data && this.state.data.length > 0 ? (
             <>
               <div className="cartProductContainer">
                 {this.state.data && this.state.data.length > 0
@@ -169,6 +184,7 @@ class Cart extends Component {
                     ))
                   : "no data found"}
               </div>
+
               <div className="cartDetail">
                 <div
                   style={{
@@ -223,8 +239,9 @@ class Cart extends Component {
                       : "no item in cart"}
                   </span>
                 </div>
-              </div>
-              <div
+              </div> 
+
+               <div
                 className="cartPlaceOrdersection"
                 onClick={this.placeOrderHandle}
               >
@@ -241,11 +258,136 @@ class Cart extends Component {
                 selectedValue={this.state.value}
                 open={this.state.open}
                 onClose={this.handleClose}
-              />  
+              /> 
             </>
           ) : (
             <NoDataFound content="Your Cart Is Empty" />
-          )}
+          )} */}
+
+          <div>
+            {Object.keys(cartBasedOnSeller).length > 0 ? (
+              <>
+                {Object.keys(cartBasedOnSeller).map((id) => {
+                  const { items, vendor } = cartBasedOnSeller[id];
+                  return (
+                    <div
+                      style={{
+                        border: "1px solid gray",
+                        borderRadius: 10,
+                        padding: 5,
+                        margin: "15px 5px 15px 5px",
+                      }}
+                    >
+                      <div
+                        style={{ fontSize: 16, padding: 10, cursor: "pointer" }}
+                        onClick={() => {
+                          this.props.history.push(`/user/${vendor.id}`);
+                        }}
+                      >
+                        Sold By: {vendor.business_name}
+                      </div>
+                      <div style={{ display: "flex", flexWrap: "wrap" }}>
+                        {items.map((res) => (
+                          <CartProductCard
+                            key={res.id}
+                            data={res}
+                            onDelete={this.onDeleteCartProduct}
+                            onAdd={this.onClickAddQuantity}
+                            onSub={this.onClickSubQuantity}
+                          />
+                        ))}
+                      </div>
+                      {vendor.minimun_order_size ? (
+                        <div
+                          style={{
+                            fontSize: 12,
+                            padding: 10,
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <div>
+                            <div>Minimum Order Size</div>
+                            <div>Rs. {vendor.minimun_order_size || 0}</div>
+                          </div>
+                          {(vendor.minimun_order_size || 0) -
+                            items.reduce((acc, obj) => {
+                              return acc + obj.product.price * obj.quantity;
+                            }, 0) >
+                            0 && (
+                            <div
+                              style={{
+                                color: "red",
+                                padding: "5px 25px 5px 25px",
+                                background: "lightgray",
+                                borderRadius: 7,
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                this.props.history.push(`/user/${vendor.id}`);
+                              }}
+                            >
+                              <div>Add More</div>
+                              <div>
+                                Rs.{" "}
+                                {(vendor.minimun_order_size || 0) -
+                                  items.reduce((acc, obj) => {
+                                    return (
+                                      acc + obj.product.price * obj.quantity
+                                    );
+                                  }, 0) >
+                                0
+                                  ? (vendor.minimun_order_size || 0) -
+                                    items.reduce((acc, obj) => {
+                                      return (
+                                        acc + obj.product.price * obj.quantity
+                                      );
+                                    }, 0)
+                                  : 0}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  );
+                })}
+                <div
+                  className="cartPlaceOrdersection"
+                  onClick={this.placeOrderHandle}
+                >
+                  <Button
+                    disabled={
+                      Object.keys(cartBasedOnSeller).filter((id) => {
+                        const { items, vendor } = cartBasedOnSeller[id];
+                        const amount =
+                          (vendor.minimun_order_size || 0) -
+                          items.reduce((acc, obj) => {
+                            return acc + obj.product.price * obj.quantity;
+                          }, 0);
+                        return amount <= 0;
+                      }).length === 0
+                    }
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    style={{ height: "100%" }}
+                  >
+                    Book Order
+                  </Button>
+                </div>
+                <SimpleDialog
+                  selectedValue={this.state.value}
+                  open={this.state.open}
+                  onClose={this.handleClose}
+                />
+              </>
+            ) : (
+              <NoDataFound content="Your Cart Is Empty" />
+            )}
+          </div>
         </div>
       </LoadingOverlay>
     );
@@ -259,47 +401,61 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(null, mapDispatchToProps)(Cart);
 
 function SimpleDialog(props) {
-  
   const { onClose, selectedValue, open } = props;
 
-  const [valueData, setValueData] = React.useState(0)
+  const [valueData, setValueData] = React.useState(0);
 
   const handleClose = () => {
-    if(valueData == randomNr.current.randomNr1 + randomNr.current.randomNr2 ){
-      console.log("verified!!")
+    if (valueData == randomNr.current.randomNr1 + randomNr.current.randomNr2) {
       onClose(1);
-    }else{
-      console.log("verification failed!!!")
+    } else {
       onClose(0);
     }
   };
 
   const randomNr = React.useRef({
-        randomNr1: Math.floor(Math.random()*10),
-        randomNr2: Math.floor(Math.random()*10),
-    })
+    randomNr1: Math.floor(Math.random() * 10),
+    randomNr2: Math.floor(Math.random() * 10),
+  });
 
-
-  const handleSubmit = event => {
-   event.preventDefault();
-    if(valueData == randomNr.current.randomNr1 + randomNr.current.randomNr2 ){
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (valueData == randomNr.current.randomNr1 + randomNr.current.randomNr2) {
       onClose(1);
-    }else{
-      alert('Captcha verification Failed. Try again!')
+    } else {
+      alert("Captcha verification Failed. Try again!");
       onClose(0);
     }
-   
- }
-  
+  };
+
   return (
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>
-      <form onSubmit={handleSubmit}>
-          <label id="ebcaptchatext">What is {randomNr.current.randomNr1} + {randomNr.current.randomNr2}?</label>
-          <br/>
-          <TextField type="number" style={{marginTop: "10px"}} onChange={(e)=>{setValueData(parseInt(e.target.value))}} id="outlined-basic" label="Answer" variant="outlined" />
-          <br/>
-          <Button style={{marginTop: "10px"}} type="submit" onClick={handleClose} color="primary" variant="contained">Book Order</Button>
+        <form onSubmit={handleSubmit}>
+          <label id="ebcaptchatext">
+            What is {randomNr.current.randomNr1} + {randomNr.current.randomNr2}?
+          </label>
+          <br />
+          <TextField
+            type="number"
+            style={{ marginTop: "10px" }}
+            onChange={(e) => {
+              setValueData(parseInt(e.target.value));
+            }}
+            id="outlined-basic"
+            label="Answer"
+            variant="outlined"
+          />
+          <br />
+          <Button
+            style={{ marginTop: "10px" }}
+            type="submit"
+            onClick={handleClose}
+            color="primary"
+            variant="contained"
+          >
+            Book Order
+          </Button>
         </form>
       </DialogTitle>
     </Dialog>

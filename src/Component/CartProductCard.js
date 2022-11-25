@@ -26,6 +26,9 @@ class CartProductCard extends Component {
       <div className="cartProductCardContainer" key={this.props.data.id}>
         <div className="cartProductCardImage">
           <img
+            onClick={() =>
+              this.onCartProductCardHandle(this.props.data.product_id)
+            }
             src={
               this.props.data &&
               this.props.data.product &&

@@ -1,15 +1,14 @@
-import React,{useEffect,useState} from 'react'
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import RecievedOrderCard from '../Component/RecievedOrderCard'
-import PlacedOrderCard from '../Component/PlacedOrderCard'
-import {getOrderRecieved,getOrderPlaced} from "../AppApi";
-import Paper from '@material-ui/core/Paper';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import React, { useEffect, useState } from "react";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import RecievedOrderCard from "../Component/RecievedOrderCard";
+import PlacedOrderCard from "../Component/PlacedOrderCard";
+import { getOrderRecieved, getOrderPlaced } from "../AppApi";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import { checkLogin } from "../Util";
-
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -31,11 +30,10 @@ function TabPanel(props) {
   );
 }
 
-
 function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
+    "aria-controls": `full-width-tabpanel-${index}`,
   };
 }
 
@@ -58,28 +56,51 @@ export default function FullWidthTabs() {
     setValue(index);
   };
 
+  const [OrderRecList, setOrderRecList] = useState([]);
+  const [OrderPlacedList, setOrderPlacedList] = useState([]);
 
-  const [OrderRecList, setOrderRecList] = useState([])
-  const [OrderPlacedList, setOrderPlacedList] = useState([])
+  const allItems = [
+    ...OrderRecList.map((item) => ({ ...item, card: "REC" })),
+    ...OrderPlacedList.map((item) => ({ ...item, card: "PLACED" })),
+  ];
 
+  allItems.sort((a, b) => {
+    return new Date(b.created_at) - new Date(a.created_at);
+  });
 
   useEffect(() => {
-   async function fetchData(){
-    const login = await checkLogin()
+    async function fetchData() {
+      const login = await checkLogin();
       if (!login) {
-        window.location.href="/login"
+        window.location.href = "/login";
       }
-    const res1 = await getOrderRecieved()
-    const res2 = await getOrderPlaced()
-    setOrderRecList(res1);
-    setOrderPlacedList(res2);
-   }
-   fetchData()
-  },[]);
+      const res1 = await getOrderRecieved();
+      const res2 = await getOrderPlaced();
+      setOrderRecList(res1);
+      setOrderPlacedList(res2);
+    }
+    fetchData();
+  }, []);
 
   return (
     <div className={classes.root}>
-      <Paper position="static" color="default" >
+      <Box display="flex" flexDirection="row" flexWrap="wrap">
+        {/* {OrderRecList.map((item) => (
+          <RecievedOrderCard key={item.id} value={item} />
+        ))}
+        {OrderPlacedList.map((item) => (
+          <PlacedOrderCard key={item.id} value={item} />
+        ))} */}
+        {allItems.map((item) => {
+          if (item.card === "REC") {
+            return <RecievedOrderCard key={item.id} value={item} />;
+          } else {
+            return <PlacedOrderCard key={item.id} value={item} />;
+          }
+        })}
+      </Box>
+
+      {/* <Paper position="static" color="default" >
         <Tabs
           fullWidth
           value={value}
@@ -102,7 +123,7 @@ export default function FullWidthTabs() {
           <Box display="flex" flexDirection="row" flexWrap="wrap">
               {OrderPlacedList.map(item => <PlacedOrderCard key={item.id} value={item} />)}
           </Box>
-        </TabPanel>
+        </TabPanel> */}
     </div>
   );
 }

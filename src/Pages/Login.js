@@ -231,7 +231,6 @@ class Login extends Component {
   };
 
   handleTrueCallerResponse = async () => {
-    console.log("231");
     const res = await getTruecallerResponse(this.state.uniqueId);
     this.setState({ stopTimer: this.state.stopTimer + 1 });
     if (res && res.data && res.truecallerStatus) {
@@ -369,11 +368,11 @@ class Login extends Component {
     return (
       <>
         <Helmet>
-          <title>Badhat</title>
-          <meta name="keywords" content="badhat,badat,Badhat.app" />
+          <title>Zulk</title>
+          <meta name="keywords" content="badhat,badat,badat.in" />
           <meta
             name="description"
-            content="Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
+            content="Zulk is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
           />
           <link
             rel="apple-touch-icon"

@@ -10,29 +10,36 @@ import { Helmet } from "react-helmet";
 import Footer from "../Component/Footer";
 import Logo from "../AppAsset/Badhat App Icon.jpg";
 import Fab from "@material-ui/core/Fab";
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
-import AddIcon from '@material-ui/icons/Add';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import { Link } from 'react-router-dom';
+import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import AddIcon from "@material-ui/icons/Add";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+import { Link } from "react-router-dom";
 import "../AppAsset/CSS/common.css";
+import { hotjar } from "react-hotjar";
+import { hjid, hjsv } from "../Constant";
 
 class Homepage extends Component {
+  componentDidMount() {
+    //Code For the hotjar
+    hotjar.initialize(hjid, hjsv);
+    hotjar.event("Home page Loaded");
+  }
   render() {
     if (
       (!checkLogin() && !checkSkip()) ||
       (!checkLogin() && !checkBadatExpiration())
     ) {
-      loginPopUp(this.props.history);
+      //loginPopUp(this.props.history);
     }
     return (
       <>
         <Helmet>
-          <title>Badhat</title>
+          <title>Zulk</title>
           <meta name="keywords" content="badhat,badat,Badhat.app" />
           <meta
             name="description"
-            content="Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
+            content="Zulk is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
           />
           <link
             rel="apple-touch-icon"
@@ -65,20 +72,27 @@ class Homepage extends Component {
         >
           Open App
         </Fab>
-        {checkLogin()?
-      <Snackbar
-        className="Snackbar-br"
-        anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-        open={true}
-        key={"bottom right"}
-      >
-        <Link to="/products/new" className="linkStyle">
-          <Button variant="contained" className="addprdBTN" color="primary" startIcon={<AddIcon />}>
-            Add Product
-          </Button>
-        </Link>
-      </Snackbar>
-      :""}
+        {checkLogin() ? (
+          <Snackbar
+            className="Snackbar-br"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            open={true}
+            key={"bottom right"}
+          >
+            <Link to="/products/new" className="linkStyle">
+              <Button
+                variant="contained"
+                className="addprdBTN"
+                color="primary"
+                startIcon={<AddIcon />}
+              >
+                Save Product
+              </Button>
+            </Link>
+          </Snackbar>
+        ) : (
+          ""
+        )}
 
         <Category />
 

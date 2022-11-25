@@ -22,22 +22,22 @@ import {
   LinkedinIcon,
   EmailIcon,
 } from "react-share";
-import DialogContent from '@material-ui/core/DialogContent';
+import DialogContent from "@material-ui/core/DialogContent";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import SendIcon from '@material-ui/icons/Send';
+import SendIcon from "@material-ui/icons/Send";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import ChatIcon from "@material-ui/icons/Chat";
 import ShareIcon from "@material-ui/icons/Share";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import PersonIcon from '@material-ui/icons/Person';
-import AddIcon from '@material-ui/icons/Add';
-import Typography from '@material-ui/core/Typography';
-import CloseIcon from '@material-ui/icons/Close';
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
+import PersonIcon from "@material-ui/icons/Person";
+import AddIcon from "@material-ui/icons/Add";
+import Typography from "@material-ui/core/Typography";
+import CloseIcon from "@material-ui/icons/Close";
 import {
   loginPopUp,
   checkSkip,
@@ -47,6 +47,7 @@ import {
 } from "../Util";
 import "../AppAsset/CSS/UserDetail.css";
 import Footer from "../Component/Footer";
+import ProductCard from "../Component/ProductCard";
 
 class UserDetail extends Component {
   constructor() {
@@ -57,26 +58,26 @@ class UserDetail extends Component {
       showAddtoCart: true,
       drawer: false,
       open: false,
-      chatBox: false
+      chatBox: false,
+      productGroup: {},
     };
   }
 
   handleClickOpen = () => {
-      this.setState({ open: true });
+    this.setState({ open: true });
   };
 
   handleClose = (value) => {
-        this.setState({ open: false });
+    this.setState({ open: false });
   };
 
   handleOpenChat = () => {
-      this.setState({ chatBox: true });
+    this.setState({ chatBox: true });
   };
 
   handleCloseChat = (value) => {
-        this.setState({ chatBox: false });
+    this.setState({ chatBox: false });
   };
-
 
   componentDidMount = async () => {
     const id = window.location.href.slice(
@@ -101,14 +102,51 @@ class UserDetail extends Component {
       (!checkLogin() && !checkSkip()) ||
       (!checkLogin() && !checkBadatExpiration())
     ) {
-      loginPopUp(this.props.history);
+      //loginPopUp(this.props.history);
     }
+
+
+
+    // let productCardLimit = () => {
+    //   this.state.data.products.map((item) => (
+    //     <ProductCard data={item} />
+    //   ));
+    // }
+    let sortedData = this.state.data && this.state.data.products && this.state.data.products.sort(function (a, b) {  return a.sub_category_id - b.sub_category_id;});
+    let subCategory = "";
+    let groupData = {};
+    let temp = []
+    this.state.data && this.state.data.products && sortedData.forEach((el) => {
+        // subCategory = el.sub_category_id;
+        if (subCategory !== el.sub_category_id) {
+          if (temp.length) {
+            // groupData = {
+            //   ...groupData,
+            //   [subCategory]: temp,
+            // } 
+
+            groupData[subCategory] = temp;
+          }
+          temp = [];
+          subCategory = el.sub_category_id;
+        }
+        if(subCategory === el.sub_category_id) {
+          temp.push(el)
+        }
+    });
+
+    console.log(groupData, "grupppppppppppppp");
+    let productCardLimit = [];
+    this.state.data && this.state.data.products && this.state.data.products.map((item) => (
+         productCardLimit.push(<ProductCard data={item} />)
+      ));
+
     return (
       <LoadingOverlay active={this.state.load} spinner text="Loading...">
         <Helmet>
           <title>
             {`${this.state.data.business_name} by ${this.state.data.name}` ||
-              "Badhat"}
+              "Zulk"}
           </title>
           <meta name="keywords" content="badhat,badat,Badhat.app" />
           <meta
@@ -118,7 +156,12 @@ class UserDetail extends Component {
               "Badhat is a personal app/website for B2B businesses.Retailers easily connect, browse, & ORDER products from wholesalers/Suppliers.Badhat provides seamless connectivity between Suppliers (Manufacturers, Stockists, Dealers, Distributors,Agent, Brands, suppliers) and Buyers (Retailers,kirnana shops, Re-sellers, online sellers etc.)."
             }
           />
-          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+          <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossorigin="anonymous"
+          />
           <link
             rel="apple-touch-icon"
             href={
@@ -127,7 +170,7 @@ class UserDetail extends Component {
                 : "https://drive.google.com/file/d/1hZFX14ynp6EuS-Sdtkt0fqbA6FsHl7NU/view"
             }
           />
-        </Helmet>        
+        </Helmet>
         <Fab
           variant="extended"
           size="small"
@@ -194,10 +237,35 @@ class UserDetail extends Component {
                 </span>
               </div>
               <div className="userDetailPolicy">
-                <Button color='inherit' variant="contained" style={{padding:"5px",marginTop:10, textTransform:"none"}} onClick={this.handleClickOpen}> Details</Button>              
-                <Button color='inherit' variant="contained" className="btn d-none btn-success ml-2" style={{padding:"5px",marginTop:10, textTransform:"none"}} onClick={this.handleOpenChat}> Chat</Button>
+                <Button
+                  color="inherit"
+                  variant="contained"
+                  style={{
+                    padding: "5px",
+                    marginTop: 10,
+                    textTransform: "none",
+                  }}
+                  onClick={this.handleClickOpen}
+                >
+                  {" "}
+                  Details
+                </Button>
+                <Button
+                  color="inherit"
+                  variant="contained"
+                  className="btn d-none btn-success ml-2"
+                  style={{
+                    padding: "5px",
+                    marginTop: 10,
+                    textTransform: "none",
+                  }}
+                  onClick={this.handleOpenChat}
+                >
+                  {" "}
+                  Chat
+                </Button>
               </div>
-            </div>            
+            </div>
           </div>
           <Divider />
           <div className="userDetailshare">
@@ -286,18 +354,26 @@ class UserDetail extends Component {
               </div>
             </Drawer>
           </>
-          <Product
-            showFilter
-            productData={
-              this.state.data && this.state.data.products
-                ? this.state.data.products
-                : []
-            }
-          />
+
+          <div className="productListing">
+            {this.state.data && this.state.data.products && (
+              <>
+                {/* {this.state.data.products.map((item) => (
+                  <ProductCard data={item} />
+                ))} */}
+                {productCardLimit}
+              </>
+            )}
+          </div>
+          
         </div>
         <Footer />
-        <SimpleDialog open={this.state.open} data={this.state.data} onClose={this.handleClose} />
-        {this.state.chatBox?<Chatpop onClose={this.handleCloseChat}/>:""}
+        <SimpleDialog
+          open={this.state.open}
+          data={this.state.data}
+          onClose={this.handleClose}
+        />
+        {this.state.chatBox ? <Chatpop onClose={this.handleCloseChat} /> : ""}
       </LoadingOverlay>
     );
   }
@@ -317,122 +393,159 @@ function SimpleDialog(props) {
   };
 
   return (
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="simple-dialog-title"
+      open={open}
+    >
       <DialogTitle id="simple-dialog-title">Seller Policies</DialogTitle>
-        <DialogContent dividers>
-          <Typography gutterBottom>
-            {data.about_us?
-              <div>
-            <strong>About us</strong>
-            <Divider/>
-            {data.about_us}
-              </div>
-              :""
-            }
-          </Typography>
-          <br/>
-          <Typography gutterBottom>
-            {data.started_since?
-            <>
-            <strong>Started since</strong>
-            <Divider/>
-            {data.started_since}
-            </>
-            :""
-          }
-          </Typography>
-          <br/>
-          <Typography gutterBottom>
-            {data.return_policy?
-            <div><strong>Return policy</strong>
-            <Divider/>
-            {data.return_policy}
+      <DialogContent dividers>
+        <Typography gutterBottom>
+          {data.about_us ? (
+            <div>
+              <strong>About us</strong>
+              <Divider />
+              {data.about_us}
             </div>
-            :""
-          }
-          </Typography>
-          <br/>
-          <Typography gutterBottom>
-                      { data.delivery_policy?
-                        <>
-            <strong>Delivery policy</strong>
-            <Divider/>
-            {data.delivery_policy}
-            </>
-            :
+          ) : (
             ""
-          }
-          </Typography>
-          <br/>
-          <Typography gutterBottom>
-            { data.payment_policy?
-            <div> 
-            <strong>Payment policy</strong>
-            <Divider/>
+          )}
+        </Typography>
+        <br />
+        <Typography gutterBottom>
+          {data.started_since ? (
+            <>
+              <strong>Started since</strong>
+              <Divider />
+              {data.started_since}
+            </>
+          ) : (
+            ""
+          )}
+        </Typography>
+        <br />
+        <Typography gutterBottom>
+          {data.return_policy ? (
+            <div>
+              <strong>Return policy</strong>
+              <Divider />
+              {data.return_policy}
+            </div>
+          ) : (
+            ""
+          )}
+        </Typography>
+        <br />
+        <Typography gutterBottom>
+          {data.delivery_policy ? (
+            <>
+              <strong>Delivery policy</strong>
+              <Divider />
+              {data.delivery_policy}
+            </>
+          ) : (
+            ""
+          )}
+        </Typography>
+        <br />
+        <Typography gutterBottom>
+          {data.payment_policy ? (
+            <div>
+              <strong>Payment policy</strong>
+              <Divider />
               {data.payment_policy}
             </div>
-            :""}
-          </Typography>
-          <br/>
-          <Typography gutterBottom>
-            { data.discount_upto?
-              <>
+          ) : (
+            ""
+          )}
+        </Typography>
+        <br />
+        <Typography gutterBottom>
+          {data.discount_upto ? (
+            <>
               <strong>Discount policy</strong>
-              <Divider/>
+              <Divider />
               {data.discount_upto}
-              </>
-              :
-              ""
-            }
-          </Typography>
-          <br/>
-        </DialogContent>
+            </>
+          ) : (
+            ""
+          )}
+        </Typography>
+        <br />
+      </DialogContent>
     </Dialog>
   );
 }
 
 const Chatpop = (props) => {
-
   const onSubmit = async (event) => {
     event.preventDefault(); // Prevent default submission
     try {
       // await postMessage();
-      alert('Your registration was successfully submitted!');
+      alert("Your registration was successfully submitted!");
     } catch (e) {
       alert(`Registration failed! ${e.message}`);
     }
-  }
+  };
 
   const closeClick = () => {
-    props.onClose()
-  }
+    props.onClose();
+  };
 
-  return(
+  return (
     <div class="chat-pos">
       <div class="card bg-white mt-5">
-          <div className="card-header d-flex justify-content-center align-items-center bg-success text-white h6 rounded-top">
-            <span>Chat</span>
-            <div className="ml-auto"><CloseIcon onClick={closeClick} /></div>
+        <div className="card-header d-flex justify-content-center align-items-center bg-success text-white h6 rounded-top">
+          <span>Chat</span>
+          <div className="ml-auto">
+            <CloseIcon onClick={closeClick} />
           </div>
-          <div className="card-body">
-            <div class="d-flex flex-row p-3">
-                <div class="bg-white mr-2 p-3"><span class="text-muted">Hello and thankyou for visiting birdlynind.</span></div> <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="30" height="30"/>
-            </div>
-            <div class="d-flex flex-row p-3"> <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="30" height="30"/>
-                <div class="chat text-wrap ml-2 p-3">asd asd a  s d as f a  s sd a sf a s d asd a sd</div>
-            </div>
-          </div>
-          <div className="card-footer p-0 m-0 bg-white">
-            
-            <form onSubmit={onSubmit} class="form-container">
-                <div class="input-group my-3 px-2">
-                  <input type="text" class="form-control rounded-pill" placeholder="Message..." aria-describedby="button-addon2"/>
-                  <button type="submit" class="btn btn-success d-flex justify-content-center align-items-center rounded-circle ml-1" id="button-addon2"><SendIcon fontSize="small"/></button>
-                </div>            
-            </form>
-        
         </div>
+        <div className="card-body">
+          <div class="d-flex flex-row p-3">
+            <div class="bg-white mr-2 p-3">
+              <span class="text-muted">
+                Hello and thankyou for visiting birdlynind.
+              </span>
+            </div>{" "}
+            <img
+              src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png"
+              width="30"
+              height="30"
+            />
+          </div>
+          <div class="d-flex flex-row p-3">
+            {" "}
+            <img
+              src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png"
+              width="30"
+              height="30"
+            />
+            <div class="chat text-wrap ml-2 p-3">
+              asd asd a s d as f a s sd a sf a s d asd a sd
+            </div>
+          </div>
+        </div>
+        <div className="card-footer p-0 m-0 bg-white">
+          <form onSubmit={onSubmit} class="form-container">
+            <div class="input-group my-3 px-2">
+              <input
+                type="text"
+                class="form-control rounded-pill"
+                placeholder="Message..."
+                aria-describedby="button-addon2"
+              />
+              <button
+                type="submit"
+                class="btn btn-success d-flex justify-content-center align-items-center rounded-circle ml-1"
+                id="button-addon2"
+              >
+                <SendIcon fontSize="small" />
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-</div>
   );
-}
+};

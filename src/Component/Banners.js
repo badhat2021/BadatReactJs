@@ -36,9 +36,7 @@ class Banners extends Component {
                   className="banner"
                   key={index + 1}
                   onClick={() =>
-                    window.open(
-                      res.banner_url.replace("badhat.club", "badhat.app")
-                    )
+                    window.open(`https://${res.banner_url}`, "_self")
                   }
                 >
                   <img

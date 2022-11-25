@@ -1,33 +1,58 @@
-
 .productCardContainer {
   width: 50%;
-  height: 130px;
-  /* margin-left: 1px; */
-  /* margin-right: 1px; */
   margin-top: 1%;
   margin-bottom: 1%;
-  /* border: 1px solid black; */
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   border-radius: 10px;
   cursor: pointer;
+  position: relative;
 }
 
 .productCardImage {
-  width: 30%;
-  height: 100%;
-  /* border: 1px solid red; */
   border-radius: 10px;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.productCardImage img {
+  width: 360px;
+  height: 270px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.moq {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: black;
+  padding: 5px;
+  opacity: 0.7;
+}
+
+.mrp {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: black;
+  opacity: 0.7;
+  padding: 5px;
+  color: white;
+  margin-bottom: 0px;
 }
 
 .productCardDetail {
-  width: 38%;
+  width: 40%;
   margin-left: 1%;
   margin-right: 1%;
   padding-top: 2%;
   padding-bottom: 2%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .productCardButton {
@@ -39,65 +64,175 @@
 }
 
 .productDetailName {
-  color: black;
-  font-weight: 500;
-  font-size: large;
+  color: #212121;
+  font-weight: 400;
+  font-size: 18px;
   text-transform: capitalize;
-  margin-top: 1%;
-  margin-bottom: 1%;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 54px;
 }
 
 .productDetailPrice {
-  color:grey;
-  font-weight: 550;
-  font-size: medium;
+  color: #fff;
+  font-weight: 400;
+  font-size: 17px;
   text-transform: capitalize;
-  margin-top: 1%;
-  margin-bottom: 1%;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  border-radius: 5px;
+}
+
+.productDetailPrice.small {
+  color: #fff;
+  font-weight: 400;
+  font-size: 11px;
+  text-transform: capitalize;
+  margin-top: auto;
+  margin-bottom: 4px;
+  text-align: right;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
 }
 
 .productDetailMoq {
   color: grey;
   font-weight: 500;
-  font-size: medium;
+  font-size: 12px;
   text-transform: capitalize;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
 }
 .productDetailMoq1 {
-  color:black;
-  font-weight: 500;
-  font-size: medium;
-  margin-bottom: 10px;
+  color: white;
   text-transform: capitalize;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  white-space: nowrap;
 }
 
+.productDetailMoq1.visible-hide {
+  visibility: hidden;
+}
 
+.hide {
+  visibility: hidden;
+}
 
 .productCardButtons {
-  width: 90%;
-  margin-left: 5%;
-  margin-right: 5%;
-  margin-top: auto;
-  margin-bottom: auto;
-  height: 35px;
-  cursor: pointer;
+  width: fit-content;
 }
 
-@media screen and (max-width: 700px) {
+.action-area {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dummy-moq {
+  color: #212121;
+  font-weight: 400;
+  font-size: 14px;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  visibility: hidden;
+}
+
+.margin-wrapper {
+  font-size: 17px;
+  font-weight: 500;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  color: #7393b3;
+  white-space: nowrap;
+  margin-bottom: 0px;
+}
+
+.margin-text {
+  display: inline-block;
+  color: #7393b3;
+  font-weight: 500;
+}
+
+.right-section {
+  width: 100%;
+  padding: 6px 0px 6px 8px;
+}
+
+.second-row {
+  display: flex;
+  align-items: center;
+}
+
+.third-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cart-btn {
+  background-color: #fff;
+  border: 2px solid #8cdf63;
+  border-radius: 12px;
+  padding-left: 12px;
+  padding-right: 7px;
+  text-transform: capitalize;
+}
+
+.cart-btn-span {
+  font-size: 14px;
+  color: #8cdf63;
+  text-transform: capitalize;
+}
+
+@media only screen and (max-width: 600px) {
+  .productDetailName {
+    font-size: 12px;
+    height: 36px;
+  }
+
+  .cart-btn {
+    padding: 0px;
+  }
+
+  .cart-btn-span {
+    font-size: 12px;
+  }
+
+  .margin-wrapper {
+    font-size: 12px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .productDetailPrice .margin-wrapper .margin-text {
+    font-size: 12px;
+  }
+
+  .productDetailPrice {
+    font-size: 12px;
+  }
+
   .productCardContainer {
-    width: 100%;
-    height: 120px;
-    /* margin-left: 1%; */
-    /* margin-right: 1%; */
-    margin-top: 1%;
-    margin-bottom: 1%;
-    /* border: 1px solid rgb(226, 223, 223); */
-    border-bottom: 1px solid rgb(226, 223, 223);
-    display: flex;
+    width: 50%;
+  }
+
+  .productCardImage img {
+    width: 180px;
+    height: 135px;
     border-radius: 10px;
-    cursor: pointer;
+    object-fit: contain;
   }
 }

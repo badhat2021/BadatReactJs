@@ -8,9 +8,16 @@ import {
   checkSkip,
   checkBadatExpiration,
 } from "../Util";
+import ShareIcon from "@mui/icons-material/Share";
 import Divider from "@material-ui/core/Divider";
-import { Drawer, Button, Fab } from "@material-ui/core";
-import { ROUTE_CART, ROUTE_USER_DETAIL, ROUTE_LOGIN } from "../Constant";
+import { Drawer, Button, Fab, DialogActions } from "@material-ui/core";
+import {
+  ROUTE_CART,
+  ROUTE_USER_DETAIL,
+  ROUTE_LOGIN,
+  hjid,
+  hjsv,
+} from "../Constant";
 import Swal from "sweetalert2";
 import Carousel from "react-material-ui-carousel";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -43,6 +50,7 @@ import {
 } from "react-share";
 
 import "../AppAsset/CSS/ProductDetail.css";
+import { hotjar } from "react-hotjar";
 
 class ProductDetail extends Component {
   constructor() {
@@ -54,22 +62,33 @@ class ProductDetail extends Component {
       drawer: false,
       open: false,
       quantityType: [],
+      showButton: false,
+      button: "cart", // 'order'
+      baseUrl: window.location.origin,
     };
   }
 
   componentDidMount = async () => {
+    //Code For the hotjar
+    hotjar.initialize(hjid, hjsv);
+    hotjar.event("Product details page Loaded");
     const id = window.location.href.slice(
       window.location.href.lastIndexOf("/") + 1
     );
     const res = await getProductDetail(id);
+
     this.setState({ load: false, data: res.data.data });
     const result1 = await getQuantity();
     this.setState({ quantityType: result1.data.data });
   };
 
-  addToCartClickHandle = async (id, userId, quantity) => {
+  addToCartClickHandle = async (id, userId, quantity, price) => {
     const res = checkLogin();
     if (res === true) {
+      if (price === 0) {
+        this.urlOpenHandler(`${this.state.baseUrl}/product/${id}`);
+        return;
+      }
       const body = {
         product_id: id,
         vendor_id: userId,
@@ -98,25 +117,56 @@ class ProductDetail extends Component {
   };
 
   handleClickOpen = () => {
-    this.setState({ open: true });
+    this.setState({ open: true, showButton: false });
   };
 
-  handleClose = (value) => {
-    this.setState({ open: false });
+  handleClose = (value, data) => {
+    if (data) {
+      if (data === "cart") {
+        this.addToCartClickHandle(
+          this.state.data.id,
+          this.state.data.user_id,
+          this.state.data.moq,
+          this.state.data.price
+        );
+      } else {
+        this.orderNowHandle(
+          this.state.data.id,
+          this.state.data.user_id,
+          this.state.data.moq,
+          this.state.data.price
+        );
+      }
+    }
+    this.setState({ open: false, showButton: false });
   };
 
   goToCartClickHandle = async () => {
     this.props.history.push(`/${ROUTE_CART}`);
   };
 
-  orderNowHandle = async (userId, id, quantity) => {
+  urlOpenHandler = (url) => {
+    window
+      .open(
+        `https://api.whatsapp.com/send?phone=918750317898&text=What%20is%20Wholesale%20Rate%20for%20${url}%20%20for%20a%20Quantity:%20`,
+        "_blank"
+      )
+      .focus();
+  };
+
+  orderNowHandle = async (userId, id, quantity, price) => {
     const res = checkLogin();
     if (res === true) {
+      if (price === 0) {
+        this.urlOpenHandler(`${this.state.baseUrl}/product/${id}`);
+        return;
+      }
       const body = {
         product_id: id,
         vendor_id: userId,
         quantity: quantity,
       };
+
       await addToCartApi(body);
       Swal.fire({
         title: "Item Added to cart",
@@ -151,7 +201,7 @@ class ProductDetail extends Component {
       (!checkLogin() && !checkSkip()) ||
       (!checkLogin() && !checkBadatExpiration())
     ) {
-      loginPopUp(this.props.history);
+      //loginPopUp(this.props.history);
     }
     return (
       <LoadingOverlay active={this.state.load} spinner text="Loading...">
@@ -210,7 +260,7 @@ class ProductDetail extends Component {
               className="productDetailShareButtonContainer"
               onClick={() => this.onDrawerClick(true)}
             >
-              Share
+              <ShareIcon />
             </div>
           </div>
           <Divider />
@@ -341,7 +391,7 @@ class ProductDetail extends Component {
               </div>
               {this.state && this.state.data && this.state.data.price && (
                 <div className="productDetailCardPrice">
-                  Selling Price Rs: {this.state.data.price}
+                  Wholesale Rate Rs: {this.state.data.price}
                   {this.state.data &&
                     this.state.data.quantity &&
                     this.state.data.product_unit_id &&
@@ -442,12 +492,29 @@ class ProductDetail extends Component {
                 }}
                 onClick={
                   this.state.showAddtoCart
-                    ? () =>
-                        this.addToCartClickHandle(
-                          this.state.data.id,
-                          this.state.data.user_id,
-                          this.state.data.moq
-                        )
+                    ? () => {
+                        if (
+                          this.state.data &&
+                          this.state.data.user &&
+                          (this.state.data.user.delivery_policy ||
+                            this.state.data.user.discount_upto ||
+                            this.state.data.user.payment_policy ||
+                            this.state.data.user.return_policy)
+                        ) {
+                          this.setState({
+                            open: true,
+                            showButton: true,
+                            button: "cart",
+                          });
+                        } else {
+                          this.addToCartClickHandle(
+                            this.state.data.id,
+                            this.state.data.user_id,
+                            this.state.data.moq,
+                            this.state.data.price
+                          );
+                        }
+                      }
                     : () =>
                         this.goToCartClickHandle(
                           this.state.data.id,
@@ -467,20 +534,38 @@ class ProductDetail extends Component {
                   height: "100%",
                   backgroundColor: "rgb(255 , 111 , 0)",
                 }}
-                onClick={() =>
-                  this.orderNowHandle(
-                    this.state.data.id,
-                    this.state.data.user_id,
-                    this.state.data.moq
-                  )
-                }
+                onClick={() => {
+                  if (
+                    this.state.data &&
+                    this.state.data.user &&
+                    (this.state.data.user.delivery_policy ||
+                      this.state.data.user.discount_upto ||
+                      this.state.data.user.payment_policy ||
+                      this.state.data.user.return_policy)
+                  ) {
+                    this.setState({
+                      open: true,
+                      showButton: true,
+                      button: "order",
+                    });
+                  } else {
+                    this.orderNowHandle(
+                      this.state.data.id,
+                      this.state.data.user_id,
+                      this.state.data.moq,
+                      this.state.data.price
+                    );
+                  }
+                }}
               >
-                Order Now
+                Book Now
               </Button>
             </div>
           </div>
         </div>
         <SimpleDialog
+          showButton={this.state.showButton}
+          button={this.state.button}
           open={this.state.open}
           data={this.state.data.user ? this.state.data.user : false}
           onClose={this.handleClose}
@@ -493,13 +578,9 @@ class ProductDetail extends Component {
 export default ProductDetail;
 
 function SimpleDialog(props) {
-  const { onClose, open, data } = props;
+  const { onClose, open, data, showButton, button } = props;
 
   const handleClose = () => {
-    onClose();
-  };
-
-  const handleListItemClick = (value) => {
     onClose();
   };
 
@@ -564,6 +645,20 @@ function SimpleDialog(props) {
         </Typography>
         <br />
       </DialogContent>
+      {showButton && (
+        <DialogActions>
+          <Button onClick={handleClose} variant="outlined">
+            Cancel
+          </Button>
+          <Button
+            onClick={(e) => onClose(e, button)}
+            variant="contained"
+            color="primary"
+          >
+            Continue to Cart
+          </Button>
+        </DialogActions>
+      )}
     </Dialog>
   );
 }

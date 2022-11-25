@@ -29,7 +29,7 @@
 }
 
 .sliderCardCategoryName {
-/*  position: absolute;
+  /*  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);*/
@@ -61,4 +61,130 @@
     color: black;
     cursor: pointer;
   }
+}
+
+.sliderContainerNew {
+  align-items: center;
+}
+
+.sliderContainer
+  .ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  border: none;
+  color: #fff;
+}
+
+.sliderContainer .ant-select-arrow {
+  color: #fff;
+}
+
+.sliderContainer .ant-select-single.ant-select-open .ant-select-selection-item {
+  color: #fff;
+}
+
+.ant-select-focused .ant-select-selector,
+.ant-select-selector:focus,
+.ant-select-selector:active,
+.ant-select-open .ant-select-selector {
+  border-color: #d9d9d9 !important;
+  box-shadow: none !important;
+}
+
+.select-wrapper {
+  padding: 10px 20px;
+}
+
+.custom-radio-active {
+  background-color: #0d6efd;
+}
+
+.custom-radio-not-active {
+  background-color: #d3d3d3;
+}
+
+.custom-radio {
+  position: relative;
+  border-radius: 24px 5px 5px 24px;
+  padding: 4px 9px 4px 2px;
+  padding-left: 0;
+}
+.custom-radio .MuiFormControlLabel-label {
+  font-size: 18px;
+  font-weight: 500;
+  margin-left: 18px;
+  color: black;
+}
+
+.select-box {
+  min-width: 150px;
+  max-width: 200px;
+  height: 50px;
+  background-color: #66be4b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding-left: 20px;
+  position: relative;
+}
+
+.select-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  font-weight: 400;
+  font-size: 16px;
+  text-transform: capitalize;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+}
+
+.option-wrapper {
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  width: 100%;
+  height: 500px;
+  overflow-y: auto;
+  background-color: white;
+  z-index: 2;
+  padding: 0px 8px;
+  box-shadow: 0px 0px 10px #ccc;
+}
+
+.option {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.option img {
+  height: 50px;
+  width: 50px;
+  object-fit: fill;
+  margin-left: 24px;
+  border-radius: 50%;
+}
+
+.option div {
+  font-size: 16px;
+  color: #212121;
+  font-weight: 400;
+
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+}
+
+/* .ant-select-open {
+  height: 1000px;
+} */
+
+@media only screen and (max-width: 600px) {
 }

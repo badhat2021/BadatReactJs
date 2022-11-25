@@ -1,8 +1,8 @@
 export const BROWSE_CATEGORY = "Select your category";
 
 // base url for apis
-export const BASE_URL = "https://badhat.club/api/";
-export const NEW_BASE_URL = "https://badhat.club/";
+export const BASE_URL = "https://Badhat.in/api/";
+export const NEW_BASE_URL = "https://Badhat.in/";
 export const ENDPOINT_CATEGORIES = "categories";
 export const ENDPOINT_QUANTITY = "getProductUnits";
 export const ENDPOINT_GET_SUBCATEGORIES = "getsubCategories";
@@ -10,7 +10,7 @@ export const ENDPOINT_GET_VERTICAL_CATEGORIES = "getVerticals";
 export const ENDPOINT_GET_PRODUCTS = "get-paginated-products"; //TODO: changed this. => getProductsWeb to 'get-paginated-products'
 export const ENDPOINT_GET_PRODUCT_DETAIL = "product";
 export const ENDPOINT_SEND_OTP = "sendOtp";
-export const ENDPOINT_LOGIN = "login";
+export const ENDPOINT_LOGIN = "login-new";
 export const ENDPOINT_ADD_TO_CART = "addToCart";
 export const ENDPOINT_GET_CART_DATA = "cart";
 export const ENDPOINT_DELETE_CART_DATA = "cart/delete";
@@ -39,3 +39,7 @@ export const ROUTE_REGISTER = "register";
 export const CATEGORY_DATA_REQUEST = "CATEGORY_DATA_REQUEST";
 export const CATEGORY_DATA_SUCCESS = "CATEGORY_DATA_SUCCESS";
 export const CATEGORY_DATA_FAIL = "CATEGORY_DATA_FAIL";
+
+//Hot jar constants
+export const hjid = "3179537";
+export const hjsv = 6;

@@ -18,7 +18,6 @@ class SliderCategory extends Component {
   };
 
   // onClickHandle = (id) => {
-  //   console.log("id", id);
   // };
 
   render() {
@@ -38,8 +37,17 @@ class SliderCategory extends Component {
                 onClick={() => this.props.onClickCategoryHandle(res.id)}
               >
                 <Paper className="sliderCategoryPaper" elevation={5}>
-                    <img src={res.icon} alt="" style={{height:"100%",float:"left", maxHeight: 60}} />
-                  <div className="sliderCardCategoryName" style={{float:"right"}}>{res.name}</div>
+                  <img
+                    src={res.icon}
+                    alt=""
+                    style={{ height: "100%", float: "left", maxHeight: 60 }}
+                  />
+                  <div
+                    className="sliderCardCategoryName"
+                    style={{ float: "right" }}
+                  >
+                    {res.name}
+                  </div>
                 </Paper>
               </div>
             ))
